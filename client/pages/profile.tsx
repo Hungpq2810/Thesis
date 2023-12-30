@@ -18,7 +18,11 @@ type Props = {
 const Profile = ({ next }: Props) => {
   const [form] = useForm()
   const { user } = useAppSelector(state => state.appSlice)
+  const { data } = useQuery(['userDetail'], () => userService.getUserByAuth())
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(user?.avatar)
+  const [belongsOrgainzer, setBelongsOrgainzer] = useState<number | undefined>(
+    data?.data.data.belongsOrganizer.organization_id
+  )
   const dispatch = useDispatch()
   const { data: skills } = useQuery(['skills'], () => skillService.getAllSkill(), {
     select(data) {
@@ -62,7 +66,7 @@ const Profile = ({ next }: Props) => {
     updateProfile.mutate(value)
     next()
   }
-  const { data } = useQuery(['userDetail'], () => userService.getUserByAuth())
+  
   // useEffect(() => {
   //   if (user && data) {
   //     const { organization } = data.data.data.belongsOrganizer;
@@ -77,12 +81,10 @@ const Profile = ({ next }: Props) => {
   // }, [data]);
   useEffect(() => {
     if (user && data) {
-    const { organization } = data.data.data.belongsOrganizer;
-    const organizationName = organization?.name;
+      setBelongsOrgainzer(data.data.data.belongsOrganizer.organization_id)
       form.setFieldsValue({
         // @ts-ignore
         ...data.data.data.user,
-        belongsOrgainzer: organizationName,
       })
     }
   }, [data])
@@ -174,22 +176,20 @@ const Profile = ({ next }: Props) => {
             />
           </Form.Item>
 
-          {
-            // data?.data.data.belongsOrgainzer && 
-          (
-            <Form.Item
-              label='Thuộc tổ chức'
-              name='belongsOrgainzer'
-              // rules={[{ required: false, message: 'Chưa điền tổ chức' }]}
-            >
+          <Form.Item
+            label='Thuộc tổ chức'
+            name='belongsOrgainzer'
+            rules={[{ required: false, message: 'Chưa điền tổ chức' }]}
+          >
+            {belongsOrgainzer && (
               <Select
-                // disabled={!!form.getFieldValue('belongsOrgainzer')}
-                placeholder='Chọn tổ chức bạn muốn gia nhập'
+                defaultValue={belongsOrgainzer}
+                placeholder='select one belongsOrgainzer'
                 optionLabelProp='label'
                 options={organizers}
               />
-            </Form.Item>
-           )} 
+            )}
+          </Form.Item>
 
           <Form.Item style={{ textAlign: 'center' }}>
             <Button type='primary' htmlType='submit' loading={updateProfile.isLoading}>

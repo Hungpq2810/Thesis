@@ -97,7 +97,7 @@ const ApplyActivityManagement = ({}: Props) => {
                 onConfirm={() => {
                   const body = {
                     user_id: record.user_id,
-                    status: record.status
+                    status: 1
                   }
                   updateMutation.mutate(body)
                 }}
