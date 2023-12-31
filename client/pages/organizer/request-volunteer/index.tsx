@@ -11,12 +11,14 @@ import { IRequestVolunteer } from '@/typeDefs/schema/volunteer.type'
 type Props = {}
 
 const RequestVolunteerManagement = ({}: Props) => {
-  const { data: dataRequestVolunteers, refetch } = useQuery(['listRequestVolunteers'], () =>
-    volunteerService.getAllRequestVolunteer()
+  const { data: dataRequestVolunteers, refetch } = useQuery(
+    ['listRequestVolunteers'],
+    () => volunteerService.getAllRequestVolunteer()
   )
   const updateMutation = useMutation({
     mutationKey: ['updateMutation'],
-    mutationFn: (body: { user_id: number; status: number }) => volunteerService.updateRequestVolunteer(body),
+    mutationFn: (body: { user_id: number; status: number }) =>
+      volunteerService.updateRequestVolunteer(body),
     onSuccess: () => {
       message.success('Cập nhật thành công')
       refetch()
@@ -44,7 +46,13 @@ const RequestVolunteerManagement = ({}: Props) => {
       title: 'Trạng thái',
       dataIndex: 'status',
       render: (_, record) => (
-        <p>{record.status === 0 ? 'Phê duyệt' : record.status === 1 ? 'Chưa phê duyệt' : 'Không phê duyệt'}</p>
+        <p>
+          {record.status === 0
+            ? 'Phê duyệt'
+            : record.status === 1
+              ? 'Chưa phê duyệt'
+              : 'Không phê duyệt'}
+        </p>
       )
     },
     {
@@ -91,26 +99,36 @@ const RequestVolunteerManagement = ({}: Props) => {
 
   return (
     <>
-      {
-      dataRequestVolunteers && 
-      // dataRequestVolunteers.data.data && 
-      (
+      {dataRequestVolunteers && (
+        // dataRequestVolunteers.data.data &&
         <React.Fragment>
           <Row justify={'space-between'} align='middle' gutter={16}>
             <Col span={12}>
-              <h1 className='font-bold text-2xl'>Quản lý yêu cầu/tình nguyện viên</h1>
+              <h1 className='font-bold text-2xl'>
+                Quản lý yêu cầu/tình nguyện viên
+              </h1>
             </Col>
             <Col span={12}>
               <div className='flex py-2 justify-between items-center gap-3'>
-                <Search className='bg-blue-300 rounded-lg' placeholder='Tìm kiếm' onSearch={() => {}} enterButton />
+                <Search
+                  className='bg-blue-300 rounded-lg'
+                  placeholder='Tìm kiếm'
+                  onSearch={() => {}}
+                  enterButton
+                />
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataRequestVolunteers.data.data.requestVolunteers} columns={columns} />
+          <Table
+            dataSource={dataRequestVolunteers.data.data.requestVolunteers}
+            columns={columns}
+          />
         </React.Fragment>
       )}
     </>
   )
 }
-RequestVolunteerManagement.getLayout = (children: React.ReactNode) => <DashboardLayout>{children}</DashboardLayout>
+RequestVolunteerManagement.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+)
 export default RequestVolunteerManagement

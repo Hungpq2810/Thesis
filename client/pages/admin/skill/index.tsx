@@ -18,7 +18,9 @@ const SkillManagement = ({}: Props) => {
   const [open, setOpen] = useState(false)
   const [action, setAtion] = useState<string>('')
   const [rowId, setRowId] = useState<number>()
-  const { data: dataSkill, refetch } = useQuery(['listSkill'], () => skillService.getAllSkill())
+  const { data: dataSkill, refetch } = useQuery(['listSkill'], () =>
+    skillService.getAllSkill()
+  )
   const deleteMutation = useMutation({
     mutationKey: ['deleteUserMutation'],
     mutationFn: (userId: number) => userService.deleteUser(userId),
@@ -48,7 +50,7 @@ const SkillManagement = ({}: Props) => {
     {
       title: 'Mo ta skill',
       dataIndex: 'description',
-      key: 'description',
+      key: 'description'
     },
     {
       title: 'Hành động',
@@ -89,7 +91,12 @@ const SkillManagement = ({}: Props) => {
             </Col>
             <Col span={12}>
               <div className='flex py-2 justify-between items-center gap-3'>
-                <Search className='bg-blue-300 rounded-lg' placeholder='Tìm kiếm' onSearch={() => {}} enterButton />
+                <Search
+                  className='bg-blue-300 rounded-lg'
+                  placeholder='Tìm kiếm'
+                  onSearch={() => {}}
+                  enterButton
+                />
                 <Button
                   onClick={() => {
                     setAtion('create')
@@ -106,12 +113,19 @@ const SkillManagement = ({}: Props) => {
           {action === 'create' && !rowId ? (
             <FormSkill refetch={refetch} open={open} setOpen={setOpen} />
           ) : (
-            <FormSkill refetch={refetch} editId={rowId} open={open} setOpen={setOpen} />
+            <FormSkill
+              refetch={refetch}
+              editId={rowId}
+              open={open}
+              setOpen={setOpen}
+            />
           )}
         </React.Fragment>
       )}
     </>
   )
 }
-SkillManagement.getLayout = (children: React.ReactNode) => <DashboardLayout>{children}</DashboardLayout>
+SkillManagement.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+)
 export default SkillManagement

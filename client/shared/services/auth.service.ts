@@ -16,7 +16,10 @@ class AuthService {
   }): Promise<AxiosResponse<IBaseResponse<IAuthen>>> {
     return httpsNoToken.post('/register', body)
   }
-  authenticated(body: { username: string; password: string }): Promise<AxiosResponse<IBaseResponse<IAuthen>>> {
+  authenticated(body: {
+    username: string
+    password: string
+  }): Promise<AxiosResponse<IBaseResponse<IAuthen>>> {
     return httpsNoToken.post('/login', body)
   }
 }

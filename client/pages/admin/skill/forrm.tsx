@@ -1,5 +1,15 @@
 import { useMutation, useQuery } from 'react-query'
-import { Button, Form, Input, message, Modal, Row, Col, Select, SelectProps } from 'antd'
+import {
+  Button,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Col,
+  Select,
+  SelectProps
+} from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import { useEffect } from 'react'
 import dayjs from 'dayjs'
@@ -16,7 +26,8 @@ const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
   const isEditIdValidNumber = typeof editId === 'number'
   const registerMutation = useMutation({
     mutationKey: 'register',
-    mutationFn: (body: { name: string; description: string }) => skillService.newSkill(body),
+    mutationFn: (body: { name: string; description: string }) =>
+      skillService.newSkill(body),
     onSuccess(data, _variables, _context) {
       const res = data.data
       if (!res) return
@@ -30,7 +41,8 @@ const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
   })
   const updateMutation = useMutation({
     mutationKey: 'update',
-    mutationFn: (body: { name: string; description: string }) => skillService.updateSkill(editId as number, body),
+    mutationFn: (body: { name: string; description: string }) =>
+      skillService.updateSkill(editId as number, body),
     onSuccess(data, _variables, _context) {
       const res = data.data
       if (!res) return
@@ -49,9 +61,13 @@ const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
       registerMutation.mutate(value)
     }
   }
-  const { data } = useQuery(['skill'], () => skillService.getSkillById(editId as number), {
-    enabled: isEditIdValidNumber
-  })
+  const { data } = useQuery(
+    ['skill'],
+    () => skillService.getSkillById(editId as number),
+    {
+      enabled: isEditIdValidNumber
+    }
+  )
   useEffect(() => {
     if (editId && data) {
       form.setFieldsValue({
@@ -61,7 +77,13 @@ const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
   }, [data])
 
   return (
-    <Modal title={editId ? `Chỉnh sửa kỹ năng` : 'Tạo kỹ năng mới'} centered open={open} width={1000} footer={false}>
+    <Modal
+      title={editId ? `Chỉnh sửa kỹ năng` : 'Tạo kỹ năng mới'}
+      centered
+      open={open}
+      width={1000}
+      footer={false}
+    >
       <Form
         form={form}
         name='basic'
@@ -70,11 +92,19 @@ const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
         autoComplete='off'
         layout='vertical'
       >
-        <Form.Item label='Tên kỹ năng' name='name' rules={[{ required: true, message: 'Chưa điền tên kỹ năng' }]}>
+        <Form.Item
+          label='Tên kỹ năng'
+          name='name'
+          rules={[{ required: true, message: 'Chưa điền tên kỹ năng' }]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label='Mô tả' name='description' rules={[{ required: true, message: 'Chưa điền mô tả' }]}>
+        <Form.Item
+          label='Mô tả'
+          name='description'
+          rules={[{ required: true, message: 'Chưa điền mô tả' }]}
+        >
           <Input />
         </Form.Item>
 
@@ -88,7 +118,9 @@ const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
           </Col>
           <Col>
             <Form.Item style={{ textAlign: 'center' }}>
-              <Button htmlType='submit'>{editId ? 'Chỉnh sửa' : 'Tạo mới'}</Button>
+              <Button htmlType='submit'>
+                {editId ? 'Chỉnh sửa' : 'Tạo mới'}
+              </Button>
             </Form.Item>
           </Col>
         </Row>

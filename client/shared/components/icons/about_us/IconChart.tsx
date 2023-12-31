@@ -2,7 +2,14 @@ import React, { SVGProps } from 'react'
 
 export default function IconChart({ ...rest }: SVGProps<SVGSVGElement>) {
   return (
-    <svg width='57' height='56' viewBox='0 0 57 56' fill='none' xmlns='http://www.w3.org/2000/svg' { ...rest }>
+    <svg
+      width='57'
+      height='56'
+      viewBox='0 0 57 56'
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'
+      {...rest}
+    >
       <g clip-path='url(#clip0_70_1579)'>
         <g clip-path='url(#clip1_70_1579)'>
           <path
@@ -35,10 +42,20 @@ export default function IconChart({ ...rest }: SVGProps<SVGSVGElement>) {
       </g>
       <defs>
         <clipPath id='clip0_70_1579'>
-          <rect width='56' height='56' fill='white' transform='translate(0.100098)' />
+          <rect
+            width='56'
+            height='56'
+            fill='white'
+            transform='translate(0.100098)'
+          />
         </clipPath>
         <clipPath id='clip1_70_1579'>
-          <rect width='56' height='56' fill='white' transform='translate(0.100098)' />
+          <rect
+            width='56'
+            height='56'
+            fill='white'
+            transform='translate(0.100098)'
+          />
         </clipPath>
       </defs>
     </svg>

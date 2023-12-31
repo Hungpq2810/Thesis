@@ -16,18 +16,25 @@ type Props = {
   activity: IBaseResponse<IActivity>
 }
 const DetailActivity = ({ activity }: Props) => {
-  const { data: userDetail } = useQuery(['userDetail'], () => userService.getUserByAuth(), {
-    select(data) {
-      
-      return data.data.data.activityApplied
+  const { data: userDetail } = useQuery(
+    ['userDetail'],
+    () => userService.getUserByAuth(),
+    {
+      select(data) {
+        return data.data.data.activityApplied
+      }
     }
-  })
+  )
   const router = useRouter()
   const { user } = useAppSelector(state => state.appSlice)
   console.log(user)
   const newFeedbackMutation = useMutation({
     mutationKey: 'newFeedback',
-    mutationFn: (body: { activity_id: number; title: string; content: string }) => feedbackService.newActivity(body),
+    mutationFn: (body: {
+      activity_id: number
+      title: string
+      content: string
+    }) => feedbackService.newActivity(body),
     onSuccess(data, _variables, _context) {
       const res = data.data
       if (!res) return
@@ -41,7 +48,8 @@ const DetailActivity = ({ activity }: Props) => {
 
   const applyActivityMutation = useMutation({
     mutationKey: 'applyActivity',
-    mutationFn: (body: { activity_id: number }) => activityService.applyActivity(body),
+    mutationFn: (body: { activity_id: number }) =>
+      activityService.applyActivity(body),
     onSuccess(data, _variables, _context) {
       if (data) {
         message.success('Đăng ký thành công')
@@ -51,6 +59,21 @@ const DetailActivity = ({ activity }: Props) => {
       message.error('Đăng ký không thành công')
     }
   })
+
+  const cancelActivityMutation = useMutation({
+    mutationKey: 'cancelActivity',
+    mutationFn: (body: { activity_id: number }) =>
+      activityService.cancelActivity(body),
+    onSuccess(data, _variables, _context) {
+      if (data) {
+        message.success('Đăng ký thành công')
+      }
+    },
+    onError(error, variables, context) {
+      message.error('Đăng ký không thành công')
+    }
+  })
+
   function handleNewFeedback(value: any) {
     const body = {
       activity_id: activity.data.id,
@@ -86,16 +109,41 @@ const DetailActivity = ({ activity }: Props) => {
             <p>Số lượng TNV đã đăng ký: {activity.data.num_of_volunteers}</p>
             {activity.data.status === 0 && user ? (
               <>
-                {userDetail && userDetail.some((item: any) => item.activity_id === activity.data.id || user.role_id === 2 ) ? (
-                  <p>Bạn đã đăng ký hoặc là tổ chức</p>
+                {userDetail &&
+                userDetail.some(
+                  (item: any) =>
+                    item.activity_id === activity.data.id || user.role_id === 2
+                ) ? (
+                  <>
+                    <p>Bạn đã đăng ký</p>
+                    <Button
+                      onClick={() =>
+                        cancelActivityMutation.mutate({
+                          activity_id: activity.data.id
+                        })
+                      }
+                    >
+                      Huỷ đăng ký
+                    </Button>
+                  </>
                 ) : (
-                  <Button onClick={() => applyActivityMutation.mutate({ activity_id: activity.data.id })}>
+                  <Button
+                    onClick={() =>
+                      applyActivityMutation.mutate({
+                        activity_id: activity.data.id
+                      })
+                    }
+                  >
                     Đăng ký
                   </Button>
                 )}
               </>
             ) : (
-              <Button onClick={() => (!user ? router.push('/login') : router.push('/activity'))}>
+              <Button
+                onClick={() =>
+                  !user ? router.push('/login') : router.push('/activity')
+                }
+              >
                 Vui lòng đăng ký tài khoản hoặc chờ hoạt động khác
               </Button>
             )}
@@ -119,7 +167,10 @@ const DetailActivity = ({ activity }: Props) => {
             </List.Item>
           )}
         />
-        {user && (
+        {userDetail &&
+        userDetail.some(
+          (item: any) => item.activity_id === activity.data.id
+        ) ? (
           <Card title='Feedback'>
             <Form
               name='newFeedback'
@@ -128,11 +179,19 @@ const DetailActivity = ({ activity }: Props) => {
               autoComplete='off'
               layout='vertical'
             >
-              <Form.Item label='Tiêu đề' name='title' rules={[{ required: true, message: 'Chưa điền tiêu đề' }]}>
+              <Form.Item
+                label='Tiêu đề'
+                name='title'
+                rules={[{ required: true, message: 'Chưa điền tiêu đề' }]}
+              >
                 <Input />
               </Form.Item>
 
-              <Form.Item label='Nội dung' name='content' rules={[{ required: true, message: 'Chưa điền nội dung' }]}>
+              <Form.Item
+                label='Nội dung'
+                name='content'
+                rules={[{ required: true, message: 'Chưa điền nội dung' }]}
+              >
                 <Input />
               </Form.Item>
 
@@ -141,19 +200,25 @@ const DetailActivity = ({ activity }: Props) => {
               </Form.Item>
             </Form>
           </Card>
+        ) : (
+          <></>
         )}
       </section>
     </React.Fragment>
   )
 }
-DetailActivity.getLayout = (children: React.ReactNode) => <BlankLayout>{children}</BlankLayout>
+DetailActivity.getLayout = (children: React.ReactNode) => (
+  <BlankLayout>{children}</BlankLayout>
+)
 export default DetailActivity
 
 export const getStaticProps: GetStaticProps = async ctx => {
   const id = ctx.params?.id
   if (id) {
     try {
-      const responseActivity = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/activities/${id}`)
+      const responseActivity = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/activities/${id}`
+      )
       const activity = await responseActivity.json()
       return {
         props: {

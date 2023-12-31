@@ -1,13 +1,19 @@
-import { VolunteerRequestAttributes } from "../models/volunteer_request";
-import { Users } from "../models/users";
+import { VolunteerRequestAttributes } from '../models/volunteer_request';
+import { Users } from '../models/users';
 
 export const volunteerRequestMapper = async (
-  volunteerRequests: VolunteerRequestAttributes[]
+  volunteerRequests: VolunteerRequestAttributes[],
 ) => {
   const result = await Promise.all(
     volunteerRequests.map(async (volunteerRequest) => {
-      const { id, user_id, status, organization_id, created_at, updated_at } =
-        volunteerRequest;
+      const {
+        id,
+        user_id,
+        status,
+        organization_id,
+        created_at,
+        updated_at,
+      } = volunteerRequest;
 
       try {
         const user = await Users.findByPk(user_id);
@@ -25,10 +31,10 @@ export const volunteerRequestMapper = async (
           updated_at,
         };
       } catch (error) {
-        console.error("Error fetching user:", error);
+        console.error('Error fetching user:', error);
         return null;
       }
-    })
+    }),
   );
 
   return result.filter((organization) => organization !== null);

@@ -44,11 +44,21 @@ export const appSlice = createSlice({
     fetchUpdateMenu: state => {
       state.countUpdateMenu += 1
     },
-    setInforOrganization: (state, action: PayloadAction<IOrganization | undefined>) => {
+    setInforOrganization: (
+      state,
+      action: PayloadAction<IOrganization | undefined>
+    ) => {
       state.inforOrganization = action.payload
     }
   }
 })
 // Action creators are generated for each case reducer function
-export const { login, logout, setAppMenu, setAppRoute, fetchUpdateMenu, setInforOrganization } = appSlice.actions
+export const {
+  login,
+  logout,
+  setAppMenu,
+  setAppRoute,
+  fetchUpdateMenu,
+  setInforOrganization
+} = appSlice.actions
 export default appSlice.reducer

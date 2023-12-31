@@ -86,43 +86,49 @@ export const activityApplyVolunteer = async (
   }
 };
 
-export const cancelApplyToActivity = async (
+export const cancelApplyActivity = async (
   req: Request,
-  res: Response,
+  res: Response
 ): Promise<void> => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
-      res.status(401).json({ message: 'Unauthorized' });
+      res.status(401).json({ message: "Unauthorized" });
       return;
     }
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
-
     if (user) {
-      const body = { status: 5 };
-      const activityId = req.body.activity_id as number;
-
-      const volunteerApplyRecord = await ActivityApply.findOne({
-        where: {
-          user_id: userId,
-          activity_id: activityId,
-        },
-      });
-
-      if (volunteerApplyRecord) {
-        const result = await volunteerApplyRecord.update(body);
-
+      if (user.organization_id && user.role_id === 2) {
         const response: GeneralResponse<{}> = {
-          status: 200,
+          status: 400,
           data: null,
-          message: 'Bạn đã hủy đăng ký thành công',
+          message: "Have an organization or you're an organization",
         };
         commonResponse(req, res, response);
+      } else {
+        const result = await ActivityApply.destroy({
+          where: {
+            user_id: userId,
+            activity_id: req.body.activity_id,
+          },
+        });
+        if (result > 0) {
+          const response: GeneralResponse<{}> = {
+            status: 200,
+            data: null,
+            message: "Delete successful",
+          };
+          commonResponse(req, res, response);
+        } else {
+          const response: GeneralResponse<{}> = {
+            status: 400,
+            data: null,
+            message: "No matching records found to delete",
+          };
+          commonResponse(req, res, response);
+        }
       }
     }
   } catch (error: any) {

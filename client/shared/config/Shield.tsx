@@ -17,13 +17,22 @@ export function Shield({ children }: Props) {
     router,
     isAuth: false,
     isLoading: false,
-    LoadingComponent: <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <Spin />
-    </div>,
+    LoadingComponent: (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh'
+        }}
+      >
+        <Spin />
+      </div>
+    ),
     privateRoutes: ['/admin/*', '/organizer/*'],
     publicRoutes: ['/login', '/'],
     loginRoute: '/login',
-    accessRoute: "/"
+    accessRoute: '/'
   }
 
   return (
@@ -32,4 +41,3 @@ export function Shield({ children }: Props) {
     </>
   )
 }
-

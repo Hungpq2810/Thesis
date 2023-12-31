@@ -8,7 +8,9 @@ const { Meta } = Card
 
 const ActivityPage = () => {
   const router = useRouter()
-  const { data: dataActivity, refetch } = useQuery(['listActivity'], () => activityService.getAllActivity())
+  const { data: dataActivity, refetch } = useQuery(['listActivity'], () =>
+    activityService.getAllActivity()
+  )
   return (
     <React.Fragment>
       <Head>
@@ -20,10 +22,10 @@ const ActivityPage = () => {
         Danh sách hoạt động đang mở
       </h1>
       <div className='grid grid-cols-1 md:grid-cols-3 gap-20'>
-        { dataActivity &&
+        {dataActivity &&
           dataActivity.data &&
-          // dataActivity.data.data.activities.map(item => (
-            dataActivity.data.data.activities.filter((item) => item.status === 0).map((item) => (
+          dataActivity.data.data.activities.map(item => (
+            // dataActivity.data.data.activities.filter((item) => item.status === 0).map((item) => (
             <Card
               key={item.id}
               style={{ width: 400 }}
@@ -44,7 +46,9 @@ const ActivityPage = () => {
                 description={
                   <div className='flex justify-between items-center'>
                     <p>Tổ chức: {item.creator}</p>
-                    <Button onClick={() => router.push(`/activity/${item.id}`)}>Xem chi tiết</Button>
+                    <Button onClick={() => router.push(`/activity/${item.id}`)}>
+                      Xem chi tiết
+                    </Button>
                   </div>
                 }
               />
@@ -56,10 +60,10 @@ const ActivityPage = () => {
         Danh sách hoạt động đã đóng
       </h1>
       <div className='grid grid-cols-1 md:grid-cols-3 gap-20'>
-        { dataActivity &&
+        {dataActivity &&
           dataActivity.data &&
-          // dataActivity.data.data.activities.map(item => (
-            dataActivity.data.data.activities.filter((item) => item.status === 1).map((item) => (
+          dataActivity.data.data.activities.map(item => (
+            // dataActivity.data.data.activities.filter((item) => item.status === 1).map((item) => (
             <Card
               key={item.id}
               style={{ width: 400 }}
@@ -80,7 +84,9 @@ const ActivityPage = () => {
                 description={
                   <div className='flex justify-between items-center'>
                     <p>Tổ chức: {item.creator}</p>
-                    <Button onClick={() => router.push(`/activity/${item.id}`)}>Xem chi tiết</Button>
+                    <Button onClick={() => router.push(`/activity/${item.id}`)}>
+                      Xem chi tiết
+                    </Button>
                   </div>
                 }
               />

@@ -33,7 +33,12 @@ const VolunteersManagement = ({}: Props) => {
       key: 'avatar',
       render: (_, record) => (
         <>
-          <Image src={record.avatar} width={50} height={50} className='rounded-lg' />
+          <Image
+            src={record.avatar}
+            width={50}
+            height={50}
+            className='rounded-lg'
+          />
         </>
       )
     },
@@ -41,7 +46,13 @@ const VolunteersManagement = ({}: Props) => {
       title: 'Trạng thái',
       key: 'status',
       render: (_, record) => (
-        <>{record.status === 0 ? 'Phê duyệt' : record.status === 1 ? 'Chưa phê duyệt' : 'Không phê duyệt'}</>
+        <>
+          {record.status === 0
+            ? 'Phê duyệt'
+            : record.status === 1
+              ? 'Chưa phê duyệt'
+              : 'Không phê duyệt'}
+        </>
       )
     }
   ]
@@ -56,15 +67,25 @@ const VolunteersManagement = ({}: Props) => {
             </Col>
             <Col span={12}>
               <div className='flex py-2 justify-between items-center gap-3'>
-                <Search className='bg-blue-300 rounded-lg' placeholder='Tìm kiếm' onSearch={() => {}} enterButton />
+                <Search
+                  className='bg-blue-300 rounded-lg'
+                  placeholder='Tìm kiếm'
+                  onSearch={() => {}}
+                  enterButton
+                />
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataVolunteer.data.data as any} columns={columns} />
+          <Table
+            dataSource={dataVolunteer.data.data as any}
+            columns={columns}
+          />
         </React.Fragment>
       )}
     </>
   )
 }
-VolunteersManagement.getLayout = (children: React.ReactNode) => <DashboardLayout>{children}</DashboardLayout>
+VolunteersManagement.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+)
 export default VolunteersManagement

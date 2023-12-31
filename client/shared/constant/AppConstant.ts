@@ -6,8 +6,10 @@ export const APP_URL = {
   ADMIN_MANAGE_ROLE_CREATE: '/admin/system_administrator/users_role/create',
   ADMIN_MANAGE_ROLE_EDIT: '/admin/system_administrator/users_role/update/',
   ADMIN_MANAGE_ACCOUNT: '/admin/system_administrator/users_account',
-  ADMIN_MANAGE_ACCOUNT_CREATE: '/admin/system_administrator/users_account/create',
-  ADMIN_MANAGE_ACCOUNT_EDIT: '/admin/system_administrator/users_account/update/',
+  ADMIN_MANAGE_ACCOUNT_CREATE:
+    '/admin/system_administrator/users_account/create',
+  ADMIN_MANAGE_ACCOUNT_EDIT:
+    '/admin/system_administrator/users_account/update/',
   ADMIN_MANAGE_PERMISSION: '/admin/system_administrator/users_permission',
   ADMIN_MANAGE_LOG: '/admin/system_administrator/users_log',
   ADMIN_MANAGE_MENU: '/admin/system_administrator/menu',

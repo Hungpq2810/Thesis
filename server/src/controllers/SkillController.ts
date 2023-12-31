@@ -31,7 +31,7 @@ export const listSkills = async (
 
 export const getSkillById = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { id } = req.params;
@@ -40,14 +40,14 @@ export const getSkillById = async (
       const response: GeneralResponse<any> = {
         status: 200,
         data: skill.toJSON(),
-        message: "Get Skill by ID successfully",
+        message: 'Get Skill by ID successfully',
       };
       commonResponse(req, res, response);
     } else {
       const response: GeneralResponse<{}> = {
         status: 404,
         data: null,
-        message: "Skill not found",
+        message: 'Skill not found',
       };
       commonResponse(req, res, response);
     }

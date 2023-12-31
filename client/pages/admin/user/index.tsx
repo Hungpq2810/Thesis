@@ -16,7 +16,9 @@ const UserManagement = ({}: Props) => {
   const [open, setOpen] = useState(false)
   const [action, setAtion] = useState<string>('')
   const [rowId, setRowId] = useState<number>()
-  const { data: dataUser, refetch } = useQuery(['listUser'], () => userService.getAllUser())
+  const { data: dataUser, refetch } = useQuery(['listUser'], () =>
+    userService.getAllUser()
+  )
   const deleteMutation = useMutation({
     mutationKey: ['deleteUserMutation'],
     mutationFn: (userId: number) => userService.deleteUser(userId),
@@ -87,7 +89,12 @@ const UserManagement = ({}: Props) => {
             </Col>
             <Col span={12}>
               <div className='flex py-2 justify-between items-center gap-3'>
-                <Search className='bg-blue-300 rounded-lg' placeholder='Tìm kiếm' onSearch={() => {}} enterButton />
+                <Search
+                  className='bg-blue-300 rounded-lg'
+                  placeholder='Tìm kiếm'
+                  onSearch={() => {}}
+                  enterButton
+                />
                 <Button
                   onClick={() => {
                     setAtion('create')
@@ -104,12 +111,19 @@ const UserManagement = ({}: Props) => {
           {action === 'create' && !rowId ? (
             <FormUser refetch={refetch} open={open} setOpen={setOpen} />
           ) : (
-            <FormUser refetch={refetch} editId={rowId} open={open} setOpen={setOpen} />
+            <FormUser
+              refetch={refetch}
+              editId={rowId}
+              open={open}
+              setOpen={setOpen}
+            />
           )}
         </React.Fragment>
       )}
     </>
   )
 }
-UserManagement.getLayout = (children: React.ReactNode) => <DashboardLayout>{children}</DashboardLayout>
+UserManagement.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+)
 export default UserManagement

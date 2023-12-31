@@ -2,7 +2,14 @@ import React, { SVGProps } from 'react'
 
 export default function IconAnimation({ ...rest }: SVGProps<SVGSVGElement>) {
   return (
-    <svg width='57' height='56' viewBox='0 0 57 56' fill='none' xmlns='http://www.w3.org/2000/svg' {...rest}>
+    <svg
+      width='57'
+      height='56'
+      viewBox='0 0 57 56'
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'
+      {...rest}
+    >
       <path
         fill-rule='evenodd'
         clip-rule='evenodd'
@@ -18,7 +25,12 @@ export default function IconAnimation({ ...rest }: SVGProps<SVGSVGElement>) {
         stroke='#0D1A26'
         stroke-width='0.95'
       />
-      <path fill-rule='evenodd' clip-rule='evenodd' d='M23.007 16L35.2888 37.2264H10.7252L23.007 16Z' fill='#FADB14' />
+      <path
+        fill-rule='evenodd'
+        clip-rule='evenodd'
+        d='M23.007 16L35.2888 37.2264H10.7252L23.007 16Z'
+        fill='#FADB14'
+      />
       <path
         d='M10.8252 37.9912C11.3775 37.9912 11.8252 37.5435 11.8252 36.9912C11.8252 36.4389 11.3775 35.9912 10.8252 35.9912C10.2729 35.9912 9.8252 36.4389 9.8252 36.9912C9.8252 37.5435 10.2729 37.9912 10.8252 37.9912Z'
         fill='#F5222D'

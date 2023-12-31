@@ -12,8 +12,9 @@ import { IRequestOrganization } from '@/typeDefs/schema/organization.type'
 type Props = {}
 
 const RequestOrganizationManagement = ({}: Props) => {
-  const { data: dataRequestOrganization, refetch } = useQuery(['listRequestOrganization'], () =>
-    organizationService.getAllRequestOrganization()
+  const { data: dataRequestOrganization, refetch } = useQuery(
+    ['listRequestOrganization'],
+    () => organizationService.getAllRequestOrganization()
   )
   const updateMutation = useMutation({
     mutationKey: ['updateMutation'],
@@ -56,7 +57,13 @@ const RequestOrganizationManagement = ({}: Props) => {
       title: 'Trạng thái',
       dataIndex: 'status',
       render: (_, record) => (
-        <p>{record.status === 0 ? 'Phê duyệt' : record.status === 1 ? 'Chưa phê duyệt' : 'Không phê duyệt'}</p>
+        <p>
+          {record.status === 0
+            ? 'Phê duyệt'
+            : record.status === 1
+              ? 'Chưa phê duyệt'
+              : 'Không phê duyệt'}
+        </p>
       )
     },
     {
@@ -103,26 +110,36 @@ const RequestOrganizationManagement = ({}: Props) => {
 
   return (
     <>
-      {
-      dataRequestOrganization && 
-      // dataRequestOrganization.data.data && 
-      (
+      {dataRequestOrganization && (
+        // dataRequestOrganization.data.data &&
         <React.Fragment>
           <Row justify={'space-between'} align='middle' gutter={16}>
             <Col span={12}>
-              <h1 className='font-bold text-2xl'>Quản lý yêu cầu/ban tổ chức</h1>
+              <h1 className='font-bold text-2xl'>
+                Quản lý yêu cầu/ban tổ chức
+              </h1>
             </Col>
             <Col span={12}>
               <div className='flex py-2 justify-between items-center gap-3'>
-                <Search className='bg-blue-300 rounded-lg' placeholder='Tìm kiếm' onSearch={() => {}} enterButton />
+                <Search
+                  className='bg-blue-300 rounded-lg'
+                  placeholder='Tìm kiếm'
+                  onSearch={() => {}}
+                  enterButton
+                />
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataRequestOrganization.data.data.requestOrganizations} columns={columns} />
+          <Table
+            dataSource={dataRequestOrganization.data.data.requestOrganizations}
+            columns={columns}
+          />
         </React.Fragment>
       )}
     </>
   )
 }
-RequestOrganizationManagement.getLayout = (children: React.ReactNode) => <DashboardLayout>{children}</DashboardLayout>
+RequestOrganizationManagement.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+)
 export default RequestOrganizationManagement

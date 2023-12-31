@@ -1,5 +1,15 @@
 import { authService } from '@/services/auth.service'
-import { Button, Card, DatePicker, DatePickerProps, Form, Input, Select, SelectProps, message } from 'antd'
+import {
+  Button,
+  Card,
+  DatePicker,
+  DatePickerProps,
+  Form,
+  Input,
+  Select,
+  SelectProps,
+  message
+} from 'antd'
 import React from 'react'
 import { useMutation } from 'react-query'
 import BlankLayout from '@/layouts/BlankLayout'
@@ -26,7 +36,7 @@ const Register = ({}: Props) => {
       const res = data.data.data
       if (res) {
         message.success('Đăng ký thành công')
-        router.push("/login")
+        router.push('/login')
       }
     },
     onError(error, variables, context) {
@@ -65,7 +75,13 @@ const Register = ({}: Props) => {
       <Card
         title='Đăng ký ngay'
         style={{ minWidth: 700 }}
-        extra={<img style={{ maxWidth: 100, maxHeight: 100 }} alt='logo' src='/logo.svg' />}
+        extra={
+          <img
+            style={{ maxWidth: 100, maxHeight: 100 }}
+            alt='logo'
+            src='/logo.svg'
+          />
+        }
       >
         <Form
           name='basic'
@@ -82,11 +98,19 @@ const Register = ({}: Props) => {
             <Input />
           </Form.Item>
 
-          <Form.Item label='Email' name='email' rules={[{ required: true, message: 'Chưa điền email' }]}>
+          <Form.Item
+            label='Email'
+            name='email'
+            rules={[{ required: true, message: 'Chưa điền email' }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item label='Tên' name='name' rules={[{ required: true, message: 'Chưa điền tên' }]}>
+          <Form.Item
+            label='Tên'
+            name='name'
+            rules={[{ required: true, message: 'Chưa điền tên' }]}
+          >
             <Input />
           </Form.Item>
 
@@ -98,7 +122,11 @@ const Register = ({}: Props) => {
             <Input type='number' />
           </Form.Item>
 
-          <Form.Item label='Giới tính' name='gender' rules={[{ required: true, message: 'Chưa điền giới tính' }]}>
+          <Form.Item
+            label='Giới tính'
+            name='gender'
+            rules={[{ required: true, message: 'Chưa điền giới tính' }]}
+          >
             <Select
               placeholder='select one country'
               defaultValue={['']}
@@ -107,15 +135,27 @@ const Register = ({}: Props) => {
             />
           </Form.Item>
 
-          <Form.Item label='Ngày sinh' name='birthday' rules={[{ required: true, message: 'Chưa điền ngày sinh' }]}>
+          <Form.Item
+            label='Ngày sinh'
+            name='birthday'
+            rules={[{ required: true, message: 'Chưa điền ngày sinh' }]}
+          >
             <DatePicker />
           </Form.Item>
 
-          <Form.Item label='Địa chỉ' name='address' rules={[{ required: true, message: 'Chưa điền địa chỉ' }]}>
+          <Form.Item
+            label='Địa chỉ'
+            name='address'
+            rules={[{ required: true, message: 'Chưa điền địa chỉ' }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item label='Mật khẩu' name='password' rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}>
+          <Form.Item
+            label='Mật khẩu'
+            name='password'
+            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
+          >
             <Input.Password />
           </Form.Item>
 
@@ -130,7 +170,9 @@ const Register = ({}: Props) => {
                   if (!value || getFieldValue('password') === value) {
                     return Promise.resolve()
                   }
-                  return Promise.reject(new Error('Mật khẩu xác nhận không khớp'))
+                  return Promise.reject(
+                    new Error('Mật khẩu xác nhận không khớp')
+                  )
                 }
               })
             ]}
@@ -138,12 +180,19 @@ const Register = ({}: Props) => {
             <Input.Password />
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
-            <Button type='primary' htmlType='submit' loading={registerMutation.isLoading}>
+            <Button
+              type='primary'
+              htmlType='submit'
+              loading={registerMutation.isLoading}
+            >
               Đăng ký
             </Button>
             <p className='mt-5 p-0 cursor-pointer text-black'>
               Đã có tài khoản?{' '}
-              <span className='text-blue-400 hover:text-blue-500' onClick={() => router.push('/register')}>
+              <span
+                className='text-blue-400 hover:text-blue-500'
+                onClick={() => router.push('/register')}
+              >
                 Đăng nhập ngay
               </span>
             </p>
@@ -153,5 +202,7 @@ const Register = ({}: Props) => {
     </React.Fragment>
   )
 }
-Register.getLayout = (children: React.ReactNode) => <BlankLayout>{children}</BlankLayout>
+Register.getLayout = (children: React.ReactNode) => (
+  <BlankLayout>{children}</BlankLayout>
+)
 export default Register

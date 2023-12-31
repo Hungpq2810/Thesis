@@ -3,7 +3,10 @@ import {
   GeneralResponse,
   commonResponse,
 } from '../../utilities/CommonResponse';
-import { Organization, OrganizationAttributes } from '../../models/organization';
+import {
+  Organization,
+  OrganizationAttributes,
+} from '../../models/organization';
 import { Users } from '../../models/users';
 import { organizationMapper } from '../../mapper/OrganizationMapper';
 
@@ -52,14 +55,14 @@ export const deleteOrganization = async (
 
 export const updateOrganization = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { id } = req.params;
     const organization = await Organization.findByPk(id);
 
     if (!organization) {
-      res.status(404).json({ message: "Organization not found" });
+      res.status(404).json({ message: 'Organization not found' });
       return;
     }
     const updatedFields = {
@@ -70,17 +73,20 @@ export const updateOrganization = async (
       updated_at: new Date(),
     };
 
-    const updatedOrganization = await organization.update(updatedFields);
+    const updatedOrganization =
+      await organization.update(updatedFields);
 
     if (updatedOrganization) {
       const response: GeneralResponse<{}> = {
         status: 200,
         data: updatedOrganization.toJSON(),
-        message: "Organization updated successfully",
+        message: 'Organization updated successfully',
       };
       commonResponse(req, res, response);
     } else {
-      res.status(400).json({ message: "Failed to update organization" });
+      res
+        .status(400)
+        .json({ message: 'Failed to update organization' });
     }
   } catch (error: any) {
     console.error(error);
@@ -99,14 +105,17 @@ export const listOrganizationAdmin = async (
 ): Promise<void> => {
   try {
     const organizationsCurrent = await Organization.findAll();
-    const organizations = await organizationMapper(organizationsCurrent);
+    const organizations = await organizationMapper(
+      organizationsCurrent,
+    );
     if (organizations.length > 0) {
       const response: GeneralResponse<{
         organizations: OrganizationAttributes[];
       }> = {
         status: 200,
-        data: { 
-          organizations: organizations as unknown as OrganizationAttributes[],
+        data: {
+          organizations:
+            organizations as unknown as OrganizationAttributes[],
         },
         message: 'Lấy danh sách tổ chức thành công',
       };

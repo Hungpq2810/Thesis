@@ -1,5 +1,15 @@
 import { useMutation, useQuery } from 'react-query'
-import { Button, Form, Input, message, Modal, Row, Col, Select, SelectProps } from 'antd'
+import {
+  Button,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Col,
+  Select,
+  SelectProps
+} from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import { useEffect } from 'react'
 import dayjs from 'dayjs'
@@ -17,11 +27,12 @@ const FormFaq = ({ editId, open, setOpen, refetch }: Props) => {
   const isEditIdValidNumber = typeof editId === 'number'
   const newMutation = useMutation({
     mutationKey: 'newFaq',
-    mutationFn: (body: { question: string; answer: string }) => faqService.newFaq(body),
+    mutationFn: (body: { question: string; answer: string }) =>
+      faqService.newFaq(body),
     onSuccess(data, _variables, _context) {
-        message.success('Tạo thành công')
-        setOpen(false)
-        refetch()
+      message.success('Tạo thành công')
+      setOpen(false)
+      refetch()
     },
     onError(error, variables, context) {
       message.error('Tạo không thành công')
@@ -29,7 +40,8 @@ const FormFaq = ({ editId, open, setOpen, refetch }: Props) => {
   })
   const updateMutation = useMutation({
     mutationKey: 'update',
-    mutationFn: (body: { question: string; answer: string }) => faqService.updateFaq(editId as number, body),
+    mutationFn: (body: { question: string; answer: string }) =>
+      faqService.updateFaq(editId as number, body),
     onSuccess(data, _variables, _context) {
       const res = data.data
       if (!res) return
@@ -48,9 +60,13 @@ const FormFaq = ({ editId, open, setOpen, refetch }: Props) => {
       newMutation.mutate(value)
     }
   }
-  const { data } = useQuery(['user'], () => faqService.getFaqById(editId as number), {
-    enabled: isEditIdValidNumber
-  })
+  const { data } = useQuery(
+    ['user'],
+    () => faqService.getFaqById(editId as number),
+    {
+      enabled: isEditIdValidNumber
+    }
+  )
   useEffect(() => {
     if (editId && data) {
       form.setFieldsValue({
@@ -60,7 +76,13 @@ const FormFaq = ({ editId, open, setOpen, refetch }: Props) => {
   }, [data])
 
   return (
-    <Modal title={editId ? `Chỉnh sửa faq` : 'Tạo faq mới'} centered open={open} width={1000} footer={false}>
+    <Modal
+      title={editId ? `Chỉnh sửa faq` : 'Tạo faq mới'}
+      centered
+      open={open}
+      width={1000}
+      footer={false}
+    >
       <Form
         form={form}
         name='basic'
@@ -69,11 +91,19 @@ const FormFaq = ({ editId, open, setOpen, refetch }: Props) => {
         autoComplete='off'
         layout='vertical'
       >
-        <Form.Item label='Câu hỏi' name='question' rules={[{ required: true, message: 'Chưa điền câu hỏi' }]}>
+        <Form.Item
+          label='Câu hỏi'
+          name='question'
+          rules={[{ required: true, message: 'Chưa điền câu hỏi' }]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label='Câu trả lời' name='answer' rules={[{ required: true, message: 'Chưa điền câu trả lời' }]}>
+        <Form.Item
+          label='Câu trả lời'
+          name='answer'
+          rules={[{ required: true, message: 'Chưa điền câu trả lời' }]}
+        >
           <Input />
         </Form.Item>
 
@@ -87,7 +117,9 @@ const FormFaq = ({ editId, open, setOpen, refetch }: Props) => {
           </Col>
           <Col>
             <Form.Item style={{ textAlign: 'center' }}>
-              <Button htmlType='submit'>{editId ? 'Chỉnh sửa' : 'Tạo mới'}</Button>
+              <Button htmlType='submit'>
+                {editId ? 'Chỉnh sửa' : 'Tạo mới'}
+              </Button>
             </Form.Item>
           </Col>
         </Row>

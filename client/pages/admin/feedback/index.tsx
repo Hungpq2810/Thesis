@@ -13,7 +13,9 @@ import { log } from 'console'
 type Props = {}
 
 const FeedbackManagement = ({}: Props) => {
-  const { data: dataFeedback, refetch } = useQuery(['listFeedback'], () => feedbackService.getAllFeedback())
+  const { data: dataFeedback, refetch } = useQuery(['listFeedback'], () =>
+    feedbackService.getAllFeedback()
+  )
   const deleteMutation = useMutation({
     mutationKey: ['deleteMutation'],
     mutationFn: (userId: number) => userService.deleteUser(userId),
@@ -45,7 +47,13 @@ const FeedbackManagement = ({}: Props) => {
       key: 'user',
       render: (_, record) => (
         <div className='w-1/3 flex justify-between items-center'>
-          <Image preview={false} src={record.avatar} width={50} height={50} className='rounded-lg' />
+          <Image
+            preview={false}
+            src={record.avatar}
+            width={50}
+            height={50}
+            className='rounded-lg'
+          />
           <p>{record.name}</p>
         </div>
       )
@@ -78,8 +86,7 @@ const FeedbackManagement = ({}: Props) => {
       )
     }
   ]
-  console.log(dataFeedback);
-  
+  console.log(dataFeedback)
 
   return (
     <>
@@ -91,15 +98,25 @@ const FeedbackManagement = ({}: Props) => {
             </Col>
             <Col span={12}>
               <div className='flex py-2 justify-between items-center gap-3'>
-                <Search className='bg-blue-300 rounded-lg' placeholder='Tìm kiếm' onSearch={() => {}} enterButton />
+                <Search
+                  className='bg-blue-300 rounded-lg'
+                  placeholder='Tìm kiếm'
+                  onSearch={() => {}}
+                  enterButton
+                />
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataFeedback.data.data.feedbacks} columns={columns} />
+          <Table
+            dataSource={dataFeedback.data.data.feedbacks}
+            columns={columns}
+          />
         </React.Fragment>
       )}
     </>
   )
 }
-FeedbackManagement.getLayout = (children: React.ReactNode) => <DashboardLayout>{children}</DashboardLayout>
+FeedbackManagement.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+)
 export default FeedbackManagement

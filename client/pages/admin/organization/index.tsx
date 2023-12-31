@@ -15,8 +15,9 @@ type Props = {}
 const OrganizationManagement = ({}: Props) => {
   const [open, setOpen] = useState(false)
   const [rowId, setRowId] = useState<number>()
-  const { data: dataOrganization, refetch } = useQuery(['listOrganizationAdmin'], () =>
-    organizationService.listOrganizationAdmin()
+  const { data: dataOrganization, refetch } = useQuery(
+    ['listOrganizationAdmin'],
+    () => organizationService.listOrganizationAdmin()
   )
   const deleteMutation = useMutation({
     mutationKey: ['deleteMutation'],
@@ -60,7 +61,12 @@ const OrganizationManagement = ({}: Props) => {
       dataIndex: 'creator',
       render: (_, record) => (
         <div className='w-1/3 flex justify-between items-center'>
-          <img src={record.creator.avatar} width={30} height={30} className='rounded-full' />
+          <img
+            src={record.creator.avatar}
+            width={30}
+            height={30}
+            className='rounded-full'
+          />
           <p>{record.creator.name}</p>
         </div>
       )
@@ -68,7 +74,9 @@ const OrganizationManagement = ({}: Props) => {
     {
       title: 'Trạng thái',
       dataIndex: 'status',
-      render: (_, record) => <p>{record.status === 0 ? 'Hoạt động' : 'Không hoạt động'}</p>
+      render: (_, record) => (
+        <p>{record.status === 0 ? 'Hoạt động' : 'Không hoạt động'}</p>
+      )
     },
     {
       title: 'Hành động',
@@ -108,16 +116,31 @@ const OrganizationManagement = ({}: Props) => {
             </Col>
             <Col span={12}>
               <div className='flex py-2 justify-between items-center gap-3'>
-                <Search className='bg-blue-300 rounded-lg' placeholder='Tìm kiếm' onSearch={() => {}} enterButton />
+                <Search
+                  className='bg-blue-300 rounded-lg'
+                  placeholder='Tìm kiếm'
+                  onSearch={() => {}}
+                  enterButton
+                />
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataOrganization.data.data.organizations} columns={columns} />
-          <FormOrganization refetch={refetch} editId={rowId} open={open} setOpen={setOpen} />
+          <Table
+            dataSource={dataOrganization.data.data.organizations}
+            columns={columns}
+          />
+          <FormOrganization
+            refetch={refetch}
+            editId={rowId}
+            open={open}
+            setOpen={setOpen}
+          />
         </React.Fragment>
       )}
     </>
   )
 }
-OrganizationManagement.getLayout = (children: React.ReactNode) => <DashboardLayout>{children}</DashboardLayout>
+OrganizationManagement.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+)
 export default OrganizationManagement

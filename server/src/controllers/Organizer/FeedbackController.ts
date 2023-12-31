@@ -8,7 +8,7 @@ import {
 import { Feedback, FeedbackAttributes } from '../../models/feedback';
 import { Users } from '../../models/users';
 import { Activities } from '../../models/activities';
-import { feedbackMapper } from "../../mapper/FeedbackMapper";
+import { feedbackMapper } from '../../mapper/FeedbackMapper';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
@@ -33,7 +33,7 @@ export const listFeedBackByOrganizer = async (
     });
     if (organizer) {
       const activities = await Activities.findAll({
-        where: { creator: organizer.organization_id },
+        where: { creator: organizerId },
       });
       const activityIds = activities.map((activity) => activity.id);
       const feedbacksCurrent = await Feedback.findAll({

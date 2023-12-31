@@ -1,5 +1,14 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Button, Col, Image, message, Popconfirm, Row, Space, Table } from 'antd'
+import {
+  Button,
+  Col,
+  Image,
+  message,
+  Popconfirm,
+  Row,
+  Space,
+  Table
+} from 'antd'
 import Search from 'antd/lib/input/Search'
 import { ColumnType } from 'antd/lib/table'
 import DashboardLayout from '@/layouts/DashboardLayout'
@@ -17,12 +26,18 @@ const ActivityManagement = ({}: Props) => {
   const [open, setOpen] = useState(false)
   const [action, setAtion] = useState<string>('')
   const [rowId, setRowId] = useState<number>()
-  const { data: dataActivity, refetch } = useQuery(['listActivty'], () => activityService.getAllActivity(), {
-    select(data) {
-      const filterActivity = data.data.data.activities.filter(activity => activity.creator_id === +user!.id)
-      return filterActivity
+  const { data: dataActivity, refetch } = useQuery(
+    ['listActivty'],
+    () => activityService.getAllActivity(),
+    {
+      select(data) {
+        const filterActivity = data.data.data.activities.filter(
+          activity => activity.creator_id === +user!.id
+        )
+        return filterActivity
+      }
     }
-  })
+  )
   const columns: ColumnType<IActivity>[] = [
     {
       title: '#',
@@ -101,14 +116,21 @@ const ActivityManagement = ({}: Props) => {
       key: 'status',
       render: (_, record) => (
         <>
-          <Image src={record.image} width={250} height={150} className='rounded-lg' />
+          <Image
+            src={record.image}
+            width={250}
+            height={150}
+            className='rounded-lg'
+          />
         </>
       )
     },
     {
       title: 'Trạng thái',
       dataIndex: 'status',
-      render: (_, record) => <p>{record.status === 0 ? 'Đang mở' : 'Đã đóng'}</p>
+      render: (_, record) => (
+        <p>{record.status === 0 ? 'Đang mở' : 'Đã đóng'}</p>
+      )
     },
     {
       title: 'Hành động',
@@ -132,9 +154,8 @@ const ActivityManagement = ({}: Props) => {
 
   return (
     <>
-      {dataActivity &&
-      // dataActivity.data.data
-      (
+      {dataActivity && (
+        // dataActivity.data.data
         <React.Fragment>
           <Row justify={'space-between'} align='middle' gutter={16}>
             <Col span={12}>
@@ -142,7 +163,12 @@ const ActivityManagement = ({}: Props) => {
             </Col>
             <Col span={12}>
               <div className='flex py-2 justify-between items-center gap-3'>
-                <Search className='bg-blue-300 rounded-lg' placeholder='Tìm kiếm' onSearch={() => {}} enterButton />
+                <Search
+                  className='bg-blue-300 rounded-lg'
+                  placeholder='Tìm kiếm'
+                  onSearch={() => {}}
+                  enterButton
+                />
                 <Button
                   onClick={() => {
                     setAtion('create')
@@ -155,16 +181,27 @@ const ActivityManagement = ({}: Props) => {
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataActivity} columns={columns} scroll={{ x: 'max-content' }} />
+          <Table
+            dataSource={dataActivity}
+            columns={columns}
+            scroll={{ x: 'max-content' }}
+          />
           {action === 'create' && !rowId ? (
             <FormActivity refetch={refetch} open={open} setOpen={setOpen} />
           ) : (
-            <FormActivity refetch={refetch} editId={rowId} open={open} setOpen={setOpen} />
+            <FormActivity
+              refetch={refetch}
+              editId={rowId}
+              open={open}
+              setOpen={setOpen}
+            />
           )}
         </React.Fragment>
       )}
     </>
   )
 }
-ActivityManagement.getLayout = (children: React.ReactNode) => <DashboardLayout>{children}</DashboardLayout>
+ActivityManagement.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+)
 export default ActivityManagement

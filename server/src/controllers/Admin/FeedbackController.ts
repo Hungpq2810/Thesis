@@ -5,7 +5,7 @@ import {
   commonResponse,
 } from '../../utilities/CommonResponse';
 import { Feedback, FeedbackAttributes } from '../../models/feedback';
-import { feedbackMapper } from "../../mapper/FeedbackMapper";
+import { feedbackMapper } from '../../mapper/FeedbackMapper';
 dotenv.config();
 
 export const listFeedBack = async (
@@ -14,7 +14,7 @@ export const listFeedBack = async (
 ): Promise<void> => {
   try {
     const feedbacksCurrent = await Feedback.findAll({
-      where: {activity_id: 0}
+      where: { activity_id: 0 },
     });
     const feedbacks = await feedbackMapper(feedbacksCurrent);
     if (feedbacks.length > 0) {

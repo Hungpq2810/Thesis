@@ -131,11 +131,19 @@ const SiderMenu = () => {
         onClick={() => router.push('/')}
       >
         {collapsed ? (
-          <img style={{ maxWidth: 32, maxHeight: 32 }} alt='logo' src='/logo.png' />
+          <img
+            style={{ maxWidth: 32, maxHeight: 32 }}
+            alt='logo'
+            src='/logo.png'
+          />
         ) : (
           <>
             <Typography>Activity Management</Typography>
-            <img style={{ maxWidth: 32, maxHeight: 32 }} alt='logo' src='/logo.png' />
+            <img
+              style={{ maxWidth: 32, maxHeight: 32 }}
+              alt='logo'
+              src='/logo.png'
+            />
           </>
         )}
       </div>

@@ -17,7 +17,8 @@ const RequestOrganization = () => {
   }
   const requestBecomeOrganizationMutation = useMutation({
     mutationKey: 'requestBecomeOrganizationMutation',
-    mutationFn: (body: { organization_id: number }) => organizationService.requestBecomeOrganization(body),
+    mutationFn: (body: { organization_id: number }) =>
+      organizationService.requestBecomeOrganization(body),
     onSuccess(data, _variables, _context) {
       if (data) {
         message.success('Yêu cầu thành công')
@@ -29,7 +30,9 @@ const RequestOrganization = () => {
   })
 
   function handleRequest() {
-    requestBecomeOrganizationMutation.mutate({ organization_id: inforOrganization?.id || 0 })
+    requestBecomeOrganizationMutation.mutate({
+      organization_id: inforOrganization?.id || 0
+    })
   }
   const steps = [
     {
@@ -54,11 +57,19 @@ const RequestOrganization = () => {
             <h1>Tên tổ chức: {inforOrganization?.name}</h1>
             <h2>Địa chỉ: {inforOrganization?.location}</h2>
             <h2>Mô tả: {inforOrganization?.description}</h2>
-            <Form.Item name='remember' valuePropName='checked' className='m-0 p-0'>
+            <Form.Item
+              name='remember'
+              valuePropName='checked'
+              className='m-0 p-0'
+            >
               <Checkbox>Ghi nhớ điều khoản</Checkbox>
             </Form.Item>
             <Form.Item style={{ textAlign: 'center' }}>
-              <Button type='primary' htmlType='submit' loading={requestBecomeOrganizationMutation.isLoading}>
+              <Button
+                type='primary'
+                htmlType='submit'
+                loading={requestBecomeOrganizationMutation.isLoading}
+              >
                 Gửi yêu cầu
               </Button>
             </Form.Item>
@@ -74,7 +85,9 @@ const RequestOrganization = () => {
         <title>Đăng ký tổ chức</title>
       </Head>
       <Steps current={current} items={items} />
-      <div className='w-full min-h-[50vh] bg-slate-300 mt-10 p-10 rounded-lg'>{steps[current].content}</div>
+      <div className='w-full min-h-[50vh] bg-slate-300 mt-10 p-10 rounded-lg'>
+        {steps[current].content}
+      </div>
       <div style={{ marginTop: 24 }}>
         {current > 0 && (
           <Button style={{ margin: '0 8px' }} onClick={() => prev()}>

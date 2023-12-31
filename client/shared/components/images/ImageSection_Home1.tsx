@@ -1,6 +1,8 @@
 import React, { SVGProps } from 'react'
 
-export default function ImageSection_Home1({ ...rest }: SVGProps<SVGSVGElement>) {
+export default function ImageSection_Home1({
+  ...rest
+}: SVGProps<SVGSVGElement>) {
   return (
     <svg
       width='814'
@@ -14,7 +16,14 @@ export default function ImageSection_Home1({ ...rest }: SVGProps<SVGSVGElement>)
       <ellipse cx='438.5' cy='295' rx='438.5' ry='439' fill='#F3F2FF' />
       <circle cx='542.327' cy='226.327' r='387.327' fill='#F6E8FE' />
       <g filter='url(#filter0_d_3_387)'>
-        <rect x='109.205' y='147' width='404.211' height='466.779' rx='40' fill='url(#pattern0)' />
+        <rect
+          x='109.205'
+          y='147'
+          width='404.211'
+          height='466.779'
+          rx='40'
+          fill='url(#pattern0)'
+        />
       </g>
       <defs>
         <filter
@@ -35,12 +44,32 @@ export default function ImageSection_Home1({ ...rest }: SVGProps<SVGSVGElement>)
           />
           <feOffset dy='24.8287' />
           <feGaussianBlur stdDeviation='19.8629' />
-          <feColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0' />
-          <feBlend mode='normal' in2='BackgroundImageFix' result='effect1_dropShadow_3_387' />
-          <feBlend mode='normal' in='SourceGraphic' in2='effect1_dropShadow_3_387' result='shape' />
+          <feColorMatrix
+            type='matrix'
+            values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0'
+          />
+          <feBlend
+            mode='normal'
+            in2='BackgroundImageFix'
+            result='effect1_dropShadow_3_387'
+          />
+          <feBlend
+            mode='normal'
+            in='SourceGraphic'
+            in2='effect1_dropShadow_3_387'
+            result='shape'
+          />
         </filter>
-        <pattern id='pattern0' patternContentUnits='objectBoundingBox' width='1' height='1'>
-          <use xlinkHref='#image0_3_387' transform='matrix(0.00188691 0 0 0.00163399 -0.0773956 0)' />
+        <pattern
+          id='pattern0'
+          patternContentUnits='objectBoundingBox'
+          width='1'
+          height='1'
+        >
+          <use
+            xlinkHref='#image0_3_387'
+            transform='matrix(0.00188691 0 0 0.00163399 -0.0773956 0)'
+          />
         </pattern>
         <image
           id='image0_3_387'

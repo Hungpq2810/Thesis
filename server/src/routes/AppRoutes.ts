@@ -23,11 +23,11 @@ import {
 import {
   createOrganization,
   listOrganization,
-  detailOrganization
+  detailOrganization,
 } from '../controllers/OrganizationController';
-import { 
+import {
   deleteOrganization,
-  updateOrganization
+  updateOrganization,
 } from '../controllers/Admin/OrganizationController';
 import { requestOrganization } from '../controllers/RequestOrganizationController';
 import {
@@ -51,7 +51,7 @@ import {
 } from '../controllers/Organizer/ActivityController';
 import {
   activityApplyVolunteer,
-  cancelApplyToActivity,
+  cancelApplyActivity,
 } from '../controllers/ActivityApplyController';
 import {
   listApplyVolunteers,
@@ -62,9 +62,9 @@ import {
   deleteSkill,
   updateSkill,
 } from '../controllers/Admin/SkillController';
-import { 
+import {
   listSkills,
-  getSkillById
+  getSkillById,
 } from '../controllers/SkillController';
 import { newFeedBack } from '../controllers/FeedbackController';
 import {
@@ -72,16 +72,12 @@ import {
   deleteFaq,
   updateFaq,
 } from '../controllers/Admin/FaqController';
-import { 
-  listFaq,
-  getFaqById 
-} from '../controllers/FaqController';
+import { listFaq, getFaqById } from '../controllers/FaqController';
 import { listActivitesBySkills } from '../controllers/SkillActivitesController';
 import { listFeedBack } from '../controllers/Admin/FeedbackController';
 import { listFeedBackByOrganizer } from '../controllers/Organizer/FeedbackController';
 import { deleteActivityByAdmin } from '../controllers/Admin/ActivityController';
-import { getVolunteer } from "../controllers/Organizer/VolunteerController";
-
+import { getVolunteer } from '../controllers/Organizer/VolunteerController';
 
 const router = express.Router();
 //Auth
@@ -122,17 +118,17 @@ router.delete(
   deleteOrganization,
 );
 router.put(
-  "/api/v1/admin/organizations/:id", 
-  authenticateToken, 
-  checkRoleAdmin, 
-  updateOrganization
+  '/api/v1/admin/organizations/:id',
+  authenticateToken,
+  checkRoleAdmin,
+  updateOrganization,
 );
 router.get(
   '/api/v1/admin/organizations',
   authenticateToken,
   checkRoleAdmin,
   listOrganizationAdmin,
-)
+);
 //Request Organization
 router.get(
   '/api/v1/admin/request_organization',
@@ -185,10 +181,7 @@ router.delete(
   deleteFaq,
 );
 //FeedBack
-router.get(
-  '/api/v1/admin/feedback',
-  listFeedBack,
-);
+router.get('/api/v1/admin/feedback', listFeedBack);
 //Activity
 router.delete(
   '/api/v1/admin/activity/:id',
@@ -250,13 +243,18 @@ router.put(
   updateApplyVolunteer,
 );
 //Volunteer manager
-router.get("/api/v1/organizer/volunteers", authenticateToken, checkRoleOrganizer, getVolunteer)
+router.get(
+  '/api/v1/organizer/volunteers',
+  authenticateToken,
+  checkRoleOrganizer,
+  getVolunteer,
+);
 //User
 router.put('/api/v1/user', authenticateToken, updateProfile);
 router.get('/api/v1/user', authenticateToken, detailUser);
 //Organization
 router.get('/api/v1/organizations', listOrganization);
-router.get("/api/v1/organization/:id", detailOrganization);
+router.get('/api/v1/organization/:id', detailOrganization);
 router.post(
   '/api/v1/create_organization',
   authenticateToken,
@@ -275,7 +273,7 @@ router.get('/api/v1/activities/:id', detailActivity);
 router.post('/api/v1/activities_by_skill', listActivitesBySkills);
 //Skill
 router.get('/api/v1/skills', listSkills);
-router.get("/api/v1/skills/:id", getSkillById);
+router.get('/api/v1/skills/:id', getSkillById);
 //Feedback
 router.post('/api/v1/feedback', newFeedBack);
 //Request Join in Activity By Volunteer
@@ -285,9 +283,9 @@ router.post(
   activityApplyVolunteer,
 );
 router.put(
-  '/api/v1/cancel_application_activity',
+  '/api/v1/cancel_volunteer',
   authenticateToken,
-  cancelApplyToActivity,
+  cancelApplyActivity,
 );
 //Request Join In Orgainzation By Volunteer
 router.post(
@@ -297,6 +295,6 @@ router.post(
 );
 //Faq
 router.get('/api/v1/faq', listFaq);
-router.get("/api/v1/faq/:id", getFaqById);
+router.get('/api/v1/faq/:id', getFaqById);
 
 export default router;

@@ -1,4 +1,13 @@
-import { Button, Card, DatePicker, Form, Input, Select, SelectProps, message } from 'antd'
+import {
+  Button,
+  Card,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  SelectProps,
+  message
+} from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import BlankLayout from '@/layouts/BlankLayout'
@@ -20,33 +29,45 @@ const Profile = ({ next }: Props) => {
   const { user } = useAppSelector(state => state.appSlice)
   const { data } = useQuery(['userDetail'], () => userService.getUserByAuth())
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(user?.avatar)
-  const [belongsOrgainzer, setBelongsOrgainzer] = useState<number | undefined>(
-    data?.data.data.belongsOrganizer.organization_id
+  const [belongsOrganizer, setBelongsOrganizer] = useState<number | undefined>(
+    data?.data.data.belongsOrganizer?.organization_id
+  )
+  const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(
+    data?.data.data.skills?.map(skill => skill.id)
   )
   const dispatch = useDispatch()
-  const { data: skills } = useQuery(['skills'], () => skillService.getAllSkill(), {
-    select(data) {
-      const result = data.data.data
-      if (!result) return
-      const res = result.skills.map(skill => ({
-        label: skill.name,
-        value: skill.id
-      }))
-      return res
+  const { data: skills } = useQuery(
+    ['skills'],
+    () => skillService.getAllSkill(),
+    {
+      select(data) {
+        const result = data.data.data
+        if (!result) return
+        const res = result.skills.map(skill => ({
+          label: skill.name,
+          value: skill.id
+        }))
+        return res
+      }
     }
-  })
+  )
+  console.log('Skills:', data?.data.data.skills)
 
-  const { data: organizers } = useQuery(['organizers'], () => organizationService.getAllOrganization(), {
-    select(data) {
-      const result = data.data.data
-      if (!result) return
-      const res = result.organizations.map(organization => ({
-        label: organization.name,
-        value: organization.id
-      }))
-      return res
+  const { data: organizers } = useQuery(
+    ['organizers'],
+    () => organizationService.getAllOrganization(),
+    {
+      select(data) {
+        const result = data.data.data
+        if (!result) return
+        const res = result.organizations.map(organization => ({
+          label: organization.name,
+          value: organization.id
+        }))
+        return res
+      }
     }
-  })
+  )
 
   const updateProfile = useMutation({
     mutationKey: 'updateProfile',
@@ -54,7 +75,7 @@ const Profile = ({ next }: Props) => {
     onSuccess(data, _variables, _context) {
       if (data.data.data) {
         dispatch(setInforOrganization(data.data.data))
-        message.success('Tạo thành công')
+        message.success('Cập nhật thành công')
       }
     },
     onError(error, variables, context) {
@@ -66,25 +87,15 @@ const Profile = ({ next }: Props) => {
     updateProfile.mutate(value)
     next()
   }
-  
-  // useEffect(() => {
-  //   if (user && data) {
-  //     const { organization } = data.data.data.belongsOrganizer;
-  //     const organizationName = organization?.name;
-      
-  //     form.setFieldsValue({
-  //         ...data.data.data.user,
-  //         belongsOrgainzer: organizationName, // Hiển thị tên tổ chức
-  //     });
-      
-  //   }
-  // }, [data]);
+
   useEffect(() => {
     if (user && data) {
-      setBelongsOrgainzer(data.data.data.belongsOrganizer.organization_id)
+      setBelongsOrganizer(data.data.data.belongsOrganizer?.organization_id)
+      setSkillsDefault(data.data.data.skills?.map(skill => skill.skill_id))
+      console.log(data.data.data.skills)
       form.setFieldsValue({
         // @ts-ignore
-        ...data.data.data.user,
+        ...data.data.data.user
       })
     }
   }, [data])
@@ -116,7 +127,13 @@ const Profile = ({ next }: Props) => {
       <Card
         title='Thông tin cá nhân'
         style={{ minWidth: 700 }}
-        extra={<img style={{ maxWidth: 100, maxHeight: 100 }} alt='logo' src='/logo.svg' />}
+        extra={
+          <img
+            style={{ maxWidth: 100, maxHeight: 100 }}
+            alt='logo'
+            src='/logo.svg'
+          />
+        }
       >
         <Form
           form={form}
@@ -129,11 +146,19 @@ const Profile = ({ next }: Props) => {
           <Form.Item label='Avatar' name='avatar'>
             <InputUpload initSrc={avatarUrl} onChange={handleAvatarChange} />
           </Form.Item>
-          <Form.Item label='Tên' name='name' rules={[{ required: true, message: 'Vui lòng nhập tên' }]}>
+          <Form.Item
+            label='Tên'
+            name='name'
+            rules={[{ required: true, message: 'Vui lòng nhập tên' }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item label='Email' name='email' rules={[{ required: true, message: 'Vui lòng nhập email' }]}>
+          <Form.Item
+            label='Email'
+            name='email'
+            rules={[{ required: true, message: 'Vui lòng nhập email' }]}
+          >
             <Input />
           </Form.Item>
 
@@ -145,8 +170,17 @@ const Profile = ({ next }: Props) => {
             <Input />
           </Form.Item>
 
-          <Form.Item label='Giới tính' name='gender' rules={[{ required: true, message: 'Chưa điền giới tính' }]}>
-            <Select placeholder='Chọn giới tính của bạn' defaultValue={['']} optionLabelProp='label' options={options} />
+          <Form.Item
+            label='Giới tính'
+            name='gender'
+            rules={[{ required: true, message: 'Chưa điền giới tính' }]}
+          >
+            <Select
+              placeholder='Chọn giới tính của bạn'
+              defaultValue={['']}
+              optionLabelProp='label'
+              options={options}
+            />
           </Form.Item>
 
           <Form.Item
@@ -159,47 +193,77 @@ const Profile = ({ next }: Props) => {
             <DatePicker />
           </Form.Item>
 
-          <Form.Item label='Địa chỉ' name='address' rules={[{ required: true, message: 'Chưa điền địa chỉ' }]}>
+          <Form.Item
+            label='Địa chỉ'
+            name='address'
+            rules={[{ required: true, message: 'Chưa điền địa chỉ' }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item label='Mật khẩu' name='password' rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}>
+          <Form.Item
+            label='Mật khẩu'
+            name='password'
+            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
+          >
             <Input.Password />
           </Form.Item>
 
-          <Form.Item label='Kỹ năng' name='skills' rules={[{ required: false, message: 'Chưa điền kỹ năng' }]}>
-            <Select
-              mode='multiple'
-              placeholder='Chọn các kỹ năng bạn thông thạo'
-              optionLabelProp='label'
-              options={skills}
-            />
-          </Form.Item>
-
           <Form.Item
-            label='Thuộc tổ chức'
-            name='belongsOrgainzer'
-            rules={[{ required: false, message: 'Chưa điền tổ chức' }]}
+            label='Kỹ năng'
+            name='skills'
+            rules={[{ required: false, message: 'Chưa điền kỹ năng' }]}
           >
-            {belongsOrgainzer && (
+            {skillsDefault && (
               <Select
-                defaultValue={belongsOrgainzer}
-                placeholder='select one belongsOrgainzer'
+                defaultValue={skillsDefault}
+                mode='multiple'
+                placeholder='Chọn kỹ năng bạn thông thạo'
                 optionLabelProp='label'
-                options={organizers}
+                options={skills}
               />
             )}
           </Form.Item>
 
+          <Form.Item
+            label='Thuộc tổ chức'
+            name='belongsOrganizer'
+            rules={[{ required: false, message: 'Chưa điền tổ chức' }]}
+          >
+            {
+              // belongsOrganizer &&
+              <Select
+                defaultValue={belongsOrganizer}
+                placeholder='Chọn tổ chức muốn gia nhập'
+                optionLabelProp='label'
+                options={organizers}
+              />
+            }
+          </Form.Item>
+
           <Form.Item style={{ textAlign: 'center' }}>
-            <Button type='primary' htmlType='submit' loading={updateProfile.isLoading}>
+            <Button
+              type='primary'
+              htmlType='submit'
+              loading={updateProfile.isLoading}
+            >
               Cập nhật
             </Button>
           </Form.Item>
         </Form>
       </Card>
+      {data && data.data.data.activityApplied && (
+        <>
+          <p>Các hoạt động đã tham gia:</p>
+          {data.data.data.activityApplied.map((item: any) => (
+            <p>{item.activity_id}</p>
+          ))}
+        </>
+      )}
     </React.Fragment>
   )
 }
-Profile.getLayout = (children: React.ReactNode) => <BlankLayout>{children}</BlankLayout>
+Profile.getLayout = (children: React.ReactNode) => (
+  <BlankLayout>{children}</BlankLayout>
+)
 export default Profile

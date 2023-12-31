@@ -16,7 +16,9 @@ export default function InputUpload({ initSrc, onChange, className }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const uploadService = useMutation({
     mutationFn: (formData: { file: File }) =>
-      httpsNoToken.post<string>('/Image/Upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
+      httpsNoToken.post<string>('/Image/Upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }),
     onSuccess: data => {
       setFilePath(data.data)
       if (onChange) onChange(data.data)
@@ -64,7 +66,10 @@ export default function InputUpload({ initSrc, onChange, className }: Props) {
           alt='Pre_image'
           className='w-full object-cover'
         />
-        <Button className='absolute z-10 top-2 right-4' onClick={() => inputRef.current?.click()}>
+        <Button
+          className='absolute z-10 top-2 right-4'
+          onClick={() => inputRef.current?.click()}
+        >
           <EditOutlined />
         </Button>
       </div>

@@ -39,7 +39,7 @@ export const listApplyVolunteers = async (
 
     if (organizer) {
       const activityExits = await Activities.findAll({
-        where: { creator: organizer.organization_id },
+        where: { creator: organizerId },
       });
       console.log('Find activity');
 

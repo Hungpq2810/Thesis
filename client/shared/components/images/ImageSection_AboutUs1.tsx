@@ -1,6 +1,8 @@
 import React, { SVGProps } from 'react'
 
-export default function ImageSection_AboutUs1({ ...rest }: SVGProps<SVGSVGElement>) {
+export default function ImageSection_AboutUs1({
+  ...rest
+}: SVGProps<SVGSVGElement>) {
   return (
     <svg
       width='421'
@@ -11,10 +13,23 @@ export default function ImageSection_AboutUs1({ ...rest }: SVGProps<SVGSVGElemen
       xmlnsXlink='http://www.w3.org/1999/xlink'
       {...rest}
     >
-      <rect width='420' height='420' transform='translate(0.400146)' fill='url(#pattern0)' />
+      <rect
+        width='420'
+        height='420'
+        transform='translate(0.400146)'
+        fill='url(#pattern0)'
+      />
       <defs>
-        <pattern id='pattern0' patternContentUnits='objectBoundingBox' width='1' height='1'>
-          <use xlinkHref='#image0_70_1323' transform='scale(0.00206612 0.00212766)' />
+        <pattern
+          id='pattern0'
+          patternContentUnits='objectBoundingBox'
+          width='1'
+          height='1'
+        >
+          <use
+            xlinkHref='#image0_70_1323'
+            transform='scale(0.00206612 0.00212766)'
+          />
         </pattern>
         <image
           id='image0_70_1323'

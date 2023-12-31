@@ -16,18 +16,30 @@ import { feedbackService } from '@/services/feedback.service'
 import { IFeedback } from '@/typeDefs/schema/feedback.type'
 
 const Home: NextPageWithLayout = () => {
-  const { data: dataActivity } = useQuery(['listActivity'], () => activityService.getAllActivity(), {
-    select(data) {
-      const activityOpen = data.data.data.activities.filter(acitivty => acitivty.status === 0)
-      return activityOpen
+  const { data: dataActivity } = useQuery(
+    ['listActivity'],
+    () => activityService.getAllActivity(),
+    {
+      select(data) {
+        const activityOpen = data.data.data.activities.filter(
+          acitivty => acitivty.status === 0
+        )
+        return activityOpen
+      }
     }
-  })
-  const { data: dataFeedback } = useQuery(['listFeedback'], () => feedbackService.getAllFeedback(), {
-    select(data) {
-      const filterDataFeedbackSystem = data.data.data.feedbacks.filter(feedback => feedback.activity_id === null)
-      return filterDataFeedbackSystem
+  )
+  const { data: dataFeedback } = useQuery(
+    ['listFeedback'],
+    () => feedbackService.getAllFeedback(),
+    {
+      select(data) {
+        const filterDataFeedbackSystem = data.data.data.feedbacks.filter(
+          feedback => feedback.activity_id === null
+        )
+        return filterDataFeedbackSystem
+      }
     }
-  })
+  )
   const { trans } = useTrans()
   return (
     <Fragment>

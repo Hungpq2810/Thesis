@@ -1,5 +1,15 @@
 import { useMutation, useQuery } from 'react-query'
-import { Button, Form, Input, message, Modal, Row, Col, Select, SelectProps } from 'antd'
+import {
+  Button,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Col,
+  Select,
+  SelectProps
+} from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import { useEffect } from 'react'
 import { organizationService } from '@/services/organization.service'
@@ -15,8 +25,11 @@ const FormOrganization = ({ editId, open, setOpen, refetch }: Props) => {
   const isEditIdValidNumber = typeof editId === 'number'
   const updateMutation = useMutation({
     mutationKey: 'update',
-    mutationFn: (body: { name: string; location: string; description: string }) =>
-      organizationService.updateOrganization(editId as number, body),
+    mutationFn: (body: {
+      name: string
+      location: string
+      description: string
+    }) => organizationService.updateOrganization(editId as number, body),
     onSuccess(data, _variables, _context) {
       const res = data.data
       if (!res) return
@@ -33,9 +46,13 @@ const FormOrganization = ({ editId, open, setOpen, refetch }: Props) => {
       updateMutation.mutate(value)
     }
   }
-  const { data } = useQuery(['user'], () => organizationService.getOrganizationById(editId as number), {
-    enabled: isEditIdValidNumber
-  })
+  const { data } = useQuery(
+    ['user'],
+    () => organizationService.getOrganizationById(editId as number),
+    {
+      enabled: isEditIdValidNumber
+    }
+  )
   const options: SelectProps['options'] = [
     {
       label: 'Hoạt động',
@@ -70,20 +87,41 @@ const FormOrganization = ({ editId, open, setOpen, refetch }: Props) => {
         autoComplete='off'
         layout='vertical'
       >
-        <Form.Item label='Tên tổ chức' name='name' rules={[{ required: true, message: 'Chưa điền tên tổ chức' }]}>
+        <Form.Item
+          label='Tên tổ chức'
+          name='name'
+          rules={[{ required: true, message: 'Chưa điền tên tổ chức' }]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label='Địa chỉ' name='location' rules={[{ required: true, message: 'Chưa điền địa điểm' }]}>
+        <Form.Item
+          label='Địa chỉ'
+          name='location'
+          rules={[{ required: true, message: 'Chưa điền địa điểm' }]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label='Mô tả' name='description' rules={[{ required: true, message: 'Chưa điền mô tả' }]}>
+        <Form.Item
+          label='Mô tả'
+          name='description'
+          rules={[{ required: true, message: 'Chưa điền mô tả' }]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label='Trạng thái' name='status' rules={[{ required: true, message: 'Chưa điền trạng thái' }]}>
-          <Select placeholder='select one status' defaultValue={['']} optionLabelProp='label' options={options} />
+        <Form.Item
+          label='Trạng thái'
+          name='status'
+          rules={[{ required: true, message: 'Chưa điền trạng thái' }]}
+        >
+          <Select
+            placeholder='select one status'
+            defaultValue={['']}
+            optionLabelProp='label'
+            options={options}
+          />
         </Form.Item>
 
         <Row justify={'center'} align={'middle'} gutter={16}>
@@ -96,7 +134,9 @@ const FormOrganization = ({ editId, open, setOpen, refetch }: Props) => {
           </Col>
           <Col>
             <Form.Item style={{ textAlign: 'center' }}>
-              <Button htmlType='submit'>{editId ? 'Chỉnh sửa' : 'Tạo mới'}</Button>
+              <Button htmlType='submit'>
+                {editId ? 'Chỉnh sửa' : 'Tạo mới'}
+              </Button>
             </Form.Item>
           </Col>
         </Row>

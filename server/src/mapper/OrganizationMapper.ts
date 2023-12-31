@@ -1,8 +1,8 @@
-import { OrganizationAttributes } from "../models/organization";
-import { Users } from "../models/users";
+import { OrganizationAttributes } from '../models/organization';
+import { Users } from '../models/users';
 
 export const organizationMapper = async (
-  organizations: OrganizationAttributes[]
+  organizations: OrganizationAttributes[],
 ) => {
   const result = await Promise.all(
     organizations.map(async (organization) => {
@@ -36,10 +36,10 @@ export const organizationMapper = async (
           updated_at,
         };
       } catch (error) {
-        console.error("Error fetching creator:", error);
+        console.error('Error fetching creator:', error);
         return null;
       }
-    })
+    }),
   );
 
   return result.filter((organization) => organization !== null);

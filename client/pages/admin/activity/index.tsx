@@ -11,10 +11,13 @@ import { IActivity } from '@/typeDefs/schema/activity.type'
 type Props = {}
 
 const ActivityManagement = ({}: Props) => {
-  const { data: dataActivity, refetch } = useQuery(['listActivty'], () => activityService.getAllActivity())
+  const { data: dataActivity, refetch } = useQuery(['listActivty'], () =>
+    activityService.getAllActivity()
+  )
   const deleteMutation = useMutation({
     mutationKey: ['deleteMutation'],
-    mutationFn: (activityId: number) => activityService.deleteActivity(activityId),
+    mutationFn: (activityId: number) =>
+      activityService.deleteActivity(activityId),
     onSuccess: () => {
       message.success('Xoá thành công')
       refetch()
@@ -59,14 +62,21 @@ const ActivityManagement = ({}: Props) => {
       key: 'status',
       render: (_, record) => (
         <>
-          <Image src={record.image} width={250} height={150} className='rounded-lg' />
+          <Image
+            src={record.image}
+            width={250}
+            height={150}
+            className='rounded-lg'
+          />
         </>
       )
     },
     {
       title: 'Trạng thái',
       dataIndex: 'status',
-      render: (_, record) => <p>{record.status === 0 ? 'Đang mở' : 'Đã đóng'}</p>
+      render: (_, record) => (
+        <p>{record.status === 0 ? 'Đang mở' : 'Đã đóng'}</p>
+      )
     },
     {
       title: 'Hành động',
@@ -97,15 +107,25 @@ const ActivityManagement = ({}: Props) => {
             </Col>
             <Col span={12}>
               <div className='flex py-2 justify-between items-center gap-3'>
-                <Search className='bg-blue-300 rounded-lg' placeholder='Tìm kiếm' onSearch={() => {}} enterButton />
+                <Search
+                  className='bg-blue-300 rounded-lg'
+                  placeholder='Tìm kiếm'
+                  onSearch={() => {}}
+                  enterButton
+                />
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataActivity.data.data.activities} columns={columns} />
+          <Table
+            dataSource={dataActivity.data.data.activities}
+            columns={columns}
+          />
         </React.Fragment>
       )}
     </>
   )
 }
-ActivityManagement.getLayout = (children: React.ReactNode) => <DashboardLayout>{children}</DashboardLayout>
+ActivityManagement.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+)
 export default ActivityManagement

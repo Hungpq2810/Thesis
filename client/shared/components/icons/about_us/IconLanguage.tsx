@@ -2,7 +2,14 @@ import React, { SVGProps } from 'react'
 
 export default function IconLanguage({ ...rest }: SVGProps<SVGSVGElement>) {
   return (
-    <svg width='57' height='56' viewBox='0 0 57 56' fill='none' xmlns='http://www.w3.org/2000/svg' {...rest}>
+    <svg
+      width='57'
+      height='56'
+      viewBox='0 0 57 56'
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'
+      {...rest}
+    >
       <g clip-path='url(#clip0_70_1566)'>
         <path
           d='M52.952 32.2454H35.0333C34.5097 32.2454 34.0852 32.6707 34.0852 33.1954V51.1067C34.0852 51.6314 34.5097 52.0567 35.0333 52.0567H52.952C53.4756 52.0567 53.9001 51.6314 53.9001 51.1067V33.1954C53.9001 32.6707 53.4756 32.2454 52.952 32.2454Z'
@@ -30,7 +37,12 @@ export default function IconLanguage({ ...rest }: SVGProps<SVGSVGElement>) {
       </g>
       <defs>
         <clipPath id='clip0_70_1566'>
-          <rect width='56' height='56' fill='white' transform='translate(0.900146)' />
+          <rect
+            width='56'
+            height='56'
+            fill='white'
+            transform='translate(0.900146)'
+          />
         </clipPath>
       </defs>
     </svg>

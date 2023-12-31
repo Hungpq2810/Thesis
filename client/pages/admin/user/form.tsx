@@ -1,5 +1,16 @@
 import { useMutation, useQuery } from 'react-query'
-import { Button, Form, Input, message, Modal, Row, Col, DatePicker, Select, SelectProps } from 'antd'
+import {
+  Button,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Col,
+  DatePicker,
+  Select,
+  SelectProps
+} from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import { useEffect } from 'react'
 import { userService } from '@/services/user.service'
@@ -16,7 +27,8 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
   const isEditIdValidNumber = typeof editId === 'number'
   const registerMutation = useMutation({
     mutationKey: 'register',
-    mutationFn: (body: { username: string; password: string }) => userService.newUser(body),
+    mutationFn: (body: { username: string; password: string }) =>
+      userService.newUser(body),
     onSuccess(data, _variables, _context) {
       const res = data.data
       if (!res) return
@@ -30,7 +42,8 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
   })
   const updateMutation = useMutation({
     mutationKey: 'update',
-    mutationFn: (body: { username: string; password: string }) => userService.updateUser(editId as number, body),
+    mutationFn: (body: { username: string; password: string }) =>
+      userService.updateUser(editId as number, body),
     onSuccess(data, _variables, _context) {
       const res = data.data
       if (!res) return
@@ -49,12 +62,18 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
       registerMutation.mutate(value)
     }
   }
-  const { data } = useQuery(['user'], () => userService.getUserById(editId as number), {
-    enabled: isEditIdValidNumber
-  })
+  const { data } = useQuery(
+    ['user'],
+    () => userService.getUserById(editId as number),
+    {
+      enabled: isEditIdValidNumber
+    }
+  )
   useEffect(() => {
     if (editId && data) {
-      const formattedBirthday = dayjs(data.data.data.birthday).format('YYYY-MM-DD')
+      const formattedBirthday = dayjs(data.data.data.birthday).format(
+        'YYYY-MM-DD'
+      )
 
       form.setFieldsValue({
         ...data.data.data,
@@ -96,20 +115,41 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
           <Input />
         </Form.Item>
 
-        <Form.Item label='Email' name='email' rules={[{ required: true, message: 'Chưa điền email' }]}>
+        <Form.Item
+          label='Email'
+          name='email'
+          rules={[{ required: true, message: 'Chưa điền email' }]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label='Tên' name='name' rules={[{ required: true, message: 'Chưa điền tên' }]}>
+        <Form.Item
+          label='Tên'
+          name='name'
+          rules={[{ required: true, message: 'Chưa điền tên' }]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label='Số điện thoại' name='phone' rules={[{ required: true, message: 'Chưa điền số điện thoại' }]}>
+        <Form.Item
+          label='Số điện thoại'
+          name='phone'
+          rules={[{ required: true, message: 'Chưa điền số điện thoại' }]}
+        >
           <Input type='number' />
         </Form.Item>
 
-        <Form.Item label='Giới tính' name='gender' rules={[{ required: true, message: 'Chưa điền giới tính' }]}>
-          <Select placeholder='select one country' defaultValue={['']} optionLabelProp='label' options={options} />
+        <Form.Item
+          label='Giới tính'
+          name='gender'
+          rules={[{ required: true, message: 'Chưa điền giới tính' }]}
+        >
+          <Select
+            placeholder='select one country'
+            defaultValue={['']}
+            optionLabelProp='label'
+            options={options}
+          />
         </Form.Item>
 
         <Form.Item
@@ -122,12 +162,20 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
           <DatePicker />
         </Form.Item>
 
-        <Form.Item label='Địa chỉ' name='address' rules={[{ required: true, message: 'Chưa điền địa chỉ' }]}>
+        <Form.Item
+          label='Địa chỉ'
+          name='address'
+          rules={[{ required: true, message: 'Chưa điền địa chỉ' }]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label='Mật khẩu' name='password' rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}>
-          <Input.Password />
+        <Form.Item
+          label='Mật khẩu'
+          name='password'
+          rules={[{ required: false, message: 'Vui lòng nhập mật khẩu' }]}
+        >
+          <Input.Password visibilityToggle={false} />
         </Form.Item>
 
         <Row justify={'center'} align={'middle'} gutter={16}>
@@ -140,7 +188,9 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
           </Col>
           <Col>
             <Form.Item style={{ textAlign: 'center' }}>
-              <Button htmlType='submit'>{editId ? 'Chỉnh sửa' : 'Tạo mới'}</Button>
+              <Button htmlType='submit'>
+                {editId ? 'Chỉnh sửa' : 'Tạo mới'}
+              </Button>
             </Form.Item>
           </Col>
         </Row>

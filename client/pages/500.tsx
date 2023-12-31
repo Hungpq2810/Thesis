@@ -6,8 +6,6 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { ReactNode } from 'react'
 
-
-
 const Error500 = () => {
   const { trans } = useTrans()
   return (
@@ -16,16 +14,20 @@ const Error500 = () => {
         <title>{trans.page[500].pageTitle}</title>
       </Head>
       <Result
-        status="500"
-        title="500"
+        status='500'
+        title='500'
         subTitle={trans.page[500].pageTitle}
-        extra={<Button type="primary"><Link href={"/"}>{trans.common.goBackHome}</Link> </Button>}
+        extra={
+          <Button type='primary'>
+            <Link href={'/'}>{trans.common.goBackHome}</Link>{' '}
+          </Button>
+        }
       />
     </>
-
   )
 }
-Error500.getLayout = (children: React.ReactNode) => <BlankLayout>{children}</BlankLayout>
-
+Error500.getLayout = (children: React.ReactNode) => (
+  <BlankLayout>{children}</BlankLayout>
+)
 
 export default Error500

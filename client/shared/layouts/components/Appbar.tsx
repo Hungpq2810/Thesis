@@ -2,7 +2,12 @@ import { APP_URL } from '@/constant/AppConstant'
 import { useAppSelector } from '@/hooks/useRedux'
 import useTrans from '@/hooks/useTrans'
 import { logout } from '@/store/appSlice'
-import { BellOutlined, LogoutOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons/lib/icons'
+import {
+  BellOutlined,
+  LogoutOutlined,
+  SearchOutlined,
+  SettingOutlined
+} from '@ant-design/icons/lib/icons'
 import { Col, Dropdown, Input, MenuProps, Row } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import { deleteCookie } from 'cookies-next'

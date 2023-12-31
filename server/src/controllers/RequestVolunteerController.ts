@@ -121,9 +121,9 @@ export const cancelRequestVolunteer = async (
           },
         });
         if (checkRequestTime.length > 0) {
-          await VolunteerRequest.destroy(
-            {where: { user_id: userId }}
-          )
+          await VolunteerRequest.destroy({
+            where: { user_id: userId },
+          });
         }
         const response: GeneralResponse<{}> = {
           status: 200,
@@ -132,8 +132,7 @@ export const cancelRequestVolunteer = async (
         };
       }
     }
-  }
-  catch (error: any) {
+  } catch (error: any) {
     console.error(error);
     const response: GeneralResponse<{}> = {
       status: 400,

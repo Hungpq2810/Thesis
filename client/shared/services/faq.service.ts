@@ -10,10 +10,10 @@ class FaqService {
   getFaqById(id: number): Promise<AxiosResponse<IBaseResponse<IFaq>>> {
     return httpsNoToken.get(`/faq/${id}`)
   }
-  newFaq(body: { question: string; answer: string; }) {
+  newFaq(body: { question: string; answer: string }) {
     return https.post('/admin/faq', body)
   }
-  updateFaq(id: number, body: { question: string; answer: string; }) {
+  updateFaq(id: number, body: { question: string; answer: string }) {
     return https.put(`/admin/faq/${id}`, body)
   }
   deleteFaq(id: number) {

@@ -1,8 +1,8 @@
-import { ActivityApplyAttributes } from "../models/activity_apply";
-import { Users } from "../models/users";
+import { ActivityApplyAttributes } from '../models/activity_apply';
+import { Users } from '../models/users';
 
 export const activityApplyMapper = async (
-  activityApplies: ActivityApplyAttributes[]
+  activityApplies: ActivityApplyAttributes[],
 ) => {
   const result = await Promise.all(
     activityApplies.map(async (activityApply) => {
@@ -23,10 +23,10 @@ export const activityApplyMapper = async (
           updated_at,
         };
       } catch (error) {
-        console.error("Error fetching user:", error);
+        console.error('Error fetching user:', error);
         return null;
       }
-    })
+    }),
   );
 
   return result.filter((organization) => organization !== null);

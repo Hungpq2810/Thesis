@@ -19,7 +19,8 @@ const Login = ({}: Props) => {
   const dispatch = useDispatch()
   const loginMutation = useMutation({
     mutationKey: 'login',
-    mutationFn: (body: { username: string; password: string }) => authService.authenticated(body),
+    mutationFn: (body: { username: string; password: string }) =>
+      authService.authenticated(body),
     onSuccess(data, _variables, _context) {
       const res = data.data.data
       const decodeData: any = jwt_decode(res.token)
@@ -35,7 +36,7 @@ const Login = ({}: Props) => {
           })
         )
         message.success('Đăng nhập thành công')
-        router.push("/")
+        router.push('/')
       }
     },
     onError(error, variables, context) {
@@ -47,8 +48,14 @@ const Login = ({}: Props) => {
     const role = getCookie(APP_SAVE_KEYS.ROLE)
     if (typeof key === 'string' && role) {
       const decodeData: any = jwt_decode(key)
-      dispatch(login({ userName: decodeData.username, role: decodeData.role_id, id: decodeData.id }))
-      router.push("/")
+      dispatch(
+        login({
+          userName: decodeData.username,
+          role: decodeData.role_id,
+          id: decodeData.id
+        })
+      )
+      router.push('/')
     }
   }, [])
 
@@ -64,7 +71,13 @@ const Login = ({}: Props) => {
       <Card
         title={trans.page.login.formHeader}
         style={{ minWidth: 700 }}
-        extra={<img style={{ maxWidth: 100, maxHeight: 100 }} alt='logo' src='/logo.svg' />}
+        extra={
+          <img
+            style={{ maxWidth: 100, maxHeight: 100 }}
+            alt='logo'
+            src='/logo.svg'
+          />
+        }
       >
         <Form
           name='basic'
@@ -76,7 +89,9 @@ const Login = ({}: Props) => {
           <Form.Item
             label={trans.page.login.username}
             name='username'
-            rules={[{ required: true, message: trans.page.login.requiredUsername }]}
+            rules={[
+              { required: true, message: trans.page.login.requiredUsername }
+            ]}
           >
             <Input />
           </Form.Item>
@@ -84,23 +99,38 @@ const Login = ({}: Props) => {
           <Form.Item
             label={trans.page.login.password}
             name='password'
-            rules={[{ required: true, message: trans.page.login.requiredPassword }]}
+            rules={[
+              { required: true, message: trans.page.login.requiredPassword }
+            ]}
           >
             <Input.Password />
           </Form.Item>
           <div className='w-full flex justify-between items-center'>
-            <Form.Item name='remember' valuePropName='checked' className='m-0 p-0'>
+            <Form.Item
+              name='remember'
+              valuePropName='checked'
+              className='m-0 p-0'
+            >
               <Checkbox>Ghi nhớ</Checkbox>
             </Form.Item>
-            <p className='m-0 p-0 cursor-pointer hover:text-blue-500'>Quên mật khẩu?</p>
+            <p className='m-0 p-0 cursor-pointer hover:text-blue-500'>
+              Quên mật khẩu?
+            </p>
           </div>
           <Form.Item style={{ textAlign: 'center' }}>
-            <Button type='primary' htmlType='submit' loading={loginMutation.isLoading}>
+            <Button
+              type='primary'
+              htmlType='submit'
+              loading={loginMutation.isLoading}
+            >
               {trans.page.login.login}
             </Button>
             <p className='mt-5 p-0 cursor-pointer text-black'>
               Chưa có tài khoản?{' '}
-              <span className='text-blue-400 hover:text-blue-500' onClick={() => router.push('/register')}>
+              <span
+                className='text-blue-400 hover:text-blue-500'
+                onClick={() => router.push('/register')}
+              >
                 Tạo tài khoản ngay
               </span>
             </p>
@@ -110,5 +140,7 @@ const Login = ({}: Props) => {
     </React.Fragment>
   )
 }
-Login.getLayout = (children: React.ReactNode) => <BlankLayout>{children}</BlankLayout>
+Login.getLayout = (children: React.ReactNode) => (
+  <BlankLayout>{children}</BlankLayout>
+)
 export default Login

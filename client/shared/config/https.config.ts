@@ -13,7 +13,9 @@ const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
 
 class AxiosConfig {
   baseUrl = BASE_URL
-  token = getCookie(APP_SAVE_KEYS.KEYS) || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZV9pZCI6Mywib3JnYW5pemF0aW9uX2lkIjpudWxsLCJ1c2VybmFtZSI6ImFkbWluIiwicGFzc3dvcmQiOiJhZG1pbiIsIm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicGhvbmUiOiIwMzMyNjI4NjY2IiwiZ2VuZGVyIjoxLCJiaXJ0aGRheSI6IjE5OTAtMDEtMDFUMDA6MDA6MDAuMDAwWiIsImFkZHJlc3MiOiIxMjMgTWFpbiBTdHJlZXQiLCJhdmF0YXIiOiJodHRwczovL2V4YW1wbGUuY29tL2F2YXRhci5qcGciLCJzdGF0dXMiOjAsImNyZWF0ZWRfYXQiOiIyMDIzLTEyLTAxVDAyOjQwOjI2LjAwMFoiLCJ1cGRhdGVkX2F0IjoiMjAyMy0xMi0wMVQwMjo0MDoyNi4wMDBaIiwiaWF0IjoxNzAyNDQwMTcyfQ.GFxgbOvN940c4WPfjx6G3IAYMEUWkBf-YcwYVChZKgg"
+  token =
+    getCookie(APP_SAVE_KEYS.KEYS) ||
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZV9pZCI6Mywib3JnYW5pemF0aW9uX2lkIjpudWxsLCJ1c2VybmFtZSI6ImFkbWluIiwicGFzc3dvcmQiOiJhZG1pbiIsIm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicGhvbmUiOiIwMzMyNjI4NjY2IiwiZ2VuZGVyIjoxLCJiaXJ0aGRheSI6IjE5OTAtMDEtMDFUMDA6MDA6MDAuMDAwWiIsImFkZHJlc3MiOiIxMjMgTWFpbiBTdHJlZXQiLCJhdmF0YXIiOiJodHRwczovL2V4YW1wbGUuY29tL2F2YXRhci5qcGciLCJzdGF0dXMiOjAsImNyZWF0ZWRfYXQiOiIyMDIzLTEyLTAxVDAyOjQwOjI2LjAwMFoiLCJ1cGRhdGVkX2F0IjoiMjAyMy0xMi0wMVQwMjo0MDoyNi4wMDBaIiwiaWF0IjoxNzAyNDQwMTcyfQ.GFxgbOvN940c4WPfjx6G3IAYMEUWkBf-YcwYVChZKgg'
   axiosConfig = {
     baseURL: this.baseUrl,
     headers: {
@@ -25,12 +27,13 @@ class AxiosConfig {
   get getAxiosInstance() {
     const axiosInstance = axios.create(this.axiosConfig)
     axiosInstance.interceptors.request.use(req => {
-      if (this.token && req.headers) req.headers['Authorization'] = `Bearer ${this.token}`
+      if (this.token && req.headers)
+        req.headers['Authorization'] = `Bearer ${this.token}`
       return req
     })
     axiosInstance.interceptors.response.use(
       response => response,
-      async (error) => {
+      async error => {
         return Promise.reject(error)
       }
     )

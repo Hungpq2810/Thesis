@@ -10,7 +10,7 @@ import {
 } from '../../models/organization_request';
 import { Users } from '../../models/users';
 import { Organization } from '../../models/organization';
-import { requestOrganizationMapper } from "../../mapper/RequestOrganizationMapper";
+import { requestOrganizationMapper } from '../../mapper/RequestOrganizationMapper';
 dotenv.config();
 
 export const listRequestOrganization = async (
@@ -18,19 +18,20 @@ export const listRequestOrganization = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const requestOrganizationsCurrent = await OrganizationRequest.findAll();
+    const requestOrganizationsCurrent =
+      await OrganizationRequest.findAll();
     const requestOrganizations = await Promise.all(
-      await requestOrganizationMapper(requestOrganizationsCurrent)
+      await requestOrganizationMapper(requestOrganizationsCurrent),
     );
     if (requestOrganizations.length > 0) {
       const response: GeneralResponse<{
         requestOrganizations: OrganizationRequestAttributes[];
       }> = {
         status: 200,
-        data: { 
+        data: {
           requestOrganizations:
             requestOrganizations as unknown as OrganizationRequestAttributes[],
-         },
+        },
         message: 'Lấy danh sách yêu cầu tạo tổ chức thành công',
       };
       commonResponse(req, res, response);

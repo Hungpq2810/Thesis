@@ -12,8 +12,11 @@ const FormCreateOrganization = ({ next }: Props) => {
   const dispatch = useDispatch()
   const newOrganizationMutation = useMutation({
     mutationKey: 'newOrganization',
-    mutationFn: (body: { name: string; location: string; description: string }) =>
-      organizationService.newOrganization(body),
+    mutationFn: (body: {
+      name: string
+      location: string
+      description: string
+    }) => organizationService.newOrganization(body),
     onSuccess(data, _variables, _context) {
       if (data.data.data) {
         dispatch(setInforOrganization(data.data.data))
@@ -25,7 +28,11 @@ const FormCreateOrganization = ({ next }: Props) => {
     }
   })
   //Handle submit form Login
-  function handleCreate(value: { name: string; location: string; description: string }) {
+  function handleCreate(value: {
+    name: string
+    location: string
+    description: string
+  }) {
     newOrganizationMutation.mutate(value)
     next()
   }
@@ -34,7 +41,13 @@ const FormCreateOrganization = ({ next }: Props) => {
       <Card
         title='Form điền thông tin tổ chức'
         style={{ minWidth: 700 }}
-        extra={<img style={{ maxWidth: 100, maxHeight: 100 }} alt='logo' src='/logo.svg' />}
+        extra={
+          <img
+            style={{ maxWidth: 100, maxHeight: 100 }}
+            alt='logo'
+            src='/logo.svg'
+          />
+        }
       >
         <Form
           name='basic'
@@ -43,19 +56,35 @@ const FormCreateOrganization = ({ next }: Props) => {
           autoComplete='off'
           layout='vertical'
         >
-          <Form.Item label='Tên tổ chức' name='name' rules={[{ required: true, message: 'Vui lòng nhập tên tổ chức' }]}>
+          <Form.Item
+            label='Tên tổ chức'
+            name='name'
+            rules={[{ required: true, message: 'Vui lòng nhập tên tổ chức' }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item label='Địa chỉ' name='location' rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}>
+          <Form.Item
+            label='Địa chỉ'
+            name='location'
+            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item label='Mô tả' name='description' rules={[{ required: true, message: 'Vui lòng nhập mô tả' }]}>
+          <Form.Item
+            label='Mô tả'
+            name='description'
+            rules={[{ required: true, message: 'Vui lòng nhập mô tả' }]}
+          >
             <Input.TextArea />
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
-            <Button type='primary' htmlType='submit' loading={newOrganizationMutation.isLoading}>
+            <Button
+              type='primary'
+              htmlType='submit'
+              loading={newOrganizationMutation.isLoading}
+            >
               Đăng ký
             </Button>
           </Form.Item>
@@ -64,5 +93,7 @@ const FormCreateOrganization = ({ next }: Props) => {
     </React.Fragment>
   )
 }
-FormCreateOrganization.getLayout = (children: React.ReactNode) => <BlankLayout>{children}</BlankLayout>
+FormCreateOrganization.getLayout = (children: React.ReactNode) => (
+  <BlankLayout>{children}</BlankLayout>
+)
 export default FormCreateOrganization

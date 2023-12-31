@@ -29,8 +29,8 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
   const handleLogout = () => {
     deleteCookie(APP_SAVE_KEYS.KEYS)
     deleteCookie(APP_SAVE_KEYS.ROLE)
-    router.push("/login")
-    window.location.reload();
+    router.push('/login')
+    window.location.reload()
   }
   const APP_WEBSITE_MENU: MenuProps['items'] = [
     {
@@ -53,10 +53,16 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
     const key = getCookie(APP_SAVE_KEYS.KEYS)
     const role = getCookie(APP_SAVE_KEYS.ROLE)
     if (typeof key === 'string' && role) {
-        const decodeData: any = jwt_decode(key)
-        dispatch(login({ userName: decodeData.username, role: decodeData.role_id, id: decodeData.id }))
+      const decodeData: any = jwt_decode(key)
+      dispatch(
+        login({
+          userName: decodeData.username,
+          role: decodeData.role_id,
+          id: decodeData.id
+        })
+      )
     }
-}, [])
+  }, [])
 
   return (
     <React.Fragment>
@@ -81,13 +87,21 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
           />
           <div className='flex justify-end items-center gap-4'>
             {user && <UserOutlined onClick={() => router.push('/profile')} />}
-            {!user && <Button onClick={() => router.push('/login')}>Đăng nhập</Button>}
-            {user && Number(user?.role) === 3 && <Button onClick={() => router.push('/admin/user')}>ADMIN</Button>}
+            {!user && (
+              <Button onClick={() => router.push('/login')}>Đăng nhập</Button>
+            )}
+            {user && Number(user?.role) === 3 && (
+              <Button onClick={() => router.push('/admin/user')}>ADMIN</Button>
+            )}
             {user && Number(user?.role) === 2 && (
-              <Button onClick={() => router.push('/organizer/activity')}>TỔ CHỨC</Button>
+              <Button onClick={() => router.push('/organizer/activity')}>
+                TỔ CHỨC
+              </Button>
             )}
             {user && Number(user?.role) === 1 && (
-              <Button onClick={() => router.push('/request_organization')}>Trở thành tổ chức</Button>
+              <Button onClick={() => router.push('/request_organization')}>
+                Trở thành tổ chức
+              </Button>
             )}
             {user && <Button onClick={() => handleLogout()}>Đăng xuất</Button>}
           </div>
@@ -96,10 +110,11 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
       <Content className='w-full min-h-[100vh] flex flex-col justify-center items-center mx-auto p-20'>
         {children}
       </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
+      <Footer style={{ textAlign: 'center' }}>
+        Ant Design ©2023 Created by Ant UED
+      </Footer>
     </React.Fragment>
   )
 }
 
 export default BlankLayout
-

@@ -31,7 +31,7 @@ export const listFaq = async (
 
 export const getFaqById = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { id } = req.params;
@@ -40,14 +40,14 @@ export const getFaqById = async (
       const response: GeneralResponse<any> = {
         status: 200,
         data: faq.toJSON(),
-        message: "Get FAQ by ID successfully",
+        message: 'Get FAQ by ID successfully',
       };
       commonResponse(req, res, response);
     } else {
       const response: GeneralResponse<{}> = {
         status: 404,
         data: null,
-        message: "FAQ not found",
+        message: 'FAQ not found',
       };
       commonResponse(req, res, response);
     }

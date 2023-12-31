@@ -16,19 +16,19 @@ const Section_AboutUs2 = () => {
         <div className='p-5 grid grid-cols-2 md:grid-cols-4 gap-5'>
           <div className='flex flex-col justify-center items-center gap-5'>
             <IconValues className='p-5 bg-white rounded-full' />
-            <p>Values</p>
+            <p>Những giá trị mới lạ</p>
           </div>
           <div className='flex flex-col justify-center items-center gap-5'>
             <IconLanguage className='p-5 bg-white rounded-full' />
-            <p>Language</p>
+            <p>Đa dạng phương thức quản lý</p>
           </div>
           <div className='flex flex-col justify-center items-center gap-5'>
             <IconChart className='p-5 bg-white rounded-full' />
-            <p>Chart</p>
+            <p>Những thống kê cụ thể, trực quan</p>
           </div>
           <div className='flex flex-col justify-center items-center gap-5'>
             <IconAnimation className='p-5 bg-white rounded-full' />
-            <p>Animation</p>
+            <p>Đưa tình nguyện đến với cộng đồng</p>
           </div>
         </div>
       </div>

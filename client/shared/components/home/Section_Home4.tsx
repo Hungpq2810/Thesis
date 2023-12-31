@@ -11,7 +11,9 @@ const Section_Home4 = ({ activities }: Props) => {
   return (
     <React.Fragment>
       <div className='mt-5 flex flex-col justify-center items-center'>
-        <h1 className='text-4xl leading-8 text-bold text-[#0F147F] border-b-2 border-b-black'>Các hoạt động sắp tới</h1>
+        <h1 className='text-4xl leading-8 text-bold text-[#0F147F] border-b-2 border-b-black'>
+          Các hoạt động sắp tới
+        </h1>
       </div>
       <div className='grid grid-cols-1 md:grid-cols-3 gap-5'>
         {activities &&
@@ -35,7 +37,9 @@ const Section_Home4 = ({ activities }: Props) => {
                 description={
                   <div className='flex justify-between items-center'>
                     <p>Tổ chức: {item.creator}</p>
-                    <Button onClick={() => router.push(`/activity/${item.id}`)}>Xem chi tiết</Button>
+                    <Button onClick={() => router.push(`/activity/${item.id}`)}>
+                      Xem chi tiết
+                    </Button>
                   </div>
                 }
               />

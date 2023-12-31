@@ -10,8 +10,11 @@ import { SkillUsers } from '../models/skill_users';
 import {
   VolunteerRequest,
   VolunteerRequestAttributes,
-} from "../models/volunteer_request";
-import { Organization, OrganizationAttributes } from '../models/organization';
+} from '../models/volunteer_request';
+import {
+  Organization,
+  OrganizationAttributes,
+} from '../models/organization';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
@@ -48,35 +51,49 @@ export const updateProfile = async (
           created_at: new Date(),
           updated_at: new Date(),
         }));
-         // Tìm kiếm tất cả các cặp skill-user hiện có của user
-  const existingSkills = await SkillUsers.findAll({
-    where: { user_id: userId },
-  });
+        // Tìm kiếm tất cả các cặp skill-user hiện có của user
+        const existingSkills = await SkillUsers.findAll({
+          where: { user_id: userId },
+        });
 
-  // Xóa các cặp skill-user không có trong input mới
-  const deletedSkills = existingSkills.filter((skill) => !skills.includes(skill.skill_id));
-  for (const skill of deletedSkills) {
-    await SkillUsers.destroy({
-      where: { skill_id: skill.skill_id, user_id: userId },
-    });
-  }
+        // Xóa các cặp skill-user không có trong input mới
+        const deletedSkills = existingSkills.filter(
+          (skill) => !skills.includes(skill.skill_id),
+        );
+        for (const skill of deletedSkills) {
+          await SkillUsers.destroy({
+            where: { skill_id: skill.skill_id, user_id: userId },
+          });
+        }
 
-  // Thêm hoặc cập nhật các cặp skill-user mới
-  for (const skill of skills) {
-    const existingSkill = existingSkills.find((s) => s.skill_id === skill.skill_id);
+        // Thêm hoặc cập nhật các cặp skill-user mới
+        for (const skill of skills) {
+          const existingSkill = existingSkills.find(
+            (s) => s.skill_id === skill.skill_id,
+          );
 
-    if (existingSkill) {
-      // Nếu cặp skill-user đã tồn tại, chỉ cần cập nhật thời gian updated_at
-      await existingSkill.update({ updated_at: new Date() });
-    } else {
-      // Nếu cặp skill-user chưa tồn tại, tạo mới
-      await SkillUsers.create(skill);
-    }
-  }
+          if (existingSkill) {
+            // Nếu cặp skill-user đã tồn tại, chỉ cần cập nhật thời gian updated_at
+            await existingSkill.update({ updated_at: new Date() });
+          } else {
+            // Nếu cặp skill-user chưa tồn tại, tạo mới
+            await SkillUsers.create(skill);
+          }
+        }
       }
+
+      const requestApplyOrganizer = {
+        user_id: Number(userId) as number,
+        organization_id: Number(req.body.belongsOrgainzer) as number,
+        status: 1,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      await VolunteerRequest.create(requestApplyOrganizer);
+
       const body = req.body;
       delete body.role_id;
-      // delete body.organization_id;
+      delete body.organization_id;
       const result = await user.update(body);
       const response: GeneralResponse<UserAttributes> = {
         status: 200,

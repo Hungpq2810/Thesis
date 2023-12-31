@@ -9,13 +9,17 @@ import {
 } from '@/typeDefs/schema/organization.type'
 
 class OrganizationService {
-  listOrganizationAdmin(): Promise<AxiosResponse<IBaseResponse<IOrganizations>>> {
+  listOrganizationAdmin(): Promise<
+    AxiosResponse<IBaseResponse<IOrganizations>>
+  > {
     return https.get('/admin/organizations')
   }
   getAllOrganization(): Promise<AxiosResponse<IBaseResponse<IOrganizations>>> {
     return httpsNoToken.get('/organizations')
   }
-  getOrganizationById(id: number): Promise<AxiosResponse<IBaseResponse<IOrganization>>> {
+  getOrganizationById(
+    id: number
+  ): Promise<AxiosResponse<IBaseResponse<IOrganization>>> {
     return https.get(`/organization/${id}`)
   }
   newOrganization(body: {
@@ -28,10 +32,15 @@ class OrganizationService {
   requestBecomeOrganization(body: { organization_id: number }) {
     return https.post('/request_organization', body)
   }
-  updateOrganization(id: number, body: { name: string; location: string; description: string }) {
+  updateOrganization(
+    id: number,
+    body: { name: string; location: string; description: string }
+  ) {
     return https.put(`/admin/organizations/${id}`, body)
   }
-  getAllRequestOrganization(): Promise<AxiosResponse<IBaseResponse<IRequestOrganizations>>> {
+  getAllRequestOrganization(): Promise<
+    AxiosResponse<IBaseResponse<IRequestOrganizations>>
+  > {
     return https.get('/admin/request_organization')
   }
   updateRequestOrganization(body: { organization_id: number; status: number }) {

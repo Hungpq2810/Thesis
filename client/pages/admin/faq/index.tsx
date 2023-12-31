@@ -1,5 +1,14 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Button, Col, Image, message, Popconfirm, Row, Space, Table } from 'antd'
+import {
+  Button,
+  Col,
+  Image,
+  message,
+  Popconfirm,
+  Row,
+  Space,
+  Table
+} from 'antd'
 import Search from 'antd/lib/input/Search'
 import { ColumnType } from 'antd/lib/table'
 import DashboardLayout from '@/layouts/DashboardLayout'
@@ -15,7 +24,9 @@ const FAQManagement = ({}: Props) => {
   const [open, setOpen] = useState(false)
   const [action, setAtion] = useState<string>('')
   const [rowId, setRowId] = useState<number>()
-  const { data: dataFaq, refetch } = useQuery(['listFaq'], () => faqService.getAllFaq())
+  const { data: dataFaq, refetch } = useQuery(['listFaq'], () =>
+    faqService.getAllFaq()
+  )
   const deleteMutation = useMutation({
     mutationKey: ['deleteMutation'],
     mutationFn: (faqId: number) => faqService.deleteFaq(faqId),
@@ -96,7 +107,12 @@ const FAQManagement = ({}: Props) => {
             </Col>
             <Col span={12}>
               <div className='flex py-2 justify-between items-center gap-3'>
-                <Search className='bg-blue-300 rounded-lg' placeholder='Tìm kiếm' onSearch={() => {}} enterButton />
+                <Search
+                  className='bg-blue-300 rounded-lg'
+                  placeholder='Tìm kiếm'
+                  onSearch={() => {}}
+                  enterButton
+                />
                 <Button
                   onClick={() => {
                     setAtion('create')
@@ -113,12 +129,19 @@ const FAQManagement = ({}: Props) => {
           {action === 'create' && !rowId ? (
             <FormFaq refetch={refetch} open={open} setOpen={setOpen} />
           ) : (
-            <FormFaq refetch={refetch} editId={rowId} open={open} setOpen={setOpen} />
+            <FormFaq
+              refetch={refetch}
+              editId={rowId}
+              open={open}
+              setOpen={setOpen}
+            />
           )}
         </React.Fragment>
       )}
     </>
   )
 }
-FAQManagement.getLayout = (children: React.ReactNode) => <DashboardLayout>{children}</DashboardLayout>
+FAQManagement.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+)
 export default FAQManagement

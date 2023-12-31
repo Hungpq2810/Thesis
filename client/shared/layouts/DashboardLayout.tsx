@@ -21,7 +21,13 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
     const role = getCookie(APP_SAVE_KEYS.ROLE)
     if (typeof key === 'string' && role) {
       const decodeData: any = jwt_decode(key)
-      dispatch(login({ userName: decodeData.username, role: decodeData.role_id, id: decodeData.id }))
+      dispatch(
+        login({
+          userName: decodeData.username,
+          role: decodeData.role_id,
+          id: decodeData.id
+        })
+      )
     }
   }, [])
   return (
@@ -33,7 +39,15 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
         </Header>
         <br />
         <Content>
-          <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>{children}</div>
+          <div
+            style={{
+              padding: 24,
+              minHeight: 360,
+              background: colorBgContainer
+            }}
+          >
+            {children}
+          </div>
         </Content>
         <FooterContent />
       </Layout>

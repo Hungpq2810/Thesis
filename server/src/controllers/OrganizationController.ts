@@ -9,7 +9,7 @@ import {
   Organization,
   OrganizationAttributes,
 } from '../models/organization';
-import { organizationMapper } from "../mapper/OrganizationMapper";
+import { organizationMapper } from '../mapper/OrganizationMapper';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
@@ -21,14 +21,17 @@ export const listOrganization = async (
     const organizationsCurrent = await Organization.findAll({
       where: { status: 0 },
     });
-    const organizations = await organizationMapper(organizationsCurrent);
+    const organizations = await organizationMapper(
+      organizationsCurrent,
+    );
     if (organizations.length > 0) {
       const response: GeneralResponse<{
         organizations: OrganizationAttributes[];
       }> = {
         status: 200,
-        data: { 
-          organizations: organizations as unknown as OrganizationAttributes[],
+        data: {
+          organizations:
+            organizations as unknown as OrganizationAttributes[],
         },
         message: 'Lấy danh sách tổ chức thành công',
       };
@@ -54,7 +57,7 @@ export const listOrganization = async (
 
 export const detailOrganization = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { id } = req.params;
@@ -67,14 +70,14 @@ export const detailOrganization = async (
         data: {
           organization: organization.toJSON(),
         },
-        message: "Get organization details successfully",
+        message: 'Get organization details successfully',
       };
       commonResponse(req, res, response);
     } else {
       const response: GeneralResponse<{}> = {
         status: 404,
         data: null,
-        message: "Organization not found",
+        message: 'Organization not found',
       };
       commonResponse(req, res, response);
     }
