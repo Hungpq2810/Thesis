@@ -10,6 +10,9 @@ export interface ActivityAttributes {
   // image: string;
   location: string;
   num_of_volunteers: number;
+  max_of_volunteers: number;
+  from_at: Date;
+  to_at: Date;
   status: number;
   created_at: Date;
   updated_at: Date;
@@ -69,8 +72,20 @@ Activities.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    max_of_volunteers: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     status: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    from_at: {
+      type: DataTypes.DATE(),
+      allowNull: false,
+    },
+    to_at: {
+      type: DataTypes.DATE(),
       allowNull: false,
     },
     created_at: {

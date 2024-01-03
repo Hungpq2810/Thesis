@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react'
 import { activityService } from '@/services/activity.service'
 import { skillService } from '@/services/skill.service'
 import InputUpload from '@/components/common/UploadInput'
+import dayjs from 'dayjs'
 
 interface Props {
   editId?: number
@@ -52,6 +53,20 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       }
     }
   )
+  const { data: skillsEdit } = useQuery(['skillsEdit'], () => skillService.getAllSkill(), {
+    select(data) {
+      const result = data.data.data
+      if (!result) return
+      const res = result.skills
+        .filter(skill => skill.id === editId)
+        .map(skill => ({
+          label: skill.name,
+          value: skill.id
+        }))
+      return res
+    }
+  })
+  const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(skillsEdit)
   const newMutation = useMutation({
     mutationKey: 'NewActivity',
     mutationFn: (body: {
@@ -164,7 +179,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
           name='description'
           rules={[{ required: true, message: 'Chưa điền mô tả' }]}
         >
-          <Input.TextArea />
+          <Input.TextArea autoSize={{ minRows: 3, maxRows: 6}} />
         </Form.Item>
 
         <Form.Item
@@ -176,7 +191,35 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
         </Form.Item>
 
         <Form.Item label='Hình ảnh' name='image'>
-          <InputUpload initSrc={imageUrl} onChange={handleImageChange} />
+        <InputUpload initSrc={imageUrl} onChange={handleImageChange} />
+        </Form.Item>
+
+        <Form.Item
+          label='Từ ngày'
+          name='from_at'
+          rules={[{ required: true, message: 'Chưa điền từ ngày' }]}
+          getValueFromEvent={onChange => dayjs(onChange).format('YYYY-MM-DD')}
+          getValueProps={i => ({ value: dayjs(i) })}
+        >
+          <DatePicker />
+        </Form.Item>
+
+        <Form.Item
+          label='Đến ngày'
+          name='to_at'
+          rules={[{ required: true, message: 'Chưa điền đến ngày' }]}
+          getValueFromEvent={onChange => dayjs(onChange).format('YYYY-MM-DD')}
+          getValueProps={i => ({ value: dayjs(i) })}
+        >
+          <DatePicker />
+        </Form.Item>
+
+        <Form.Item
+          label='Số lượng TN tối đa'
+          name='max_of_volunteers'
+          rules={[{ required: true, message: 'Chưa điền số lượng TN tối đa' }]}
+        >
+          <Input type='number' />
         </Form.Item>
 
         <Form.Item
@@ -196,9 +239,10 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
           name='skills'
           rules={[{ required: true, message: 'Chưa điền kỹ năng' }]}
         >
-          <Select
+         <Select
+            defaultValue={skillsDefault && skillsDefault}
             mode='multiple'
-            placeholder='Chọn kỹ năng'
+            placeholder='select one skills'
             optionLabelProp='label'
             options={skills}
           />

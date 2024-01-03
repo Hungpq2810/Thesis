@@ -21,20 +21,23 @@ import { IUser } from '@/typeDefs/schema/user.type'
 import { organizationService } from '@/services/organization.service'
 import dayjs from 'dayjs'
 import InputUpload from '@/components/common/UploadInput'
+import { useRouter } from 'next/router'
 type Props = {
   next: any
 }
 const Profile = ({ next }: Props) => {
   const [form] = useForm()
+  const router = useRouter();
   const { user } = useAppSelector(state => state.appSlice)
   const { data } = useQuery(['userDetail'], () => userService.getUserByAuth())
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(user?.avatar)
   const [belongsOrganizer, setBelongsOrganizer] = useState<number | undefined>(
     data?.data.data.belongsOrganizer?.organization_id
   )
-  const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(
-    data?.data.data.skills?.map(skill => skill.id)
-  )
+  const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(data?.data.data.skills?.map(skill => ({
+    label: skill.name,
+    value: skill.id
+  })))
   const dispatch = useDispatch()
   const { data: skills } = useQuery(
     ['skills'],
@@ -51,7 +54,18 @@ const Profile = ({ next }: Props) => {
       }
     }
   )
-  console.log('Skills:', data?.data.data.skills)
+  const { data: organizersCurrent } = useQuery(['organizers'], () => organizationService.getAllOrganization(), {
+    select(dataInner) {
+      if (data?.data.data.belongsOrganizer) {
+        const result = dataInner.data.data.organizations.filter(
+          item => item.id === data.data.data.belongsOrganizer.organization_id
+        )
+        return result[0]
+      } else {
+        return undefined
+      }
+    }
+  })
 
   const { data: organizers } = useQuery(
     ['organizers'],
@@ -91,8 +105,12 @@ const Profile = ({ next }: Props) => {
   useEffect(() => {
     if (user && data) {
       setBelongsOrganizer(data.data.data.belongsOrganizer?.organization_id)
-      setSkillsDefault(data.data.data.skills?.map(skill => skill.skill_id))
-      console.log(data.data.data.skills)
+      setSkillsDefault(
+        data.data.data.skills?.map(skill => ({
+          label: skill.name,
+          value: skill.id
+        }))
+      )
       form.setFieldsValue({
         // @ts-ignore
         ...data.data.data.user
@@ -225,21 +243,22 @@ const Profile = ({ next }: Props) => {
             )}
           </Form.Item>
 
-          <Form.Item
-            label='Thuộc tổ chức'
-            name='belongsOrganizer'
-            rules={[{ required: false, message: 'Chưa điền tổ chức' }]}
-          >
-            {
-              // belongsOrganizer &&
+          {!belongsOrganizer ? (
+            <Form.Item
+              label='Thuộc tổ chức'
+              name='belongsOrganizer'
+              rules={[{ required: true, message: 'Chưa điền tổ chức' }]}
+            >
               <Select
-                defaultValue={belongsOrganizer}
-                placeholder='Chọn tổ chức muốn gia nhập'
+                defaultValue={belongsOrganizer && belongsOrganizer}
+                placeholder='select one belongsOrganizer'
                 optionLabelProp='label'
                 options={organizers}
               />
-            }
-          </Form.Item>
+            </Form.Item>
+          ) : (
+            <p>Thuộc tổ chức: {organizersCurrent && organizersCurrent.name}</p>
+          )}
 
           <Form.Item style={{ textAlign: 'center' }}>
             <Button
@@ -252,13 +271,24 @@ const Profile = ({ next }: Props) => {
           </Form.Item>
         </Form>
       </Card>
-      {data && data.data.data.activityApplied && (
-        <>
+      {
+      data && 
+      data.data.data.activityApplied && 
+      (
+        <div className='w-full flex flex-col justify-start items-start'>
           <p>Các hoạt động đã tham gia:</p>
           {data.data.data.activityApplied.map((item: any) => (
-            <p>{item.activity_id}</p>
+            <div className='w-full flex justify-center items-center gap-2'>
+              <p>Tên hoạt động: {item.name}</p>
+              <p
+                onClick={() => router.push(`/activity/${item.id}`)}
+                className='underline hover:text-cyan-500 cursor-pointer'
+              >
+                Chi tiết
+              </p>
+            </div>
           ))}
-        </>
+        </div>
       )}
     </React.Fragment>
   )

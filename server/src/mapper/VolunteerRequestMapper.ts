@@ -1,5 +1,7 @@
 import { VolunteerRequestAttributes } from '../models/volunteer_request';
 import { Users } from '../models/users';
+import { ActivityApply } from '../models/activity_apply';
+import { activityApplyMapper } from './ActivityApplyMapper';
 
 export const volunteerRequestMapper = async (
   volunteerRequests: VolunteerRequestAttributes[],
@@ -19,6 +21,11 @@ export const volunteerRequestMapper = async (
         const user = await Users.findByPk(user_id);
         const userName = user ? user.name : null;
         const userAvatar = user ? user.avatar : null;
+        const volunteersApplied = await ActivityApply.findAll({
+          where: { user_id: id },
+        });
+        const mappedVolunteersApplied =
+          await activityApplyMapper(volunteersApplied);
 
         return {
           id,

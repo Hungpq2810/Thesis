@@ -11,10 +11,13 @@ import {
   VolunteerRequest,
   VolunteerRequestAttributes,
 } from '../models/volunteer_request';
+import { ActivityApply } from '../models/activity_apply';
 import {
   Organization,
   OrganizationAttributes,
 } from '../models/organization';
+import { activityApplyMapper } from '../mapper/ActivityApplyMapper';
+import { Skills } from '../models/skills';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
@@ -51,37 +54,11 @@ export const updateProfile = async (
           created_at: new Date(),
           updated_at: new Date(),
         }));
-        // Tìm kiếm tất cả các cặp skill-user hiện có của user
-        const existingSkills = await SkillUsers.findAll({
-          where: { user_id: userId },
-        });
-
-        // Xóa các cặp skill-user không có trong input mới
-        const deletedSkills = existingSkills.filter(
-          (skill) => !skills.includes(skill.skill_id),
-        );
-        for (const skill of deletedSkills) {
-          await SkillUsers.destroy({
-            where: { skill_id: skill.skill_id, user_id: userId },
-          });
-        }
-
-        // Thêm hoặc cập nhật các cặp skill-user mới
+        await SkillUsers.destroy({ where: { user_id: userId } });
         for (const skill of skills) {
-          const existingSkill = existingSkills.find(
-            (s) => s.skill_id === skill.skill_id,
-          );
-
-          if (existingSkill) {
-            // Nếu cặp skill-user đã tồn tại, chỉ cần cập nhật thời gian updated_at
-            await existingSkill.update({ updated_at: new Date() });
-          } else {
-            // Nếu cặp skill-user chưa tồn tại, tạo mới
-            await SkillUsers.create(skill);
-          }
+          await SkillUsers.create(skill);
         }
       }
-
       const requestApplyOrganizer = {
         user_id: Number(userId) as number,
         organization_id: Number(req.body.belongsOrgainzer) as number,
@@ -89,8 +66,13 @@ export const updateProfile = async (
         created_at: new Date(),
         updated_at: new Date(),
       };
+      await VolunteerRequest.destroy({
+        where: {
+          user_id: userId,
+          organization_id: req.body.belongsOrgainzer,
+        },
+      });
       await VolunteerRequest.create(requestApplyOrganizer);
-
       const body = req.body;
       delete body.role_id;
       delete body.organization_id;
@@ -98,7 +80,7 @@ export const updateProfile = async (
       const response: GeneralResponse<UserAttributes> = {
         status: 200,
         data: result.toJSON() as UserAttributes,
-        message: 'Cập nhật thành công',
+        message: 'Update successfull',
       };
       commonResponse(req, res, response);
     }
@@ -143,31 +125,34 @@ export const detailUser = async (
     const userSkills = await SkillUsers.findAll({
       where: { user_id: userId },
     });
-    const userOrganizerRequest = await VolunteerRequest.findOne({
+    const skillIds = userSkills.map((skill) => skill.skill_id);
+    const skills = await Skills.findAll({ where: { id: skillIds } });
+    const skillsWithDetails = userSkills.map((activity) => {
+      const skill = skills.find(
+        (skill) => skill.id === activity.skill_id,
+      );
+      return skill;
+    });
+    const userOrganizer = await VolunteerRequest.findOne({
       where: { user_id: userId },
     });
-    const userOrganization = userOrganizerRequest
-      ? await Organization.findOne({
-          where: { id: userOrganizerRequest.organization_id },
-        })
-      : null;
 
+    const userActivity = await ActivityApply.findAll({
+      where: { user_id: userId },
+    });
+    const activityMapper = await activityApplyMapper(userActivity);
     const response: GeneralResponse<{
       user: UserAttributes;
-      skills: SkillUsers[];
-      belongsOrganizer: {
-        request: VolunteerRequestAttributes | null;
-        organization: OrganizationAttributes | null;
-      };
+      skills: any[];
+      activityApplied: any[];
+      belongsOrgainzer: VolunteerRequestAttributes | null;
     }> = {
       status: 200,
       data: {
         user: user.toJSON() as UserAttributes,
-        skills: userSkills,
-        belongsOrganizer: {
-          request: userOrganizerRequest,
-          organization: userOrganization,
-        },
+        skills: skillsWithDetails,
+        activityApplied: activityMapper,
+        belongsOrgainzer: userOrganizer,
       },
       message: 'Lấy thông tin người dùng thành công',
     };

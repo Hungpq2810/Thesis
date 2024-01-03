@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Op } from 'sequelize';
 import * as dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
 import {
   GeneralResponse,
   commonResponse,
@@ -20,6 +21,7 @@ export const listUser = async (
         },
         status: 0,
       },
+      attributes: { exclude: ['password'] },
     });
     const response: GeneralResponse<{
       users: UserAttributes[];

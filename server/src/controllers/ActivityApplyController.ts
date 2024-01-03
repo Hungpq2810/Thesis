@@ -39,7 +39,7 @@ export const activityApplyVolunteer = async (
       } else {
         const checkRequestTime = await ActivityApply.findAll({
           where: {
-            id: req.body.activity_id,
+            // id: req.body.activity_id,
             user_id: userId,
             status: 0,
           },
@@ -88,15 +88,18 @@ export const activityApplyVolunteer = async (
 
 export const cancelApplyActivity = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
+    const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-      res.status(401).json({ message: "Unauthorized" });
+      res.status(401).json({ message: 'Unauthorized' });
       return;
     }
-    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(
+      token,
+      secretKey,
+    ) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
     if (user) {
@@ -118,14 +121,14 @@ export const cancelApplyActivity = async (
           const response: GeneralResponse<{}> = {
             status: 200,
             data: null,
-            message: "Delete successful",
+            message: 'Delete successful',
           };
           commonResponse(req, res, response);
         } else {
           const response: GeneralResponse<{}> = {
             status: 400,
             data: null,
-            message: "No matching records found to delete",
+            message: 'No matching records found to delete',
           };
           commonResponse(req, res, response);
         }

@@ -31,7 +31,7 @@ const RequestOrganization = () => {
 
   function handleRequest() {
     requestBecomeOrganizationMutation.mutate({
-      organization_id: inforOrganization?.id || 0
+      organization_id: inforOrganization!.id
     })
   }
   const steps = [

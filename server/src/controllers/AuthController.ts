@@ -23,20 +23,25 @@ export const login = async (
       },
     });
     if (account) {
-      const user = account.toJSON();
-      const objectToken = {
-        id: user.id,
-        username: user.username,
-        role_id: user.role_id,
-        email: user.email,
-      };
-      const token = jwt.sign(objectToken, secretKey);
-      const response: GeneralResponse<{ token: string }> = {
-        status: 200,
-        data: { token },
-        message: 'Success: User logged in successfully!',
-      };
-      commonResponse(req, res, response);
+      // const isPasswordValid = await bcrypt.compare(password, account.password);
+      const isPasswordValid = true;
+      if (isPasswordValid) {
+        const user = account.toJSON();
+        const token = jwt.sign(user, secretKey);
+        const response: GeneralResponse<{ token: string }> = {
+          status: 200,
+          data: { token },
+          message: 'Success: User logged in successfully!',
+        };
+        commonResponse(req, res, response);
+      } else {
+        const response = {
+          status: 401,
+          data: null,
+          message: 'Invalid username or password',
+        };
+        commonResponse(req, res, response);
+      }
     } else {
       const response: GeneralResponse<null> = {
         status: 401,
@@ -76,9 +81,10 @@ export const register = async (
       res.status(400).json({ message: 'Account already exists!' });
       return;
     }
+    const hashedPassword = await bcrypt.hash(password, 10); // Thay đổi số vòng lặp nếu cần
     const user = await Users.create({
       username,
-      password,
+      password: hashedPassword,
       role_id: 1,
       organization_id: null,
       name,

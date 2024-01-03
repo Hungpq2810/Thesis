@@ -38,9 +38,15 @@ const RequestVolunteerManagement = ({}: Props) => {
       )
     },
     {
-      title: 'Tên người đăng ký',
+      title: 'Người đăng ký',
       dataIndex: 'user_id',
-      render: (_, record) => <p>{record.user_id}</p>
+      render: (_, record) => (
+        <div className='w-full flex flex-col justify-start items-start gap-2'>
+            <p>Tên: {record.name}</p>
+            <p>Email: {record.email}</p>
+            <p>Sđt: {record.phone}</p>
+        </div>
+      )
     },
     {
       title: 'Trạng thái',
@@ -67,7 +73,8 @@ const RequestVolunteerManagement = ({}: Props) => {
                 onConfirm={() => {
                   const body = {
                     user_id: record.user_id,
-                    status: record.status
+                    // status: record.status
+                    status: 0
                   }
                   updateMutation.mutate(body)
                 }}
@@ -119,10 +126,7 @@ const RequestVolunteerManagement = ({}: Props) => {
               </div>
             </Col>
           </Row>
-          <Table
-            dataSource={dataRequestVolunteers.data.data.requestVolunteers}
-            columns={columns}
-          />
+          <Table dataSource={dataRequestVolunteers.data.data.requestVolunteers.filter(volunteer => volunteer.status !== 0)} columns={columns} />
         </React.Fragment>
       )}
     </>
