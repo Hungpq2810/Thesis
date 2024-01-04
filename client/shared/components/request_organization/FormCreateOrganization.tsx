@@ -1,40 +1,40 @@
-import { Button, Card, Form, Input, message } from 'antd'
-import React from 'react'
-import { useMutation } from 'react-query'
-import BlankLayout from '@/layouts/BlankLayout'
-import { organizationService } from '@/services/organization.service'
-import { useDispatch } from 'react-redux'
-import { setInforOrganization } from '@/store/appSlice'
+import { Button, Card, Form, Input, message } from 'antd';
+import React from 'react';
+import { useMutation } from 'react-query';
+import BlankLayout from '@/layouts/BlankLayout';
+import { organizationService } from '@/services/organization.service';
+import { useDispatch } from 'react-redux';
+import { setInforOrganization } from '@/store/appSlice';
 type Props = {
-  next: any
-}
+  next: any;
+};
 const FormCreateOrganization = ({ next }: Props) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const newOrganizationMutation = useMutation({
     mutationKey: 'newOrganization',
     mutationFn: (body: {
-      name: string
-      location: string
-      description: string
+      name: string;
+      location: string;
+      description: string;
     }) => organizationService.newOrganization(body),
     onSuccess(data, _variables, _context) {
       if (data.data.data) {
-        dispatch(setInforOrganization(data.data.data))
-        message.success('Tạo thành công')
+        dispatch(setInforOrganization(data.data.data));
+        message.success('Tạo thành công');
       }
     },
     onError(error, variables, context) {
-      message.error('Tạo không thành công')
+      message.error('Tạo không thành công');
     }
-  })
+  });
   //Handle submit form Login
   function handleCreate(value: {
-    name: string
-    location: string
-    description: string
+    name: string;
+    location: string;
+    description: string;
   }) {
-    newOrganizationMutation.mutate(value)
-    next()
+    newOrganizationMutation.mutate(value);
+    next();
   }
   return (
     <React.Fragment>
@@ -77,7 +77,7 @@ const FormCreateOrganization = ({ next }: Props) => {
             name='description'
             rules={[{ required: true, message: 'Vui lòng nhập mô tả' }]}
           >
-            <Input.TextArea autoSize={{ minRows: 3, maxRows: 6 }}/>
+            <Input.TextArea autoSize={{ minRows: 3, maxRows: 6 }} />
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
             <Button
@@ -91,9 +91,9 @@ const FormCreateOrganization = ({ next }: Props) => {
         </Form>
       </Card>
     </React.Fragment>
-  )
-}
+  );
+};
 FormCreateOrganization.getLayout = (children: React.ReactNode) => (
   <BlankLayout>{children}</BlankLayout>
-)
-export default FormCreateOrganization
+);
+export default FormCreateOrganization;

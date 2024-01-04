@@ -24,6 +24,7 @@ export const listOrganization = async (
     const organizations = await organizationMapper(
       organizationsCurrent,
     );
+
     if (organizations.length > 0) {
       const response: GeneralResponse<{
         organizations: OrganizationAttributes[];

@@ -27,7 +27,7 @@ export const listRequestVolunteers = async (
       token,
       secretKey,
     ) as jwt.JwtPayload;
-    console.log(decodedToken);
+
     const organizerId = decodedToken.id;
     const organizer = await Users.findOne({
       where: {
@@ -41,6 +41,14 @@ export const listRequestVolunteers = async (
         where: {
           organization_id: organizer.organization_id,
         },
+        include: [
+          {
+            model: Users,
+            where: {
+              status: 0,
+            },
+          },
+        ],
       });
       if (requestVolunteers.length > 0) {
         const response: GeneralResponse<{

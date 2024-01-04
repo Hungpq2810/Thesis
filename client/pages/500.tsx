@@ -1,13 +1,13 @@
 // ** React Imports
-import useTrans from '@/hooks/useTrans'
-import BlankLayout from '@/layouts/BlankLayout'
-import { Button, Result } from 'antd'
-import Head from 'next/head'
-import Link from 'next/link'
-import { ReactNode } from 'react'
+import useTrans from '@/hooks/useTrans';
+import BlankLayout from '@/layouts/BlankLayout';
+import { Button, Result } from 'antd';
+import Head from 'next/head';
+import Link from 'next/link';
+import { ReactNode } from 'react';
 
 const Error500 = () => {
-  const { trans } = useTrans()
+  const { trans } = useTrans();
   return (
     <>
       <Head>
@@ -24,10 +24,10 @@ const Error500 = () => {
         }
       />
     </>
-  )
-}
+  );
+};
 Error500.getLayout = (children: React.ReactNode) => (
   <BlankLayout>{children}</BlankLayout>
-)
+);
 
-export default Error500
+export default Error500;

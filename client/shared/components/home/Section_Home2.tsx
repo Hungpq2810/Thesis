@@ -1,10 +1,10 @@
-import { Carousel } from 'antd'
-import React from 'react'
+import { Carousel } from 'antd';
+import React from 'react';
 
 const Section_Home2 = () => {
   const onChange = (currentSlide: number) => {
-    console.log(currentSlide)
-  }
+    console.log(currentSlide);
+  };
   return (
     <React.Fragment>
       <div className='w-full grid grid-cols-1 justify-center items-center gap-5'>
@@ -40,7 +40,7 @@ const Section_Home2 = () => {
         </Carousel>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Section_Home2
+export default Section_Home2;

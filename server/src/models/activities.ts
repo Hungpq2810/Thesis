@@ -7,7 +7,7 @@ export interface ActivityAttributes {
   creator: number;
   name: string;
   description: string;
-  // image: string;
+  image: string;
   location: string;
   num_of_volunteers: number;
   max_of_volunteers: number;
@@ -28,9 +28,12 @@ class Activities
   public creator!: number;
   public name!: string;
   public description!: string;
-  // public image!: string;
+  public image!: string;
   public location!: string;
   public num_of_volunteers!: number;
+  public max_of_volunteers!: number;
+  public from_at!: Date;
+  public to_at!: Date;
   public status!: number;
   public created_at!: Date;
   public updated_at!: Date;
@@ -60,10 +63,10 @@ Activities.init(
       type: new DataTypes.STRING(255),
       allowNull: false,
     },
-    // image: {
-    //   type: new DataTypes.BLOB('long'),
-    //   allowNull: true,
-    // },
+    image: {
+      type: new DataTypes.STRING(1250),
+      allowNull: false,
+    },
     location: {
       type: new DataTypes.STRING(100),
       allowNull: false,
@@ -105,8 +108,5 @@ Activities.init(
     updatedAt: false,
   },
 );
-Activities.belongsTo(Users, {
-  foreignKey: 'creator',
-  as: 'user',
-});
+Activities.belongsTo(Users, { foreignKey: 'creator', as: 'user' });
 export { Activities };

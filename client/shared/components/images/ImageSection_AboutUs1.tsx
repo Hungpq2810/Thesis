@@ -1,4 +1,4 @@
-import React, { SVGProps } from 'react'
+import React, { SVGProps } from 'react';
 
 export default function ImageSection_AboutUs1({
   ...rest
@@ -39,5 +39,5 @@ export default function ImageSection_AboutUs1({
         />
       </defs>
     </svg>
-  )
+  );
 }

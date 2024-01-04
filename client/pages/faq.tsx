@@ -1,12 +1,12 @@
-import { faqService } from '@/services/faq.service'
-import React from 'react'
-import { useQuery } from 'react-query'
-import { Collapse } from 'antd'
-import dayjs from 'dayjs'
-const { Panel } = Collapse
+import { faqService } from '@/services/faq.service';
+import React from 'react';
+import { useQuery } from 'react-query';
+import { Collapse } from 'antd';
+import dayjs from 'dayjs';
+const { Panel } = Collapse;
 
 const FAQPage = () => {
-  const { data: dataFaq } = useQuery(['listFaq'], () => faqService.getAllFaq())
+  const { data: dataFaq } = useQuery(['listFaq'], () => faqService.getAllFaq());
   return (
     <React.Fragment>
       <div className='mt-5 flex flex-col justify-center items-center'>
@@ -17,7 +17,7 @@ const FAQPage = () => {
       <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-5'>
         {dataFaq &&
           dataFaq.data.data &&
-          dataFaq.data.data.faqs.map(faq => (
+          dataFaq.data.data.faqs.map((faq) => (
             <Collapse key={faq.id} collapsible='icon' defaultActiveKey={['1']}>
               <Panel header={faq.question} key='1'>
                 <p>{faq.answer}</p>
@@ -29,7 +29,7 @@ const FAQPage = () => {
           ))}
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default FAQPage
+export default FAQPage;

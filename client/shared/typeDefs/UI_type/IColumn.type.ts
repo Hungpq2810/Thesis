@@ -1,5 +1,5 @@
-import { ColumnType } from 'antd/es/table'
+import { ColumnType } from 'antd/es/table';
 
 export interface IColumn<T> extends ColumnType<T> {
-  hidden: boolean
+  hidden: boolean;
 }

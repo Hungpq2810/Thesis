@@ -1,9 +1,9 @@
-import React from 'react'
-import ImageSection_Home1 from '../images/ImageSection_Home1'
-import IconServiceUser from '../icons/home/IconServiceUser'
-import IconGuarantee from '../icons/home/IconGuarantee'
-import IconTeam from '../icons/home/IconTeam'
-import { Button } from 'antd'
+import React from 'react';
+import ImageSection_Home1 from '../images/ImageSection_Home1';
+import IconServiceUser from '../icons/home/IconServiceUser';
+import IconGuarantee from '../icons/home/IconGuarantee';
+import IconTeam from '../icons/home/IconTeam';
+import { Button } from 'antd';
 
 const Section_Home1 = () => {
   return (
@@ -37,7 +37,7 @@ const Section_Home1 = () => {
         <ImageSection_Home1 />
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Section_Home1
+export default Section_Home1;

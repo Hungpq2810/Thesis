@@ -1,36 +1,36 @@
-import { Button, Input, InputRef, Space, theme } from 'antd'
-import { ColumnType } from 'antd/es/table'
-import { FilterConfirmProps } from 'antd/lib/table/interface'
-import { useRef, useState } from 'react'
-import Highlighter from 'react-highlight-words'
-import useTrans from './useTrans'
-import { SearchOutlined } from '@ant-design/icons/lib/icons'
+import { Button, Input, InputRef, Space, theme } from 'antd';
+import { ColumnType } from 'antd/es/table';
+import { FilterConfirmProps } from 'antd/lib/table/interface';
+import { useRef, useState } from 'react';
+import Highlighter from 'react-highlight-words';
+import useTrans from './useTrans';
+import { SearchOutlined } from '@ant-design/icons/lib/icons';
 
 type Props = {
-  apiFn?: Function
-}
+  apiFn?: Function;
+};
 
 export default function useHeaderSearch<T>({ apiFn }: Props) {
-  const { token } = theme.useToken()
-  const [searchText, setSearchText] = useState('')
-  const [searchedColumn, setSearchedColumn] = useState('')
-  const searchInput = useRef<InputRef>(null)
-  const { trans } = useTrans()
+  const { token } = theme.useToken();
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef<InputRef>(null);
+  const { trans } = useTrans();
   const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
     dataIndex: keyof T
   ) => {
-    confirm()
-    setSearchText(selectedKeys[0])
-    setSearchedColumn(String(dataIndex))
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(String(dataIndex));
     // callAPi search
-  }
+  };
 
   const handleReset = (clearFilters: () => void) => {
-    clearFilters()
-    setSearchText('')
-  }
+    clearFilters();
+    setSearchText('');
+  };
   const getColumnSearchProps = (dataIndex: keyof T): ColumnType<T> => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -39,12 +39,12 @@ export default function useHeaderSearch<T>({ apiFn }: Props) {
       clearFilters,
       close
     }) => (
-      <div style={{ padding: 8 }} onKeyDown={e => e.stopPropagation()}>
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
           ref={searchInput}
           placeholder={`Search ${String(dataIndex)}`}
           value={selectedKeys[0]}
-          onChange={e =>
+          onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() =>
@@ -75,10 +75,10 @@ export default function useHeaderSearch<T>({ apiFn }: Props) {
             type='link'
             size='small'
             onClick={() => {
-              confirm({ closeDropdown: false })
-              setSearchText((selectedKeys as string[])[0])
+              confirm({ closeDropdown: false });
+              setSearchText((selectedKeys as string[])[0]);
               if (typeof dataIndex === 'string') {
-                setSearchedColumn(dataIndex)
+                setSearchedColumn(dataIndex);
               }
             }}
           >
@@ -88,7 +88,7 @@ export default function useHeaderSearch<T>({ apiFn }: Props) {
             type='link'
             size='small'
             onClick={() => {
-              close()
+              close();
             }}
           >
             {trans.common.close}
@@ -106,12 +106,12 @@ export default function useHeaderSearch<T>({ apiFn }: Props) {
         .toString()
         .toLowerCase()
         .includes((value as string).toLowerCase()),
-    onFilterDropdownOpenChange: visible => {
+    onFilterDropdownOpenChange: (visible) => {
       if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100)
+        setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-    render: text =>
+    render: (text) =>
       searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
@@ -122,6 +122,6 @@ export default function useHeaderSearch<T>({ apiFn }: Props) {
       ) : (
         text
       )
-  })
-  return { getColumnSearchProps }
+  });
+  return { getColumnSearchProps };
 }

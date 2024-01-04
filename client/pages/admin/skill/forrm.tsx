@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query';
 import {
   Button,
   Form,
@@ -9,56 +9,56 @@ import {
   Col,
   Select,
   SelectProps
-} from 'antd'
-import { useForm } from 'antd/lib/form/Form'
-import { useEffect } from 'react'
-import dayjs from 'dayjs'
-import { skillService } from '@/services/skill.service'
+} from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import { useEffect } from 'react';
+import dayjs from 'dayjs';
+import { skillService } from '@/services/skill.service';
 
 interface Props {
-  editId?: number
-  open: any
-  setOpen: any
-  refetch: any
+  editId?: number;
+  open: any;
+  setOpen: any;
+  refetch: any;
 }
 const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
-  const [form] = useForm()
-  const isEditIdValidNumber = typeof editId === 'number'
+  const [form] = useForm();
+  const isEditIdValidNumber = typeof editId === 'number';
   const registerMutation = useMutation({
     mutationKey: 'register',
     mutationFn: (body: { name: string; description: string }) =>
       skillService.newSkill(body),
     onSuccess(data, _variables, _context) {
-      const res = data.data
-      if (!res) return
-      message.success('Tạo thành công')
-      setOpen(false)
-      refetch()
+      const res = data.data;
+      if (!res) return;
+      message.success('Tạo thành công');
+      setOpen(false);
+      refetch();
     },
     onError(error, variables, context) {
-      message.error('Tạo không thành công')
+      message.error('Tạo không thành công');
     }
-  })
+  });
   const updateMutation = useMutation({
     mutationKey: 'update',
     mutationFn: (body: { name: string; description: string }) =>
       skillService.updateSkill(editId as number, body),
     onSuccess(data, _variables, _context) {
-      const res = data.data
-      if (!res) return
-      message.success('Cập nhật thành công')
-      setOpen(false)
-      refetch()
+      const res = data.data;
+      if (!res) return;
+      message.success('Cập nhật thành công');
+      setOpen(false);
+      refetch();
     },
     onError(error, variables, context) {
-      message.error('Cập nhật không thành công')
+      message.error('Cập nhật không thành công');
     }
-  })
+  });
   function handleregister(value: any) {
     if (editId) {
-      updateMutation.mutate(value)
+      updateMutation.mutate(value);
     } else {
-      registerMutation.mutate(value)
+      registerMutation.mutate(value);
     }
   }
   const { data } = useQuery(
@@ -67,14 +67,14 @@ const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
     {
       enabled: isEditIdValidNumber
     }
-  )
+  );
   useEffect(() => {
     if (editId && data) {
       form.setFieldsValue({
         ...data.data.data
-      })
+      });
     }
-  }, [data])
+  }, [data]);
 
   return (
     <Modal
@@ -126,7 +126,7 @@ const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
         </Row>
       </Form>
     </Modal>
-  )
-}
+  );
+};
 
-export default FormSkill
+export default FormSkill;

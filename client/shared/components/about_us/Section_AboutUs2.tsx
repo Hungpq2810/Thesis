@@ -1,8 +1,8 @@
-import React from 'react'
-import IconValues from '../icons/about_us/IconValues'
-import IconLanguage from '../icons/about_us/IconLanguage'
-import IconChart from '../icons/about_us/IconChart'
-import IconAnimation from '../icons/about_us/IconAnimation'
+import React from 'react';
+import IconValues from '../icons/about_us/IconValues';
+import IconLanguage from '../icons/about_us/IconLanguage';
+import IconChart from '../icons/about_us/IconChart';
+import IconAnimation from '../icons/about_us/IconAnimation';
 
 const Section_AboutUs2 = () => {
   return (
@@ -33,7 +33,7 @@ const Section_AboutUs2 = () => {
         </div>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Section_AboutUs2
+export default Section_AboutUs2;

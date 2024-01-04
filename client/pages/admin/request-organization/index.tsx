@@ -1,40 +1,40 @@
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
-import { Col, message, Popconfirm, Row, Space, Table } from 'antd'
-import Search from 'antd/lib/input/Search'
-import { ColumnType } from 'antd/lib/table'
-import DashboardLayout from '@/layouts/DashboardLayout'
-import { useMutation, useQuery } from 'react-query'
-import { userService } from '@/services/user.service'
-import React from 'react'
-import { organizationService } from '@/services/organization.service'
-import { IRequestOrganization } from '@/typeDefs/schema/organization.type'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Col, message, Popconfirm, Row, Space, Table } from 'antd';
+import Search from 'antd/lib/input/Search';
+import { ColumnType } from 'antd/lib/table';
+import DashboardLayout from '@/layouts/DashboardLayout';
+import { useMutation, useQuery } from 'react-query';
+import { userService } from '@/services/user.service';
+import React from 'react';
+import { organizationService } from '@/services/organization.service';
+import { IRequestOrganization } from '@/typeDefs/schema/organization.type';
 
-type Props = {}
+type Props = {};
 
 const RequestOrganizationManagement = ({}: Props) => {
   const { data: dataRequestOrganization, refetch } = useQuery(
     ['listRequestOrganization'],
     () => organizationService.getAllRequestOrganization()
-  )
+  );
   const updateMutation = useMutation({
     mutationKey: ['updateMutation'],
     mutationFn: (body: { organization_id: number; status: number }) =>
       organizationService.updateRequestOrganization(body),
     onSuccess: () => {
-      message.success('Cập nhật thành công')
-      refetch()
+      message.success('Cập nhật thành công');
+      refetch();
     },
     onError() {
-      message.error('Cập nhật không thành công')
+      message.error('Cập nhật không thành công');
     }
-  })
+  });
   const columns: ColumnType<IRequestOrganization>[] = [
     {
       title: '#',
       key: 'id',
       render: (value, record, index) => (
         <div>
-          <p>{index}</p>
+          <p>{index + 1}</p>
         </div>
       )
     },
@@ -79,8 +79,8 @@ const RequestOrganizationManagement = ({}: Props) => {
                   const body = {
                     organization_id: record.organizer.id,
                     status: record.status
-                  }
-                  updateMutation.mutate(body)
+                  };
+                  updateMutation.mutate(body);
                 }}
                 title={'Phê duyệt'}
               >
@@ -92,8 +92,8 @@ const RequestOrganizationManagement = ({}: Props) => {
                   const body = {
                     organization_id: record.organizer.id,
                     status: 2
-                  }
-                  updateMutation.mutate(body)
+                  };
+                  updateMutation.mutate(body);
                 }}
                 title={'Từ chối'}
               >
@@ -106,7 +106,7 @@ const RequestOrganizationManagement = ({}: Props) => {
         </Space>
       )
     }
-  ]
+  ];
 
   return (
     <>
@@ -137,9 +137,9 @@ const RequestOrganizationManagement = ({}: Props) => {
         </React.Fragment>
       )}
     </>
-  )
-}
+  );
+};
 RequestOrganizationManagement.getLayout = (children: React.ReactNode) => (
   <DashboardLayout>{children}</DashboardLayout>
-)
-export default RequestOrganizationManagement
+);
+export default RequestOrganizationManagement;

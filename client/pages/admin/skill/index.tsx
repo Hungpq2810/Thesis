@@ -1,44 +1,44 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Button, Col, message, Popconfirm, Row, Space, Table } from 'antd'
-import Search from 'antd/lib/input/Search'
-import { ColumnType } from 'antd/lib/table'
-import { useState } from 'react'
-import DashboardLayout from '@/layouts/DashboardLayout'
-import { useMutation, useQuery } from 'react-query'
-import { userService } from '@/services/user.service'
-import React from 'react'
-import { IUser, IUserList } from '@/typeDefs/schema/user.type'
-import FormSkill from './forrm'
-import { skillService } from '@/services/skill.service'
-import { ISkill } from '@/typeDefs/schema/skill.type'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Col, message, Popconfirm, Row, Space, Table } from 'antd';
+import Search from 'antd/lib/input/Search';
+import { ColumnType } from 'antd/lib/table';
+import { useState } from 'react';
+import DashboardLayout from '@/layouts/DashboardLayout';
+import { useMutation, useQuery } from 'react-query';
+import { userService } from '@/services/user.service';
+import React from 'react';
+import { IUser, IUserList } from '@/typeDefs/schema/user.type';
+import FormSkill from './forrm';
+import { skillService } from '@/services/skill.service';
+import { ISkill } from '@/typeDefs/schema/skill.type';
 
-type Props = {}
+type Props = {};
 
 const SkillManagement = ({}: Props) => {
-  const [open, setOpen] = useState(false)
-  const [action, setAtion] = useState<string>('')
-  const [rowId, setRowId] = useState<number>()
+  const [open, setOpen] = useState(false);
+  const [action, setAtion] = useState<string>('');
+  const [rowId, setRowId] = useState<number>();
   const { data: dataSkill, refetch } = useQuery(['listSkill'], () =>
     skillService.getAllSkill()
-  )
+  );
   const deleteMutation = useMutation({
     mutationKey: ['deleteUserMutation'],
     mutationFn: (userId: number) => userService.deleteUser(userId),
     onSuccess: () => {
-      message.success('Xoá thành công')
-      refetch()
+      message.success('Xoá thành công');
+      refetch();
     },
     onError() {
-      message.error('Xoá không thành công')
+      message.error('Xoá không thành công');
     }
-  })
+  });
   const columns: ColumnType<ISkill>[] = [
     {
       title: '#',
       key: 'id',
       render: (value, record, index) => (
         <div>
-          <p>{index}</p>
+          <p>{index + 1}</p>
         </div>
       )
     },
@@ -60,9 +60,9 @@ const SkillManagement = ({}: Props) => {
           <div
             className='cursor-pointer'
             onClick={() => {
-              setAtion('edit')
-              setOpen(true)
-              setRowId(record.id)
+              setAtion('edit');
+              setOpen(true);
+              setRowId(record.id);
             }}
           >
             <EditOutlined />
@@ -70,7 +70,7 @@ const SkillManagement = ({}: Props) => {
           <Popconfirm
             okButtonProps={{ loading: deleteMutation.isLoading }}
             onConfirm={() => {
-              deleteMutation.mutate(record.id)
+              deleteMutation.mutate(record.id);
             }}
             title={'Xoá'}
           >
@@ -79,7 +79,7 @@ const SkillManagement = ({}: Props) => {
         </Space>
       )
     }
-  ]
+  ];
 
   return (
     <>
@@ -99,9 +99,9 @@ const SkillManagement = ({}: Props) => {
                 />
                 <Button
                   onClick={() => {
-                    setAtion('create')
-                    setRowId(NaN)
-                    setOpen(true)
+                    setAtion('create');
+                    setRowId(NaN);
+                    setOpen(true);
                   }}
                 >
                   Tạo mới
@@ -123,9 +123,9 @@ const SkillManagement = ({}: Props) => {
         </React.Fragment>
       )}
     </>
-  )
-}
+  );
+};
 SkillManagement.getLayout = (children: React.ReactNode) => (
   <DashboardLayout>{children}</DashboardLayout>
-)
-export default SkillManagement
+);
+export default SkillManagement;

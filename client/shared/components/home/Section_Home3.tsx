@@ -1,5 +1,5 @@
-import { Image } from 'antd'
-import React from 'react'
+import { Image } from 'antd';
+import React from 'react';
 
 const Section_Home3 = () => {
   return (
@@ -36,7 +36,7 @@ const Section_Home3 = () => {
         </div>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Section_Home3
+export default Section_Home3;

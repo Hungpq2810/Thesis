@@ -1,13 +1,13 @@
-import { Card, Modal, Tag, Typography } from 'antd'
-import { ColumnType } from 'antd/lib/table'
-import React from 'react'
+import { Card, Modal, Tag, Typography } from 'antd';
+import { ColumnType } from 'antd/lib/table';
+import React from 'react';
 
 type Props<T> = {
-  columns: ColumnType<T>[]
-  setColumns: Function
-  isOpen: boolean
-  setOpen: Function
-}
+  columns: ColumnType<T>[];
+  setColumns: Function;
+  isOpen: boolean;
+  setOpen: Function;
+};
 
 export default function useTableSetting<T>({
   columns,
@@ -29,13 +29,13 @@ export default function useTableSetting<T>({
             <Typography className='font-bold mb-4 '>
               Thứ tự các cột:{' '}
             </Typography>
-            {columns.map(item => (
+            {columns.map((item) => (
               <Tag>{item.title as string}</Tag>
             ))}
           </div>
         </Card>
       </Modal>
-    )
+    );
   }
-  return { ModalSetting: getModal }
+  return { ModalSetting: getModal };
 }

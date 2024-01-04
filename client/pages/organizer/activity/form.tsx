@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query';
 import {
   Button,
   Form,
@@ -10,19 +10,19 @@ import {
   DatePicker,
   Select,
   SelectProps
-} from 'antd'
-import { useForm } from 'antd/lib/form/Form'
-import { useEffect, useState } from 'react'
-import { activityService } from '@/services/activity.service'
-import { skillService } from '@/services/skill.service'
-import InputUpload from '@/components/common/UploadInput'
-import dayjs from 'dayjs'
+} from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import { useEffect, useState } from 'react';
+import { activityService } from '@/services/activity.service';
+import { skillService } from '@/services/skill.service';
+import InputUpload from '@/components/common/UploadInput';
+import dayjs from 'dayjs';
 
 interface Props {
-  editId?: number
-  open: any
-  setOpen: any
-  refetch: any
+  editId?: number;
+  open: any;
+  setOpen: any;
+  refetch: any;
 }
 const status = [
   {
@@ -33,78 +33,77 @@ const status = [
     lable: 'Đã đóng',
     value: 1
   }
-]
+];
 const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
-  const [form] = useForm()
-  const [imageUrl, setImageUrl] = useState<string | undefined>()
-  const isEditIdValidNumber = typeof editId === 'number'
+  const [form] = useForm();
+  const [imageUrl, setImageUrl] = useState<string | undefined>();
+  const isEditIdValidNumber = typeof editId === 'number';
+  const { data } = useQuery(
+    ['activity'],
+    () => activityService.getActivityById(editId as number),
+    {
+      enabled: isEditIdValidNumber
+    }
+  );
   const { data: skills } = useQuery(
     ['skills'],
     () => skillService.getAllSkill(),
     {
       select(data) {
-        const result = data.data.data
-        if (!result) return
-        const res = result.skills.map(skill => ({
+        const result = data.data.data;
+        if (!result) return;
+        const res = result.skills.map((skill) => ({
           label: skill.name,
           value: skill.id
-        }))
-        return res
+        }));
+        return res;
       }
     }
-  )
-  const { data: skillsEdit } = useQuery(['skillsEdit'], () => skillService.getAllSkill(), {
-    select(data) {
-      const result = data.data.data
-      if (!result) return
-      const res = result.skills
-        .filter(skill => skill.id === editId)
-        .map(skill => ({
-          label: skill.name,
-          value: skill.id
-        }))
-      return res
-    }
-  })
-  const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(skillsEdit)
+  );
+  const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(
+    data?.data.data.skillsActivity?.map((skill) => ({
+      label: skill.name,
+      value: skill.id
+    }))
+  );
   const newMutation = useMutation({
     mutationKey: 'NewActivity',
     mutationFn: (body: {
-      name: string
-      description: string
-      location: string
-      skills: string[]
+      name: string;
+      description: string;
+      location: string;
+      skills: string[];
     }) => activityService.newActivity(body),
     onSuccess(data, _variables, _context) {
-      const res = data.data
-      if (!res) return
-      message.success('Tạo thành công')
-      setOpen(false)
-      refetch()
+      const res = data.data;
+      if (!res) return;
+      message.success('Tạo thành công');
+      setOpen(false);
+      refetch();
     },
     onError(error, variables, context) {
-      message.error('Tạo không thành công')
+      message.error('Tạo không thành công');
     }
-  })
+  });
   const updateMutation = useMutation({
     mutationKey: 'update',
     mutationFn: (body: {
-      name: string
-      description: string
-      location: string
-      skills: string[]
+      name: string;
+      description: string;
+      location: string;
+      skills: string[];
     }) => activityService.updateActivity(editId as number, body),
     onSuccess(data, _variables, _context) {
-      const res = data.data
+      const res = data.data;
       // if (!res) return
-      message.success('Cập nhật thành công')
-      setOpen(false)
-      refetch()
+      message.success('Cập nhật thành công');
+      setOpen(false);
+      refetch();
     },
     onError(error, variables, context) {
-      message.error('Cập nhật không thành công')
+      message.error('Cập nhật không thành công');
     }
-  })
+  });
   const options: SelectProps['options'] = [
     {
       label: 'Hoạt động',
@@ -114,41 +113,40 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       label: 'Không hoạt động',
       value: 1
     }
-  ]
+  ];
   function handleNewActivity(value: any) {
     if (editId) {
-      updateMutation.mutate(value)
+      updateMutation.mutate(value);
     } else {
-      newMutation.mutate(value)
+      newMutation.mutate(value);
     }
   }
-  const { data } = useQuery(
-    ['activity'],
-    () => activityService.getActivityById(editId as number),
-    {
-      enabled: isEditIdValidNumber
-    }
-  )
   useEffect(() => {
     if (editId && data) {
-      setImageUrl(data.data.data.image)
+      setImageUrl(data.data.data.image);
+      setSkillsDefault(
+        data.data.data.skillsActivity?.map((skill) => ({
+          label: skill.name,
+          value: skill.id
+        }))
+      );
       form.setFieldsValue({
         ...data.data.data
-      })
+      });
     }
-  }, [data])
+  }, [data]);
   const handleImageChange = (newAvatarUrl: string) => {
-    const updatedImageUrl = newAvatarUrl || ''
-    setImageUrl(updatedImageUrl)
+    const updatedImageUrl = newAvatarUrl || '';
+    setImageUrl(updatedImageUrl);
     // Kiểm tra nếu formData tồn tại, thì cập nhật avatar trong formData
     if (data) {
       form.setFieldsValue({
         // @ts-ignore
         ...data.data.data.user,
         image: updatedImageUrl
-      })
+      });
     }
-  }
+  };
 
   return (
     <Modal
@@ -179,7 +177,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
           name='description'
           rules={[{ required: true, message: 'Chưa điền mô tả' }]}
         >
-          <Input.TextArea autoSize={{ minRows: 3, maxRows: 6}} />
+          <Input.TextArea autoSize={{ minRows: 3, maxRows: 6 }} />
         </Form.Item>
 
         <Form.Item
@@ -191,15 +189,15 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
         </Form.Item>
 
         <Form.Item label='Hình ảnh' name='image'>
-        <InputUpload initSrc={imageUrl} onChange={handleImageChange} />
+          <InputUpload initSrc={imageUrl} onChange={handleImageChange} />
         </Form.Item>
 
         <Form.Item
           label='Từ ngày'
           name='from_at'
           rules={[{ required: true, message: 'Chưa điền từ ngày' }]}
-          getValueFromEvent={onChange => dayjs(onChange).format('YYYY-MM-DD')}
-          getValueProps={i => ({ value: dayjs(i) })}
+          getValueFromEvent={(onChange) => dayjs(onChange).format('YYYY-MM-DD')}
+          getValueProps={(i) => ({ value: dayjs(i) })}
         >
           <DatePicker />
         </Form.Item>
@@ -208,8 +206,8 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
           label='Đến ngày'
           name='to_at'
           rules={[{ required: true, message: 'Chưa điền đến ngày' }]}
-          getValueFromEvent={onChange => dayjs(onChange).format('YYYY-MM-DD')}
-          getValueProps={i => ({ value: dayjs(i) })}
+          getValueFromEvent={(onChange) => dayjs(onChange).format('YYYY-MM-DD')}
+          getValueProps={(i) => ({ value: dayjs(i) })}
         >
           <DatePicker />
         </Form.Item>
@@ -239,7 +237,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
           name='skills'
           rules={[{ required: true, message: 'Chưa điền kỹ năng' }]}
         >
-         <Select
+          <Select
             defaultValue={skillsDefault && skillsDefault}
             mode='multiple'
             placeholder='select one skills'
@@ -266,7 +264,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
         </Row>
       </Form>
     </Modal>
-  )
-}
+  );
+};
 
-export default FormActivity
+export default FormActivity;

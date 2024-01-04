@@ -1,42 +1,42 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Button, Col, message, Popconfirm, Row, Space, Table } from 'antd'
-import Search from 'antd/lib/input/Search'
-import { ColumnType } from 'antd/lib/table'
-import { useState } from 'react'
-import FormUser from './form'
-import DashboardLayout from '@/layouts/DashboardLayout'
-import { useMutation, useQuery } from 'react-query'
-import { userService } from '@/services/user.service'
-import React from 'react'
-import { IUser } from '@/typeDefs/schema/user.type'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Col, message, Popconfirm, Row, Space, Table } from 'antd';
+import Search from 'antd/lib/input/Search';
+import { ColumnType } from 'antd/lib/table';
+import { useState } from 'react';
+import FormUser from './form';
+import DashboardLayout from '@/layouts/DashboardLayout';
+import { useMutation, useQuery } from 'react-query';
+import { userService } from '@/services/user.service';
+import React from 'react';
+import { IUser } from '@/typeDefs/schema/user.type';
 
-type Props = {}
+type Props = {};
 
 const UserManagement = ({}: Props) => {
-  const [open, setOpen] = useState(false)
-  const [action, setAtion] = useState<string>('')
-  const [rowId, setRowId] = useState<number>()
+  const [open, setOpen] = useState(false);
+  const [action, setAtion] = useState<string>('');
+  const [rowId, setRowId] = useState<number>();
   const { data: dataUser, refetch } = useQuery(['listUser'], () =>
     userService.getAllUser()
-  )
+  );
   const deleteMutation = useMutation({
     mutationKey: ['deleteUserMutation'],
     mutationFn: (userId: number) => userService.deleteUser(userId),
     onSuccess: () => {
-      message.success('Xoá thành công')
-      refetch()
+      message.success('Xoá thành công');
+      refetch();
     },
     onError() {
-      message.error('Xoá không thành công')
+      message.error('Xoá không thành công');
     }
-  })
+  });
   const columns: ColumnType<IUser>[] = [
     {
       title: '#',
       key: 'id',
       render: (value, record, index) => (
         <div>
-          <p>{index}</p>
+          <p>{index + 1}</p>
         </div>
       )
     },
@@ -58,9 +58,9 @@ const UserManagement = ({}: Props) => {
           <div
             className='cursor-pointer'
             onClick={() => {
-              setAtion('edit')
-              setOpen(true)
-              setRowId(record.id)
+              setAtion('edit');
+              setOpen(true);
+              setRowId(record.id);
             }}
           >
             <EditOutlined />
@@ -68,7 +68,7 @@ const UserManagement = ({}: Props) => {
           <Popconfirm
             okButtonProps={{ loading: deleteMutation.isLoading }}
             onConfirm={() => {
-              deleteMutation.mutate(record.id)
+              deleteMutation.mutate(record.id);
             }}
             title={'Xoá'}
           >
@@ -77,7 +77,7 @@ const UserManagement = ({}: Props) => {
         </Space>
       )
     }
-  ]
+  ];
 
   return (
     <>
@@ -97,9 +97,9 @@ const UserManagement = ({}: Props) => {
                 />
                 <Button
                   onClick={() => {
-                    setAtion('create')
-                    setRowId(NaN)
-                    setOpen(true)
+                    setAtion('create');
+                    setRowId(NaN);
+                    setOpen(true);
                   }}
                 >
                   Tạo mới
@@ -121,9 +121,9 @@ const UserManagement = ({}: Props) => {
         </React.Fragment>
       )}
     </>
-  )
-}
+  );
+};
 UserManagement.getLayout = (children: React.ReactNode) => (
   <DashboardLayout>{children}</DashboardLayout>
-)
-export default UserManagement
+);
+export default UserManagement;

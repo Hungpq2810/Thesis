@@ -21,8 +21,9 @@ export const listUser = async (
         },
         status: 0,
       },
-      attributes: { exclude: ['password'] },
+    attributes: { exclude: ['password'] },
     });
+
     const response: GeneralResponse<{
       users: UserAttributes[];
     }> = {
@@ -48,7 +49,11 @@ export const getUserById = async (
 ): Promise<void> => {
   try {
     const userId: string = req.params.id;
-    const user = await Users.findByPk(userId);
+    const user = await Users.findByPk(userId, {
+      attributes: {
+        exclude: ['password'],
+      },
+    });
 
     if (!user) {
       const response: GeneralResponse<{}> = {

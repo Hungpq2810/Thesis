@@ -1,4 +1,4 @@
-import React, { SVGProps } from 'react'
+import React, { SVGProps } from 'react';
 
 export default function IconAnimation({ ...rest }: SVGProps<SVGSVGElement>) {
   return (
@@ -36,5 +36,5 @@ export default function IconAnimation({ ...rest }: SVGProps<SVGSVGElement>) {
         fill='#F5222D'
       />
     </svg>
-  )
+  );
 }

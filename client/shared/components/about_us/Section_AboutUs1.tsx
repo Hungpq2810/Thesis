@@ -1,5 +1,5 @@
-import React from 'react'
-import ImageSection_AboutUs1 from '../images/ImageSection_AboutUs1'
+import React from 'react';
+import ImageSection_AboutUs1 from '../images/ImageSection_AboutUs1';
 const Section_AboutUs1 = () => {
   return (
     <React.Fragment>
@@ -32,7 +32,7 @@ const Section_AboutUs1 = () => {
         </div>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Section_AboutUs1
+export default Section_AboutUs1;

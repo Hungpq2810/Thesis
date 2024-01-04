@@ -66,7 +66,10 @@ import {
   listSkills,
   getSkillById,
 } from '../controllers/SkillController';
-import { newFeedBack } from '../controllers/FeedbackController';
+import {
+  listFeedBackNoAuth,
+  newFeedBack,
+} from '../controllers/FeedbackController';
 import {
   createFaq,
   deleteFaq,
@@ -77,7 +80,10 @@ import { listActivitesBySkills } from '../controllers/SkillActivitesController';
 import { listFeedBack } from '../controllers/Admin/FeedbackController';
 import { listFeedBackByOrganizer } from '../controllers/Organizer/FeedbackController';
 import { deleteActivityByAdmin } from '../controllers/Admin/ActivityController';
-import { getVolunteer } from '../controllers/Organizer/VolunteerController';
+import {
+  getVolunteer,
+  removeVolunteer,
+} from '../controllers/Organizer/VolunteerController';
 
 const router = express.Router();
 //Auth
@@ -249,6 +255,12 @@ router.get(
   checkRoleOrganizer,
   getVolunteer,
 );
+router.delete(
+  '/api/v1/organizer/volunteers/:id',
+  authenticateToken,
+  checkRoleOrganizer,
+  removeVolunteer,
+);
 //User
 router.put('/api/v1/user', authenticateToken, updateProfile);
 router.get('/api/v1/user', authenticateToken, detailUser);
@@ -276,6 +288,7 @@ router.get('/api/v1/skills', listSkills);
 router.get('/api/v1/skills/:id', getSkillById);
 //Feedback
 router.post('/api/v1/feedback', newFeedBack);
+router.get('/api/v1/feedback', listFeedBackNoAuth);
 //Request Join in Activity By Volunteer
 router.post(
   '/api/v1/apply_volunteer',

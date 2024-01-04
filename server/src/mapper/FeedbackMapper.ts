@@ -13,6 +13,7 @@ export const feedbackMapper = async (
         activity_id,
         title,
         content,
+        rate,
         created_at,
         updated_at,
       } = feedback;
@@ -29,6 +30,7 @@ export const feedbackMapper = async (
           activity_id,
           title,
           content,
+          rate,
           created_at,
           updated_at,
           name: userName,

@@ -1,4 +1,4 @@
-import React, { SVGProps } from 'react'
+import React, { SVGProps } from 'react';
 
 export default function IconValues({ ...rest }: SVGProps<SVGSVGElement>) {
   return (
@@ -56,5 +56,5 @@ export default function IconValues({ ...rest }: SVGProps<SVGSVGElement>) {
         </clipPath>
       </defs>
     </svg>
-  )
+  );
 }

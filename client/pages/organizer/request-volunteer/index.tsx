@@ -1,39 +1,39 @@
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
-import { Col, message, Popconfirm, Row, Space, Table } from 'antd'
-import Search from 'antd/lib/input/Search'
-import { ColumnType } from 'antd/lib/table'
-import DashboardLayout from '@/layouts/DashboardLayout'
-import { useMutation, useQuery } from 'react-query'
-import React from 'react'
-import { volunteerService } from '@/services/volunteer.service'
-import { IRequestVolunteer } from '@/typeDefs/schema/volunteer.type'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Col, message, Popconfirm, Row, Space, Table } from 'antd';
+import Search from 'antd/lib/input/Search';
+import { ColumnType } from 'antd/lib/table';
+import DashboardLayout from '@/layouts/DashboardLayout';
+import { useMutation, useQuery } from 'react-query';
+import React from 'react';
+import { volunteerService } from '@/services/volunteer.service';
+import { IRequestVolunteer } from '@/typeDefs/schema/volunteer.type';
 
-type Props = {}
+type Props = {};
 
 const RequestVolunteerManagement = ({}: Props) => {
   const { data: dataRequestVolunteers, refetch } = useQuery(
     ['listRequestVolunteers'],
     () => volunteerService.getAllRequestVolunteer()
-  )
+  );
   const updateMutation = useMutation({
     mutationKey: ['updateMutation'],
     mutationFn: (body: { user_id: number; status: number }) =>
       volunteerService.updateRequestVolunteer(body),
     onSuccess: () => {
-      message.success('Cập nhật thành công')
-      refetch()
+      message.success('Cập nhật thành công');
+      refetch();
     },
     onError() {
-      message.error('Cập nhật không thành công')
+      message.error('Cập nhật không thành công');
     }
-  })
+  });
   const columns: ColumnType<IRequestVolunteer>[] = [
     {
       title: '#',
       key: 'id',
       render: (value, record, index) => (
         <div>
-          <p>{index}</p>
+          <p>{index + 1}</p>
         </div>
       )
     },
@@ -42,9 +42,9 @@ const RequestVolunteerManagement = ({}: Props) => {
       dataIndex: 'user_id',
       render: (_, record) => (
         <div className='w-full flex flex-col justify-start items-start gap-2'>
-            <p>Tên: {record.name}</p>
-            <p>Email: {record.email}</p>
-            <p>Sđt: {record.phone}</p>
+          <p>Tên: {record.name}</p>
+          <p>Email: {record.email}</p>
+          <p>Sđt: {record.phone}</p>
         </div>
       )
     },
@@ -75,8 +75,8 @@ const RequestVolunteerManagement = ({}: Props) => {
                     user_id: record.user_id,
                     // status: record.status
                     status: 0
-                  }
-                  updateMutation.mutate(body)
+                  };
+                  updateMutation.mutate(body);
                 }}
                 title={'Phê duyệt'}
               >
@@ -88,8 +88,8 @@ const RequestVolunteerManagement = ({}: Props) => {
                   const body = {
                     user_id: record.user_id,
                     status: 2
-                  }
-                  updateMutation.mutate(body)
+                  };
+                  updateMutation.mutate(body);
                 }}
                 title={'Từ chối'}
               >
@@ -102,11 +102,12 @@ const RequestVolunteerManagement = ({}: Props) => {
         </Space>
       )
     }
-  ]
+  ];
 
   return (
     <>
-      {dataRequestVolunteers && (
+      {
+        // dataRequestVolunteers &&
         // dataRequestVolunteers.data.data &&
         <React.Fragment>
           <Row justify={'space-between'} align='middle' gutter={16}>
@@ -126,13 +127,18 @@ const RequestVolunteerManagement = ({}: Props) => {
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataRequestVolunteers.data.data.requestVolunteers.filter(volunteer => volunteer.status !== 0)} columns={columns} />
+          <Table
+            dataSource={dataRequestVolunteers?.data.data.requestVolunteers.filter(
+              (volunteer) => volunteer.status !== 0
+            )}
+            columns={columns}
+          />
         </React.Fragment>
-      )}
+      }
     </>
-  )
-}
+  );
+};
 RequestVolunteerManagement.getLayout = (children: React.ReactNode) => (
   <DashboardLayout>{children}</DashboardLayout>
-)
-export default RequestVolunteerManagement
+);
+export default RequestVolunteerManagement;

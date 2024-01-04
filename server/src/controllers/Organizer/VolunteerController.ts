@@ -38,7 +38,8 @@ export const getVolunteer = async (
       } else {
         const volunteerRequest = await VolunteerRequest.findAll({
           where: {
-            organization_id: user.organization_id,
+            organization_id: user.organization_id, // user.id
+            status: 0,
           },
         });
         const volunteerRequestMapped =
@@ -62,12 +63,11 @@ export const getVolunteer = async (
   }
 };
 
-export const updateVolunteer = async (
+export const removeVolunteer = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
   try {
-    // Get the id from url parameters or body
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
       res.status(401).json({ message: 'Unauthorized' });
@@ -84,11 +84,32 @@ export const updateVolunteer = async (
         const response: GeneralResponse<{}> = {
           status: 400,
           data: null,
-          message: 'Bạn đã là tổ chức',
+          message: "Have an organization or you're an organization",
         };
         commonResponse(req, res, response);
       } else {
+        const { id } = req.params;
+        const volunteer = await Users.findOne({
+          where: { id: id, organization_id: userId },
+        });
+        if (volunteer) {
+          await volunteer.update({ organization_id: null });
+        }
+        const response: GeneralResponse<{}> = {
+          status: 200,
+          data: null,
+          message: 'Successfull',
+        };
+        commonResponse(req, res, response);
       }
     }
-  } catch {}
+  } catch (error: any) {
+    console.error(error);
+    const response: GeneralResponse<{}> = {
+      status: 400,
+      data: null,
+      message: error.message,
+    };
+    commonResponse(req, res, response);
+  }
 };

@@ -1,26 +1,26 @@
-import { APP_URL } from '@/constant/AppConstant'
-import { useAppSelector } from '@/hooks/useRedux'
-import useTrans from '@/hooks/useTrans'
-import { logout } from '@/store/appSlice'
+import { APP_URL } from '@/constant/AppConstant';
+import { useAppSelector } from '@/hooks/useRedux';
+import useTrans from '@/hooks/useTrans';
+import { logout } from '@/store/appSlice';
 import {
   BellOutlined,
   LogoutOutlined,
   SearchOutlined,
   SettingOutlined
-} from '@ant-design/icons/lib/icons'
-import { Col, Dropdown, Input, MenuProps, Row } from 'antd'
-import Modal from 'antd/lib/modal/Modal'
-import { deleteCookie } from 'cookies-next'
-import { useRouter } from 'next/router'
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+} from '@ant-design/icons/lib/icons';
+import { Col, Dropdown, Input, MenuProps, Row } from 'antd';
+import Modal from 'antd/lib/modal/Modal';
+import { deleteCookie } from 'cookies-next';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 const Appbar = () => {
-  const { user } = useAppSelector(state => state.appSlice)
-  const router = useRouter()
-  const { trans, lang, changeLanguage } = useTrans()
-  const dispatch = useDispatch()
-  const [isOpenModalLogout, setOpenModalLogout] = useState(false)
+  const { user } = useAppSelector((state) => state.appSlice);
+  const router = useRouter();
+  const { trans, lang, changeLanguage } = useTrans();
+  const dispatch = useDispatch();
+  const [isOpenModalLogout, setOpenModalLogout] = useState(false);
   const items: MenuProps['items'] = [
     {
       key: '2',
@@ -34,19 +34,19 @@ const Appbar = () => {
       icon: <LogoutOutlined />,
       onClick: () => setOpenModalLogout(true)
     }
-  ]
+  ];
   const handleSearch = (value: string | number) => {
-    console.log('search value:', value)
-  }
+    console.log('search value:', value);
+  };
   function handleLogout() {
-    deleteCookie('keys')
-    deleteCookie('sessionKey')
-    deleteCookie('role')
-    deleteCookie('timeExpired')
-    dispatch(logout())
+    deleteCookie('keys');
+    deleteCookie('sessionKey');
+    deleteCookie('role');
+    deleteCookie('timeExpired');
+    dispatch(logout());
     setTimeout(() => {
-      router.push('/login')
-    }, 500)
+      router.push('/login');
+    }, 500);
   }
 
   return (
@@ -59,7 +59,7 @@ const Appbar = () => {
             allowClear
             enterButton={<SearchOutlined />}
             size='large'
-            onSearch={value => handleSearch(value)}
+            onSearch={(value) => handleSearch(value)}
           />
         </Col>
         <Col flex='1' span='3'>
@@ -95,7 +95,7 @@ const Appbar = () => {
         cancelText='Hủy'
       ></Modal>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Appbar
+export default Appbar;

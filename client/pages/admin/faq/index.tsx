@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
   Button,
   Col,
@@ -8,43 +8,43 @@ import {
   Row,
   Space,
   Table
-} from 'antd'
-import Search from 'antd/lib/input/Search'
-import { ColumnType } from 'antd/lib/table'
-import DashboardLayout from '@/layouts/DashboardLayout'
-import { useMutation, useQuery } from 'react-query'
-import React, { useState } from 'react'
-import { faqService } from '@/services/faq.service'
-import { IFaq } from '@/typeDefs/schema/faq.type'
-import FormFaq from './form'
+} from 'antd';
+import Search from 'antd/lib/input/Search';
+import { ColumnType } from 'antd/lib/table';
+import DashboardLayout from '@/layouts/DashboardLayout';
+import { useMutation, useQuery } from 'react-query';
+import React, { useState } from 'react';
+import { faqService } from '@/services/faq.service';
+import { IFaq } from '@/typeDefs/schema/faq.type';
+import FormFaq from './form';
 
-type Props = {}
+type Props = {};
 
 const FAQManagement = ({}: Props) => {
-  const [open, setOpen] = useState(false)
-  const [action, setAtion] = useState<string>('')
-  const [rowId, setRowId] = useState<number>()
+  const [open, setOpen] = useState(false);
+  const [action, setAtion] = useState<string>('');
+  const [rowId, setRowId] = useState<number>();
   const { data: dataFaq, refetch } = useQuery(['listFaq'], () =>
     faqService.getAllFaq()
-  )
+  );
   const deleteMutation = useMutation({
     mutationKey: ['deleteMutation'],
     mutationFn: (faqId: number) => faqService.deleteFaq(faqId),
     onSuccess: () => {
-      message.success('Xoá thành công')
-      refetch()
+      message.success('Xoá thành công');
+      refetch();
     },
     onError() {
-      message.error('Xoá không thành công')
+      message.error('Xoá không thành công');
     }
-  })
+  });
   const columns: ColumnType<IFaq>[] = [
     {
       title: '#',
       key: 'id',
       render: (value, record, index) => (
         <div>
-          <p>{index}</p>
+          <p>{index + 1}</p>
         </div>
       )
     },
@@ -56,7 +56,9 @@ const FAQManagement = ({}: Props) => {
     {
       title: 'Trả lời',
       key: 'answer',
-      render: (_, record) => <div style={{ whiteSpace: 'pre-line' }}>{record.answer}</div>
+      render: (_, record) => (
+        <div style={{ whiteSpace: 'pre-line' }}>{record.answer}</div>
+      )
     },
     {
       title: 'Ngày tạo',
@@ -76,9 +78,9 @@ const FAQManagement = ({}: Props) => {
           <div
             className='cursor-pointer'
             onClick={() => {
-              setAtion('edit')
-              setOpen(true)
-              setRowId(record.id)
+              setAtion('edit');
+              setOpen(true);
+              setRowId(record.id);
             }}
           >
             <EditOutlined />
@@ -86,7 +88,7 @@ const FAQManagement = ({}: Props) => {
           <Popconfirm
             okButtonProps={{ loading: deleteMutation.isLoading }}
             onConfirm={() => {
-              deleteMutation.mutate(record.id)
+              deleteMutation.mutate(record.id);
             }}
             title={'Xoá'}
           >
@@ -95,7 +97,7 @@ const FAQManagement = ({}: Props) => {
         </Space>
       )
     }
-  ]
+  ];
 
   return (
     <>
@@ -115,9 +117,9 @@ const FAQManagement = ({}: Props) => {
                 />
                 <Button
                   onClick={() => {
-                    setAtion('create')
-                    setRowId(NaN)
-                    setOpen(true)
+                    setAtion('create');
+                    setRowId(NaN);
+                    setOpen(true);
                   }}
                 >
                   Tạo mới
@@ -139,9 +141,9 @@ const FAQManagement = ({}: Props) => {
         </React.Fragment>
       )}
     </>
-  )
-}
+  );
+};
 FAQManagement.getLayout = (children: React.ReactNode) => (
   <DashboardLayout>{children}</DashboardLayout>
-)
-export default FAQManagement
+);
+export default FAQManagement;

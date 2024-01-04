@@ -7,116 +7,123 @@ import {
   Select,
   SelectProps,
   message
-} from 'antd'
-import React, { useEffect, useState } from 'react'
-import { useMutation, useQuery } from 'react-query'
-import BlankLayout from '@/layouts/BlankLayout'
-import { useForm } from 'antd/lib/form/Form'
-import { useDispatch } from 'react-redux'
-import { setInforOrganization } from '@/store/appSlice'
-import { userService } from '@/services/user.service'
-import { useAppSelector } from '@/hooks/useRedux'
-import { skillService } from '@/services/skill.service'
-import { IUser } from '@/typeDefs/schema/user.type'
-import { organizationService } from '@/services/organization.service'
-import dayjs from 'dayjs'
-import InputUpload from '@/components/common/UploadInput'
-import { useRouter } from 'next/router'
+} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
+import BlankLayout from '@/layouts/BlankLayout';
+import { useForm } from 'antd/lib/form/Form';
+import { useDispatch } from 'react-redux';
+import { setInforOrganization } from '@/store/appSlice';
+import { userService } from '@/services/user.service';
+import { useAppSelector } from '@/hooks/useRedux';
+import { skillService } from '@/services/skill.service';
+import { IUser } from '@/typeDefs/schema/user.type';
+import { organizationService } from '@/services/organization.service';
+import dayjs from 'dayjs';
+import InputUpload from '@/components/common/UploadInput';
+import { useRouter } from 'next/router';
 type Props = {
-  next: any
-}
+  next: any;
+};
 const Profile = ({ next }: Props) => {
-  const [form] = useForm()
+  const [form] = useForm();
   const router = useRouter();
-  const { user } = useAppSelector(state => state.appSlice)
-  const { data } = useQuery(['userDetail'], () => userService.getUserByAuth())
-  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(user?.avatar)
+  const { user } = useAppSelector((state) => state.appSlice);
+  const { data } = useQuery(['userDetail'], () => userService.getUserByAuth());
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(user?.avatar);
   const [belongsOrganizer, setBelongsOrganizer] = useState<number | undefined>(
     data?.data.data.belongsOrganizer?.organization_id
-  )
-  const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(data?.data.data.skills?.map(skill => ({
-    label: skill.name,
-    value: skill.id
-  })))
-  const dispatch = useDispatch()
+  );
+  const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(
+    data?.data.data.skills?.map((skill) => ({
+      label: skill.name,
+      value: skill.id
+    }))
+  );
+  const dispatch = useDispatch();
   const { data: skills } = useQuery(
     ['skills'],
     () => skillService.getAllSkill(),
     {
       select(data) {
-        const result = data.data.data
-        if (!result) return
-        const res = result.skills.map(skill => ({
+        const result = data.data.data;
+        if (!result) return;
+        const res = result.skills.map((skill) => ({
           label: skill.name,
           value: skill.id
-        }))
-        return res
+        }));
+        return res;
       }
     }
-  )
-  const { data: organizersCurrent } = useQuery(['organizers'], () => organizationService.getAllOrganization(), {
-    select(dataInner) {
-      if (data?.data.data.belongsOrganizer) {
-        const result = dataInner.data.data.organizations.filter(
-          item => item.id === data.data.data.belongsOrganizer.organization_id
-        )
-        return result[0]
-      } else {
-        return undefined
+  );
+  const { data: organizersCurrent } = useQuery(
+    ['organizers'],
+    () => organizationService.getAllOrganization(),
+    {
+      select(dataInner) {
+        if (data?.data.data.belongsOrganizer) {
+          const result = dataInner.data.data.organizations.filter(
+            (item) =>
+              item.id === data.data.data.belongsOrganizer.organization_id
+          );
+          return result[0];
+        } else {
+          return undefined;
+        }
       }
     }
-  })
+  );
 
   const { data: organizers } = useQuery(
     ['organizers'],
     () => organizationService.getAllOrganization(),
     {
       select(data) {
-        const result = data.data.data
-        if (!result) return
-        const res = result.organizations.map(organization => ({
+        const result = data.data.data;
+        if (!result) return;
+        const res = result.organizations.map((organization) => ({
           label: organization.name,
           value: organization.id
-        }))
-        return res
+        }));
+        return res;
       }
     }
-  )
+  );
 
   const updateProfile = useMutation({
     mutationKey: 'updateProfile',
     mutationFn: (body: IUser) => userService.updateProfile(body),
     onSuccess(data, _variables, _context) {
       if (data.data.data) {
-        dispatch(setInforOrganization(data.data.data))
-        message.success('Cập nhật thành công')
+        dispatch(setInforOrganization(data.data.data));
+        message.success('Cập nhật thành công');
       }
     },
     onError(error, variables, context) {
-      message.error('Tạo không thành công')
+      message.error('Tạo không thành công');
     }
-  })
+  });
   //Handle submit form Login
   function handleCreate(value: IUser) {
-    updateProfile.mutate(value)
-    next()
+    updateProfile.mutate(value);
+    next();
   }
 
   useEffect(() => {
     if (user && data) {
-      setBelongsOrganizer(data.data.data.belongsOrganizer?.organization_id)
+      setBelongsOrganizer(data.data.data.belongsOrganizer?.organization_id);
       setSkillsDefault(
-        data.data.data.skills?.map(skill => ({
+        data.data.data.skills?.map((skill) => ({
           label: skill.name,
           value: skill.id
         }))
-      )
+      );
       form.setFieldsValue({
         // @ts-ignore
         ...data.data.data.user
-      })
+      });
     }
-  }, [data])
+  }, [data]);
   const options: SelectProps['options'] = [
     {
       label: 'Nam',
@@ -126,19 +133,19 @@ const Profile = ({ next }: Props) => {
       label: 'Nữ',
       value: 1
     }
-  ]
+  ];
   const handleAvatarChange = (newAvatarUrl: string) => {
-    const updatedAvatarUrl = newAvatarUrl || ''
-    setAvatarUrl(updatedAvatarUrl)
+    const updatedAvatarUrl = newAvatarUrl || '';
+    setAvatarUrl(updatedAvatarUrl);
     // Kiểm tra nếu formData tồn tại, thì cập nhật avatar trong formData
     if (user && data) {
       form.setFieldsValue({
         // @ts-ignore
         ...data.data.data.user,
         avatar: updatedAvatarUrl
-      })
+      });
     }
-  }
+  };
 
   return (
     <React.Fragment>
@@ -205,8 +212,10 @@ const Profile = ({ next }: Props) => {
             label='Ngày sinh'
             name='birthday'
             rules={[{ required: true, message: 'Chưa điền ngày sinh' }]}
-            getValueFromEvent={onChange => dayjs(onChange).format('YYYY-MM-DD')}
-            getValueProps={i => ({ value: dayjs(i) })}
+            getValueFromEvent={(onChange) =>
+              dayjs(onChange).format('YYYY-MM-DD')
+            }
+            getValueProps={(i) => ({ value: dayjs(i) })}
           >
             <DatePicker />
           </Form.Item>
@@ -271,10 +280,7 @@ const Profile = ({ next }: Props) => {
           </Form.Item>
         </Form>
       </Card>
-      {
-      data && 
-      data.data.data.activityApplied && 
-      (
+      {data && data.data.data.activityApplied && (
         <div className='w-full flex flex-col justify-start items-start'>
           <p>Các hoạt động đã tham gia:</p>
           {data.data.data.activityApplied.map((item: any) => (
@@ -291,9 +297,9 @@ const Profile = ({ next }: Props) => {
         </div>
       )}
     </React.Fragment>
-  )
-}
+  );
+};
 Profile.getLayout = (children: React.ReactNode) => (
   <BlankLayout>{children}</BlankLayout>
-)
-export default Profile
+);
+export default Profile;

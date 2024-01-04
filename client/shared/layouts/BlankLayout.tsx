@@ -4,35 +4,36 @@ import {
   ExpandAltOutlined,
   UserOutlined,
   GroupOutlined
-} from '@ant-design/icons'
-import { Button, Layout, Menu, MenuProps } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import Search from 'antd/lib/input/Search'
-import { useAppSelector } from '@/hooks/useRedux'
-import { deleteCookie, getCookie } from 'cookies-next'
-import { APP_SAVE_KEYS } from '@/constant/AppConstant'
-import { useDispatch } from 'react-redux'
-import { login } from '@/store/appSlice'
-import jwt_decode from 'jwt-decode'
+} from '@ant-design/icons';
+import { Button, Layout, Menu, MenuProps } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import Search from 'antd/lib/input/Search';
+import { useAppSelector } from '@/hooks/useRedux';
+import { deleteCookie, getCookie } from 'cookies-next';
+import { APP_SAVE_KEYS } from '@/constant/AppConstant';
+import { useDispatch } from 'react-redux';
+import { login } from '@/store/appSlice';
+import jwt_decode from 'jwt-decode';
+import { activityService } from '@/services/activity.service';
 
-const { Header, Content, Footer } = Layout
+const { Header, Content, Footer } = Layout;
 
 function BlankLayout({ children }: { children: React.ReactNode }) {
-  const { user } = useAppSelector(state => state.appSlice)
-  const dispatch = useDispatch()
-  const [current, setCurrent] = useState('')
-  const router = useRouter()
-  const onClick: MenuProps['onClick'] = e => {
-    setCurrent(e.key)
-    window.location.href = `/${e.key}`
-  }
+  const { user } = useAppSelector((state) => state.appSlice);
+  const dispatch = useDispatch();
+  const [current, setCurrent] = useState('');
+  const router = useRouter();
+  const onClick: MenuProps['onClick'] = (e) => {
+    setCurrent(e.key);
+    window.location.href = `/${e.key}`;
+  };
   const handleLogout = () => {
-    deleteCookie(APP_SAVE_KEYS.KEYS)
-    deleteCookie(APP_SAVE_KEYS.ROLE)
-    router.push('/login')
-    window.location.reload()
-  }
+    deleteCookie(APP_SAVE_KEYS.KEYS);
+    deleteCookie(APP_SAVE_KEYS.ROLE);
+    router.push('/login');
+    window.location.reload();
+  };
   const APP_WEBSITE_MENU: MenuProps['items'] = [
     {
       label: 'Hoạt động',
@@ -50,25 +51,33 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
       icon: <ExpandAltOutlined />
     },
     {
+      label: 'Feedback',
+      key: 'feedback',
+      icon: <QuestionCircleOutlined />
+    },
+    {
       label: 'FAQ',
       key: 'faq',
       icon: <QuestionCircleOutlined />
     }
-  ]
+  ];
   useEffect(() => {
-    const key = getCookie(APP_SAVE_KEYS.KEYS)
-    const role = getCookie(APP_SAVE_KEYS.ROLE)
+    const key = getCookie(APP_SAVE_KEYS.KEYS);
+    const role = getCookie(APP_SAVE_KEYS.ROLE);
     if (typeof key === 'string' && role) {
-      const decodeData: any = jwt_decode(key)
+      const decodeData: any = jwt_decode(key);
       dispatch(
         login({
           userName: decodeData.username,
           role: decodeData.role_id,
           id: decodeData.id
         })
-      )
+      );
     }
-  }, [])
+  }, []);
+  const handleSearch = (value: string) => {
+    router.push(`/activity?key=${value}`);
+  };
 
   return (
     <React.Fragment>
@@ -88,7 +97,9 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
           <Search
             className='col-span-1 bg-blue-300 rounded-lg'
             placeholder='Tìm kiếm'
-            onSearch={() => {}}
+            onSearch={() => {
+              handleSearch;
+            }}
             enterButton
           />
           <div className='col-span-2 w-full flex justify-end items-center gap-4'>
@@ -120,7 +131,7 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
         Ant Design ©2023 Created by Ant UED
       </Footer>
     </React.Fragment>
-  )
+  );
 }
 
-export default BlankLayout
+export default BlankLayout;

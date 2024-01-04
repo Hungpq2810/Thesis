@@ -1,13 +1,13 @@
-import { IActivity } from '@/typeDefs/schema/activity.type'
-import { Avatar, Badge, Button, Card } from 'antd'
-import { useRouter } from 'next/router'
-import React from 'react'
-const { Meta } = Card
+import { IActivity } from '@/typeDefs/schema/activity.type';
+import { Avatar, Badge, Button, Card } from 'antd';
+import { useRouter } from 'next/router';
+import React from 'react';
+const { Meta } = Card;
 type Props = {
-  activities: IActivity[] | undefined
-}
+  activities: IActivity[] | undefined;
+};
 const Section_Home4 = ({ activities }: Props) => {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <React.Fragment>
       <div className='mt-5 flex flex-col justify-center items-center'>
@@ -15,7 +15,7 @@ const Section_Home4 = ({ activities }: Props) => {
           Các hoạt động sắp tới
         </h1>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-5'>
+      <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-5'>
         {activities &&
           activities.map((item: IActivity) => (
             <Card
@@ -47,7 +47,7 @@ const Section_Home4 = ({ activities }: Props) => {
           ))}
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Section_Home4
+export default Section_Home4;

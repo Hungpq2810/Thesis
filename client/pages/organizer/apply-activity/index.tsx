@@ -2,33 +2,34 @@ import {
   CheckCircleOutlined,
   CheckOutlined,
   CloseCircleOutlined,
-  CloseOutlined
-} from '@ant-design/icons'
-import { Col, message, Popconfirm, Row, Space, Table } from 'antd'
-import Search from 'antd/lib/input/Search'
-import { ColumnType } from 'antd/lib/table'
-import DashboardLayout from '@/layouts/DashboardLayout'
-import { useMutation, useQuery } from 'react-query'
-import React from 'react'
-import { activityService } from '@/services/activity.service'
-import { IAppliedVolunteer } from '@/typeDefs/schema/activity.type'
-import { useAppSelector } from '@/hooks/useRedux'
+  CloseOutlined,
+  ExclamationCircleOutlined
+} from '@ant-design/icons';
+import { Col, message, Popconfirm, Row, Space, Table } from 'antd';
+import Search from 'antd/lib/input/Search';
+import { ColumnType } from 'antd/lib/table';
+import DashboardLayout from '@/layouts/DashboardLayout';
+import { useMutation, useQuery } from 'react-query';
+import React from 'react';
+import { activityService } from '@/services/activity.service';
+import { IAppliedVolunteer } from '@/typeDefs/schema/activity.type';
+import { useAppSelector } from '@/hooks/useRedux';
 
-type Props = {}
+type Props = {};
 
 const ApplyActivityManagement = ({}: Props) => {
-  const { user } = useAppSelector(state => state.appSlice)
+  const { user } = useAppSelector((state) => state.appSlice);
   const { data: dataActivity } = useQuery(
     ['listActivity'],
     () => activityService.getAllActivity(),
     {
       select(data) {
         return data.data.data.activities.filter(
-          activity => activity.creator_id === +user!.id
-        )
+          (activity) => activity.creator_id === +user!.id
+        );
       }
     }
-  )
+  );
   const { data: dataApplyActivity, refetch } = useQuery(
     ['listApplyActivity'],
     () => activityService.getAllApplyActivity(),
@@ -36,41 +37,54 @@ const ApplyActivityManagement = ({}: Props) => {
       select(data) {
         const activityIdsAndCreatorIds =
           dataActivity &&
-          dataActivity.map(activity => ({
+          dataActivity.map((activity) => ({
             activity_id: activity.id,
             creator_id: activity.creator_id
-          }))
-        if (!activityIdsAndCreatorIds) return
+          }));
+        if (!activityIdsAndCreatorIds) return;
         const currentApplyActivity = data.data.data.appliedVolunteers.filter(
-          appliedVolunteer => {
+          (appliedVolunteer) => {
             return activityIdsAndCreatorIds.some(
               ({ activity_id }) => activity_id === appliedVolunteer.activity_id
-            )
+            );
           }
-        )
-        return currentApplyActivity
+        );
+        return currentApplyActivity;
       }
     }
-  )
+  );
   const updateMutation = useMutation({
     mutationKey: ['updateMutation'],
     mutationFn: (body: { user_id: number; status: number }) =>
       activityService.updateApplyActivity(body),
     onSuccess: () => {
-      message.success('Cập nhật thành công')
-      refetch()
+      message.success('Cập nhật thành công');
+      refetch();
     },
     onError() {
-      message.error('Cập nhật không thành công')
+      message.error('Cập nhật không thành công');
     }
-  })
+  });
+  let filterActivityByName: { text: string; value: string }[] = [];
+
+  if (dataApplyActivity) {
+    filterActivityByName = dataApplyActivity.map((item) => ({
+      text: item.activity!.name,
+      value: item.activity!.name
+    }));
+  } else {
+    filterActivityByName.push({
+      text: '',
+      value: ''
+    });
+  }
   const columns: ColumnType<IAppliedVolunteer>[] = [
     {
       title: '#',
       key: 'id',
       render: (value, record, index) => (
         <div>
-          <p>{index}</p>
+          <p>{index + 1}</p>
         </div>
       )
     },
@@ -88,7 +102,11 @@ const ApplyActivityManagement = ({}: Props) => {
     {
       title: 'Tên hoạt động',
       dataIndex: 'name_organizer',
-      render: (_, record) => <p>{record.activity?.name}</p>
+      filters: filterActivityByName,
+      render: (_, record) => <p>{record.activity?.name}</p>,
+      // @ts-ignore
+      onFilter: (value: string, record) =>
+        record.activity?.name.indexOf(value) === 0
     },
     {
       title: 'Trạng thái',
@@ -112,7 +130,7 @@ const ApplyActivityManagement = ({}: Props) => {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          {record.status === 0 ? (
+          {record.status ? (
             <>
               <Popconfirm
                 okButtonProps={{ loading: updateMutation.isLoading }}
@@ -120,8 +138,8 @@ const ApplyActivityManagement = ({}: Props) => {
                   const body = {
                     user_id: record.user_id,
                     status: 1
-                  }
-                  updateMutation.mutate(body)
+                  };
+                  updateMutation.mutate(body);
                 }}
                 title={'Phê duyệt'}
               >
@@ -133,8 +151,8 @@ const ApplyActivityManagement = ({}: Props) => {
                   const body = {
                     user_id: record.user_id,
                     status: 2
-                  }
-                  updateMutation.mutate(body)
+                  };
+                  updateMutation.mutate(body);
                 }}
                 title={'Từ chối'}
               >
@@ -146,8 +164,8 @@ const ApplyActivityManagement = ({}: Props) => {
                   const body = {
                     user_id: record.user_id,
                     status: 3
-                  }
-                  updateMutation.mutate(body)
+                  };
+                  updateMutation.mutate(body);
                 }}
                 title={'Đã tham gia'}
               >
@@ -159,12 +177,12 @@ const ApplyActivityManagement = ({}: Props) => {
                   const body = {
                     user_id: record.user_id,
                     status: 4
-                  }
-                  updateMutation.mutate(body)
+                  };
+                  updateMutation.mutate(body);
                 }}
                 title={'Không tham gia'}
               >
-                <CloseCircleOutlined className='cursor-pointer'></CloseCircleOutlined>
+                <ExclamationCircleOutlined className='cursor-pointer'></ExclamationCircleOutlined>
               </Popconfirm>
             </>
           ) : (
@@ -173,7 +191,7 @@ const ApplyActivityManagement = ({}: Props) => {
         </Space>
       )
     }
-  ]
+  ];
 
   return (
     <>
@@ -201,9 +219,9 @@ const ApplyActivityManagement = ({}: Props) => {
         </React.Fragment>
       }
     </>
-  )
-}
+  );
+};
 ApplyActivityManagement.getLayout = (children: React.ReactNode) => (
   <DashboardLayout>{children}</DashboardLayout>
-)
-export default ApplyActivityManagement
+);
+export default ApplyActivityManagement;

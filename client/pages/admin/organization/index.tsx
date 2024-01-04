@@ -1,42 +1,42 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Col, message, Popconfirm, Row, Space, Table } from 'antd'
-import Search from 'antd/lib/input/Search'
-import { ColumnType } from 'antd/lib/table'
-import DashboardLayout from '@/layouts/DashboardLayout'
-import { useMutation, useQuery } from 'react-query'
-import { userService } from '@/services/user.service'
-import React, { useState } from 'react'
-import { organizationService } from '@/services/organization.service'
-import { IOrganization } from '@/typeDefs/schema/organization.type'
-import FormOrganization from './form'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Col, message, Popconfirm, Row, Space, Table } from 'antd';
+import Search from 'antd/lib/input/Search';
+import { ColumnType } from 'antd/lib/table';
+import DashboardLayout from '@/layouts/DashboardLayout';
+import { useMutation, useQuery } from 'react-query';
+import { userService } from '@/services/user.service';
+import React, { useState } from 'react';
+import { organizationService } from '@/services/organization.service';
+import { IOrganization } from '@/typeDefs/schema/organization.type';
+import FormOrganization from './form';
 
-type Props = {}
+type Props = {};
 
 const OrganizationManagement = ({}: Props) => {
-  const [open, setOpen] = useState(false)
-  const [rowId, setRowId] = useState<number>()
+  const [open, setOpen] = useState(false);
+  const [rowId, setRowId] = useState<number>();
   const { data: dataOrganization, refetch } = useQuery(
     ['listOrganizationAdmin'],
     () => organizationService.listOrganizationAdmin()
-  )
+  );
   const deleteMutation = useMutation({
     mutationKey: ['deleteMutation'],
     mutationFn: (userId: number) => userService.deleteUser(userId),
     onSuccess: () => {
-      message.success('Xoá thành công')
-      refetch()
+      message.success('Xoá thành công');
+      refetch();
     },
     onError() {
-      message.error('Xoá không thành công')
+      message.error('Xoá không thành công');
     }
-  })
+  });
   const columns: ColumnType<IOrganization>[] = [
     {
       title: '#',
       key: 'id',
       render: (value, record, index) => (
         <div>
-          <p>{index}</p>
+          <p>{index + 1}</p>
         </div>
       )
     },
@@ -47,7 +47,9 @@ const OrganizationManagement = ({}: Props) => {
     },
     {
       title: 'Mô tả',
-      render: (_, record) => <p style={{ whiteSpace: 'pre-line' }}>{record.description}</p>
+      render: (_, record) => (
+        <p style={{ whiteSpace: 'pre-line' }}>{record.description}</p>
+      )
     },
     {
       title: 'Địa chỉ',
@@ -85,8 +87,8 @@ const OrganizationManagement = ({}: Props) => {
           <div
             className='cursor-pointer'
             onClick={() => {
-              setOpen(true)
-              setRowId(record.id)
+              setOpen(true);
+              setRowId(record.id);
             }}
           >
             <EditOutlined />
@@ -94,7 +96,7 @@ const OrganizationManagement = ({}: Props) => {
           <Popconfirm
             okButtonProps={{ loading: deleteMutation.isLoading }}
             onConfirm={() => {
-              deleteMutation.mutate(record.id)
+              deleteMutation.mutate(record.id);
             }}
             title={'Xoá'}
           >
@@ -103,7 +105,7 @@ const OrganizationManagement = ({}: Props) => {
         </Space>
       )
     }
-  ]
+  ];
 
   return (
     <>
@@ -137,9 +139,9 @@ const OrganizationManagement = ({}: Props) => {
         </React.Fragment>
       )}
     </>
-  )
-}
+  );
+};
 OrganizationManagement.getLayout = (children: React.ReactNode) => (
   <DashboardLayout>{children}</DashboardLayout>
-)
-export default OrganizationManagement
+);
+export default OrganizationManagement;

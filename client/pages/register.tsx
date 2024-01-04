@@ -1,4 +1,4 @@
-import { authService } from '@/services/auth.service'
+import { authService } from '@/services/auth.service';
 import {
   Button,
   Card,
@@ -9,53 +9,53 @@ import {
   Select,
   SelectProps,
   message
-} from 'antd'
-import React from 'react'
-import { useMutation } from 'react-query'
-import BlankLayout from '@/layouts/BlankLayout'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-type Props = {}
+} from 'antd';
+import React from 'react';
+import { useMutation } from 'react-query';
+import BlankLayout from '@/layouts/BlankLayout';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+type Props = {};
 
 const Register = ({}: Props) => {
-  const router = useRouter()
+  const router = useRouter();
   const registerMutation = useMutation({
     mutationKey: 'Register',
     mutationFn: (body: {
-      username: string
-      password: string
-      name: string
-      email: string
-      phone: string
-      gender: number
-      birthday: Date
-      address: string
-      avatar: string
+      username: string;
+      password: string;
+      name: string;
+      email: string;
+      phone: string;
+      gender: number;
+      birthday: Date;
+      address: string;
+      avatar: string;
     }) => authService.register(body),
     onSuccess(data, _variables, _context) {
-      const res = data.data.data
+      const res = data.data.data;
       if (res) {
-        message.success('Đăng ký thành công')
-        router.push('/login')
+        message.success('Đăng ký thành công');
+        router.push('/login');
       }
     },
     onError(error, variables, context) {
-      message.error('Đăng ký không thành công')
+      message.error('Đăng ký không thành công');
     }
-  })
+  });
   //Handle submit form Register
   function handleRegister(value: {
-    username: string
-    password: string
-    name: string
-    email: string
-    phone: string
-    gender: number
-    birthday: Date
-    address: string
-    avatar: string
+    username: string;
+    password: string;
+    name: string;
+    email: string;
+    phone: string;
+    gender: number;
+    birthday: Date;
+    address: string;
+    avatar: string;
   }) {
-    registerMutation.mutate(value)
+    registerMutation.mutate(value);
   }
   const options: SelectProps['options'] = [
     {
@@ -66,7 +66,7 @@ const Register = ({}: Props) => {
       label: 'Nữ',
       value: 1
     }
-  ]
+  ];
   return (
     <React.Fragment>
       <Head>
@@ -168,11 +168,11 @@ const Register = ({}: Props) => {
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue('password') === value) {
-                    return Promise.resolve()
+                    return Promise.resolve();
                   }
                   return Promise.reject(
                     new Error('Mật khẩu xác nhận không khớp')
-                  )
+                  );
                 }
               })
             ]}
@@ -200,9 +200,9 @@ const Register = ({}: Props) => {
         </Form>
       </Card>
     </React.Fragment>
-  )
-}
+  );
+};
 Register.getLayout = (children: React.ReactNode) => (
   <BlankLayout>{children}</BlankLayout>
-)
-export default Register
+);
+export default Register;

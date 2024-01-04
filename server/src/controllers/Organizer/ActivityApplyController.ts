@@ -36,16 +36,11 @@ export const listApplyVolunteers = async (
         role_id: 2,
       },
     });
-    console.log(organizer);
 
     if (organizer) {
       const activityExits = await Activities.findAll({
         where: { creator: organizerId },
       });
-      console.log('Find activity');
-
-      console.log(activityExits);
-
       const activityIds = activityExits.map(
         (activity) => activity.id,
       );
@@ -107,36 +102,76 @@ export const updateApplyVolunteer = async (
     });
     if (organizer) {
       const volunteerId = req.body.user_id as number;
-      const activityId = req.body.activity_id as number;
       const checkStatus = req.body.status as number;
-
-      const body = {
-        status: checkStatus,
-        updated_at: new Date(),
-      };
-
-      const volunteerApplyRecord = await ActivityApply.findOne({
-        where: {
-          user_id: volunteerId,
-          activity_id: activityId,
-        },
-      });
-
-      if (volunteerApplyRecord) {
-        const result = await volunteerApplyRecord.update(body);
-        const activity = await Activities.findByPk(
-          volunteerApplyRecord.activity_id,
-        );
-        if (result && activity) {
-          const resultTwo = await activity.update({
-            // num_of_volunteers: activity.num_of_volunteers + 1,
-            updated_at: new Date(),
-          });
-          if (resultTwo) {
+      if (checkStatus === 1) {
+        const body = { status: 1, updated_at: new Date() };
+        const volunteerApplyRecord = await ActivityApply.findOne({
+          where: { user_id: volunteerId },
+        });
+        if (volunteerApplyRecord) {
+          const result = await volunteerApplyRecord.update(body);
+          const activity = await Activities.findByPk(
+            volunteerApplyRecord.activity_id,
+          );
+          if (result && activity) {
+            const resultTwo = await activity.update({
+              num_of_volunteers: activity.num_of_volunteers + 1,
+              updated_at: new Date(),
+            });
+            if (resultTwo) {
+              const response: GeneralResponse<{}> = {
+                status: 200,
+                data: null,
+                message: 'Update successfully',
+              };
+              commonResponse(req, res, response);
+            }
+          }
+        }
+      } else if (checkStatus === 2) {
+        const body = { status: 2, updated_at: new Date() };
+        const volunteerRequestRecord = await ActivityApply.findOne({
+          where: { user_id: volunteerId },
+        });
+        if (volunteerRequestRecord) {
+          const result = await volunteerRequestRecord.update(body);
+          if (result) {
             const response: GeneralResponse<{}> = {
               status: 200,
               data: null,
-              message: 'Thay đổi trạng thái thành công',
+              message: 'Update successfully',
+            };
+            commonResponse(req, res, response);
+          }
+        }
+      } else if (checkStatus === 3) {
+        const body = { status: 3, updated_at: new Date() };
+        const volunteerRequestRecord = await ActivityApply.findOne({
+          where: { user_id: volunteerId },
+        });
+        if (volunteerRequestRecord) {
+          const result = await volunteerRequestRecord.update(body);
+          if (result) {
+            const response: GeneralResponse<{}> = {
+              status: 200,
+              data: null,
+              message: 'Update successfully',
+            };
+            commonResponse(req, res, response);
+          }
+        }
+      } else {
+        const body = { status: 4, updated_at: new Date() };
+        const volunteerRequestRecord = await ActivityApply.findOne({
+          where: { user_id: volunteerId },
+        });
+        if (volunteerRequestRecord) {
+          const result = await volunteerRequestRecord.update(body);
+          if (result) {
+            const response: GeneralResponse<{}> = {
+              status: 200,
+              data: null,
+              message: 'Update successfully',
             };
             commonResponse(req, res, response);
           }

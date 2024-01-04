@@ -1,39 +1,39 @@
-import { DeleteOutlined } from '@ant-design/icons'
-import { Col, Image, message, Popconfirm, Row, Space, Table } from 'antd'
-import Search from 'antd/lib/input/Search'
-import { ColumnType } from 'antd/lib/table'
-import DashboardLayout from '@/layouts/DashboardLayout'
-import { useMutation, useQuery } from 'react-query'
-import { userService } from '@/services/user.service'
-import React from 'react'
-import { feedbackService } from '@/services/feedback.service'
-import { IFeedback } from '@/typeDefs/schema/feedback.type'
-import { log } from 'console'
+import { DeleteOutlined } from '@ant-design/icons';
+import { Col, Image, message, Popconfirm, Row, Space, Table } from 'antd';
+import Search from 'antd/lib/input/Search';
+import { ColumnType } from 'antd/lib/table';
+import DashboardLayout from '@/layouts/DashboardLayout';
+import { useMutation, useQuery } from 'react-query';
+import { userService } from '@/services/user.service';
+import React from 'react';
+import { feedbackService } from '@/services/feedback.service';
+import { IFeedback } from '@/typeDefs/schema/feedback.type';
+import { log } from 'console';
 
-type Props = {}
+type Props = {};
 
 const FeedbackManagement = ({}: Props) => {
   const { data: dataFeedback, refetch } = useQuery(['listFeedback'], () =>
     feedbackService.getAllFeedback()
-  )
+  );
   const deleteMutation = useMutation({
     mutationKey: ['deleteMutation'],
     mutationFn: (userId: number) => userService.deleteUser(userId),
     onSuccess: () => {
-      message.success('Xoá thành công')
-      refetch()
+      message.success('Xoá thành công');
+      refetch();
     },
     onError() {
-      message.error('Xoá không thành công')
+      message.error('Xoá không thành công');
     }
-  })
+  });
   const columns: ColumnType<IFeedback>[] = [
     {
       title: '#',
       key: 'id',
       render: (value, record, index) => (
         <div>
-          <p>{index}</p>
+          <p>{index + 1}</p>
         </div>
       )
     },
@@ -76,7 +76,7 @@ const FeedbackManagement = ({}: Props) => {
           <Popconfirm
             okButtonProps={{ loading: deleteMutation.isLoading }}
             onConfirm={() => {
-              deleteMutation.mutate(record.id)
+              deleteMutation.mutate(record.id);
             }}
             title={'Xoá'}
           >
@@ -85,8 +85,8 @@ const FeedbackManagement = ({}: Props) => {
         </Space>
       )
     }
-  ]
-  console.log(dataFeedback)
+  ];
+  console.log(dataFeedback);
 
   return (
     <>
@@ -107,13 +107,18 @@ const FeedbackManagement = ({}: Props) => {
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataFeedback.data.data.feedbacks.filter(item => item.activity_id === null)} columns={columns} />
+          <Table
+            dataSource={dataFeedback.data.data.feedbacks.filter(
+              (item) => item.activity_id === null
+            )}
+            columns={columns}
+          />
         </React.Fragment>
       )}
     </>
-  )
-}
+  );
+};
 FeedbackManagement.getLayout = (children: React.ReactNode) => (
   <DashboardLayout>{children}</DashboardLayout>
-)
-export default FeedbackManagement
+);
+export default FeedbackManagement;

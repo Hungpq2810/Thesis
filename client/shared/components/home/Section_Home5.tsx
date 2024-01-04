@@ -1,12 +1,12 @@
-import React from 'react'
-import { Collapse } from 'antd'
-import dayjs from 'dayjs'
-import { IFeedback } from '@/typeDefs/schema/feedback.type'
-const { Panel } = Collapse
+import React from 'react';
+import { Collapse } from 'antd';
+import dayjs from 'dayjs';
+import { IFeedback } from '@/typeDefs/schema/feedback.type';
+const { Panel } = Collapse;
 
 type Props = {
-  feedbacks: IFeedback[] | undefined
-}
+  feedbacks: IFeedback[] | undefined;
+};
 
 const Section_Home5 = ({ feedbacks }: Props) => {
   return (
@@ -18,7 +18,7 @@ const Section_Home5 = ({ feedbacks }: Props) => {
       </div>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
         {feedbacks &&
-          feedbacks.map(feedback => (
+          feedbacks.map((feedback) => (
             <Collapse
               key={feedback.id}
               collapsible='icon'
@@ -28,14 +28,14 @@ const Section_Home5 = ({ feedbacks }: Props) => {
                 <p>{feedback.content}</p>
                 <p>
                   Cập nhật lúc:{' '}
-                  {dayjs(feedback.updated_at).format('DD/MM/YYYY')}
+                  {dayjs(feedback.created_at).format('DD/MM/YYYY')}
                 </p>
               </Panel>
             </Collapse>
           ))}
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Section_Home5
+export default Section_Home5;

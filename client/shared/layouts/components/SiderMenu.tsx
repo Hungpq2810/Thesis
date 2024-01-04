@@ -1,4 +1,4 @@
-import { useAppSelector } from '@/hooks/useRedux'
+import { useAppSelector } from '@/hooks/useRedux';
 import {
   AuditOutlined,
   CalendarOutlined,
@@ -9,18 +9,18 @@ import {
   StarOutlined,
   UserAddOutlined,
   UsergroupAddOutlined
-} from '@ant-design/icons'
-import { Layout, Menu, MenuProps, Typography, theme } from 'antd'
-import { useRouter } from 'next/router'
-import React, { useState } from 'react'
-const { Sider } = Layout
-type MenuItem = Required<MenuProps>['items'][number]
+} from '@ant-design/icons';
+import { Layout, Menu, MenuProps, Typography, theme } from 'antd';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+const { Sider } = Layout;
+type MenuItem = Required<MenuProps>['items'][number];
 
 const SiderMenu = () => {
-  const { user } = useAppSelector(state => state.appSlice)
-  const { token } = theme.useToken()
-  const [collapsed, setCollapsed] = useState(false)
-  const router = useRouter()
+  const { user } = useAppSelector((state) => state.appSlice);
+  const { token } = theme.useToken();
+  const [collapsed, setCollapsed] = useState(false);
+  const router = useRouter();
   const menuAdmin = [
     {
       key: '/',
@@ -69,7 +69,7 @@ const SiderMenu = () => {
         }
       ]
     }
-  ]
+  ];
   const menuOrganizer = [
     {
       key: '/',
@@ -108,13 +108,13 @@ const SiderMenu = () => {
         }
       ]
     }
-  ]
+  ];
   return (
     <Sider
       style={{ backgroundColor: token.colorBgBase }}
       collapsible
       collapsed={collapsed}
-      onCollapse={value => setCollapsed(value)}
+      onCollapse={(value) => setCollapsed(value)}
       width={250}
     >
       <div
@@ -152,12 +152,12 @@ const SiderMenu = () => {
         defaultSelectedKeys={[router.pathname]}
         mode='inline'
         items={user && +user?.role === 2 ? menuOrganizer : menuAdmin}
-        onClick={menu => {
-          router.push(menu.key)
+        onClick={(menu) => {
+          router.push(menu.key);
         }}
       />
     </Sider>
-  )
-}
+  );
+};
 
-export default SiderMenu
+export default SiderMenu;

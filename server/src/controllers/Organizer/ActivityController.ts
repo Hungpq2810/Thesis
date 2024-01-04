@@ -15,60 +15,6 @@ import { mappedActivities } from '../../mapper/ActivityMapper';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
-export const listActivityOrg = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
-    res.status(401).json({ message: 'Unauthorized' });
-    return;
-  }
-
-  const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
-  const organizerId = decodedToken.id;
-  const organizationId = decodedToken.organization_id;
-
-  const organizer = await Users.findOne({
-    where: { id: organizerId, role_id: 2 },
-  });
-  try {
-    const activitiesCurrent = await Activities.findAll({
-      where: { creator: organizationId },
-    });
-    const activities = await Promise.all(
-      mappedActivities(activitiesCurrent),
-    );
-    if (activities.length > 0) {
-      const response: GeneralResponse<{
-        activities: ActivityAttributes[];
-      }> = {
-        status: 200,
-        data: {
-          activities: activities as unknown as ActivityAttributes[],
-        },
-        message: 'Get list activities successfully',
-      };
-      commonResponse(req, res, response);
-    } else {
-      const response: GeneralResponse<{}> = {
-        status: 200,
-        data: [],
-        message: 'Get list activities successfully',
-      };
-      commonResponse(req, res, response);
-    }
-  } catch (error: any) {
-    console.error(error);
-    const response: GeneralResponse<{}> = {
-      status: 400,
-      data: null,
-      message: error.message,
-    };
-    commonResponse(req, res, response);
-  }
-};
-
 export const createActivity = async (
   req: Request,
   res: Response,
@@ -97,8 +43,11 @@ export const createActivity = async (
         description: req.body.description as string,
         location: req.body.location as string,
         num_of_volunteers: 0,
+        max_of_volunteers: req.body.max_of_volunteers,
         image: req.body.image as string,
         status: 1,
+        from_at: req.body.from_at,
+        to_at: req.body.to_at,
         created_at: new Date(),
         updated_at: new Date(),
       };
@@ -159,11 +108,17 @@ export const updateActivity = async (
       const newSkills = req.body.skills;
       if (activity && activity.creator === organizerId) {
         const updatedActivity = {
+          creator: organizerId as number,
           name: req.body.name as string,
           description: req.body.description as string,
           location: req.body.location as string,
-          updated_at: new Date(),
+          num_of_volunteers: 0,
+          max_of_volunteers: req.body.max_of_volunteers,
+          image: req.body.image as string,
           status: req.body.status,
+          from_at: req.body.from_at,
+          to_at: req.body.to_at,
+          updated_at: new Date(),
         };
 
         await Activities.update(updatedActivity, {

@@ -104,25 +104,23 @@ export const detailActivity = async (
 export const searchActivities = async (
   req: Request,
   res: Response,
-): Promise<void> => {
+) => {
   try {
-    const { name, skill } = req.query;
+    const { key } = req.query;
     let activities;
-    if (name) {
-      const searchKey = `${name}`.toLowerCase();
-      activities = await Activities.findAll({
+    if (key) {
+      const searchKey = `${key}`.toLowerCase();
+      const activitiesByName = await Activities.findAll({
         where: {
           name: {
-            [Op.like]: searchKey,
+            [Op.like]: `%${searchKey}%`,
           },
         },
       });
-    } else if (skill) {
-      const searchKey = `${skill}`.toLowerCase();
       const skills = await Skills.findAll({
         where: {
           name: {
-            [Op.like]: searchKey,
+            [Op.like]: `%${searchKey}%`,
           },
         },
       });
@@ -135,29 +133,25 @@ export const searchActivities = async (
       const skillActivitiesIds = skillActivities.map(
         (skillActivity) => skillActivity.activity_id,
       );
-      activities = await Activities.findAll({
+      const activitiesBySkill = await Activities.findAll({
         where: {
           id: skillActivitiesIds,
         },
       });
+
+      activities = [...activitiesByName, ...activitiesBySkill];
     } else {
       activities = await Activities.findAll();
     }
-    const response: GeneralResponse<{
-      activities: ActivityAttributes[];
-    }> = {
+
+    const response = {
       status: 200,
       data: { activities },
-      message: 'Tìm sự kiện thành công',
+      message: 'Search activities successfully',
     };
-    commonResponse(req, res, response);
-  } catch (error: any) {
+    res.status(200).json(response);
+  } catch (error) {
     console.error(error);
-    const response: GeneralResponse<{}> = {
-      status: 400,
-      data: null,
-      message: error.message,
-    };
-    commonResponse(req, res, response);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };

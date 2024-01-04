@@ -1,5 +1,5 @@
 module.exports = {
-  arrowParens: 'avoid',
+  arrowParens: 'always',
   bracketSpacing: true,
   htmlWhitespaceSensitivity: 'css',
   insertPragma: false,
@@ -13,5 +13,6 @@ module.exports = {
   singleQuote: true,
   tabWidth: 2,
   trailingComma: 'none',
-  useTabs: false
-}
+  useTabs: false,
+  semi: true
+};

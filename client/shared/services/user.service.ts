@@ -1,30 +1,30 @@
-import { AxiosResponse } from 'axios'
-import { https } from '../config/https.config'
-import { IUser, IUserList } from '@/typeDefs/schema/user.type'
-import { IBaseResponse } from '@/typeDefs/baseReponse.type'
+import { AxiosResponse } from 'axios';
+import { https } from '../config/https.config';
+import { IUser, IUserList } from '@/typeDefs/schema/user.type';
+import { IBaseResponse } from '@/typeDefs/baseReponse.type';
 
 class UserService {
   getAllUser(): Promise<AxiosResponse<IBaseResponse<IUserList>>> {
-    return https.get('/admin/users')
+    return https.get('/admin/users');
   }
   getUserById(id: number): Promise<AxiosResponse<IBaseResponse<IUser>>> {
-    return https.get(`/admin/users/${id}`)
+    return https.get(`/admin/users/${id}`);
   }
   getUserByAuth(): Promise<AxiosResponse<IBaseResponse<IUser>>> {
-    return https.get(`/user`)
+    return https.get(`/user`);
   }
   newUser(body: { username: string; password: string }) {
-    return https.post('/register', body)
+    return https.post('/register', body);
   }
   updateUser(id: number, body: { username: string; password: string }) {
-    return https.put(`/admin/users/${id}`, body)
+    return https.put(`/admin/users/${id}`, body);
   }
   updateProfile(body: IUser) {
-    return https.put(`/user`, body)
+    return https.put(`/user`, body);
   }
   deleteUser(id: number) {
-    return https.delete(`/admin/users/${id}`)
+    return https.delete(`/admin/users/${id}`);
   }
 }
 
-export const userService = new UserService()
+export const userService = new UserService();

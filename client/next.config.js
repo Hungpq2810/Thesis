@@ -9,6 +9,6 @@ const nextConfig = {
     locales: ['en', 'vi'],
     defaultLocale: 'vi'
   }
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

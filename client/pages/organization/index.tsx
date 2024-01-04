@@ -1,13 +1,15 @@
-import { organizationService } from '@/services/organization.service'
-import { Card } from 'antd'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import React from 'react'
-import { useQuery } from 'react-query'
+import { organizationService } from '@/services/organization.service';
+import { Card } from 'antd';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useQuery } from 'react-query';
 
 const OrganizationPage = () => {
-  const router = useRouter()
-  const { data: dataOrganization, refetch } = useQuery(['listActivity'], () => organizationService.getAllOrganization())
+  const router = useRouter();
+  const { data: dataOrganization, refetch } = useQuery(['listActivity'], () =>
+    organizationService.getAllOrganization()
+  );
   return (
     <React.Fragment>
       <Head>
@@ -21,7 +23,7 @@ const OrganizationPage = () => {
       <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-5'>
         {dataOrganization &&
           dataOrganization.data &&
-          dataOrganization.data.data.organizations.map(item => (
+          dataOrganization.data.data.organizations.map((item) => (
             <Card key={item.id} style={{ width: 400 }}>
               <div className='flex justify-between items-center'>
                 <p>Tên: {item.name}</p>
@@ -32,7 +34,7 @@ const OrganizationPage = () => {
           ))}
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default OrganizationPage
+export default OrganizationPage;

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query';
 import {
   Button,
   Form,
@@ -10,56 +10,56 @@ import {
   DatePicker,
   Select,
   SelectProps
-} from 'antd'
-import { useForm } from 'antd/lib/form/Form'
-import { useEffect } from 'react'
-import { userService } from '@/services/user.service'
-import dayjs from 'dayjs'
+} from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import { useEffect } from 'react';
+import { userService } from '@/services/user.service';
+import dayjs from 'dayjs';
 
 interface Props {
-  editId?: number
-  open: any
-  setOpen: any
-  refetch: any
+  editId?: number;
+  open: any;
+  setOpen: any;
+  refetch: any;
 }
 const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
-  const [form] = useForm()
-  const isEditIdValidNumber = typeof editId === 'number'
+  const [form] = useForm();
+  const isEditIdValidNumber = typeof editId === 'number';
   const registerMutation = useMutation({
     mutationKey: 'register',
     mutationFn: (body: { username: string; password: string }) =>
       userService.newUser(body),
     onSuccess(data, _variables, _context) {
-      const res = data.data
-      if (!res) return
-      message.success('Tạo thành công')
-      setOpen(false)
-      refetch()
+      const res = data.data;
+      if (!res) return;
+      message.success('Tạo thành công');
+      setOpen(false);
+      refetch();
     },
     onError(error, variables, context) {
-      message.error('Tạo không thành công')
+      message.error('Tạo không thành công');
     }
-  })
+  });
   const updateMutation = useMutation({
     mutationKey: 'update',
     mutationFn: (body: { username: string; password: string }) =>
       userService.updateUser(editId as number, body),
     onSuccess(data, _variables, _context) {
-      const res = data.data
-      if (!res) return
-      message.success('Cập nhật thành công')
-      setOpen(false)
-      refetch()
+      const res = data.data;
+      if (!res) return;
+      message.success('Cập nhật thành công');
+      setOpen(false);
+      refetch();
     },
     onError(error, variables, context) {
-      message.error('Cập nhật không thành công')
+      message.error('Cập nhật không thành công');
     }
-  })
+  });
   function handleregister(value: any) {
     if (editId) {
-      updateMutation.mutate(value)
+      updateMutation.mutate(value);
     } else {
-      registerMutation.mutate(value)
+      registerMutation.mutate(value);
     }
   }
   const { data } = useQuery(
@@ -68,19 +68,19 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
     {
       enabled: isEditIdValidNumber
     }
-  )
+  );
   useEffect(() => {
     if (editId && data) {
       const formattedBirthday = dayjs(data.data.data.birthday).format(
         'YYYY-MM-DD'
-      )
+      );
 
       form.setFieldsValue({
         ...data.data.data,
         birthday: formattedBirthday
-      })
+      });
     }
-  }, [data])
+  }, [data]);
   const options: SelectProps['options'] = [
     {
       label: 'Nam',
@@ -90,7 +90,7 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
       label: 'Nữ',
       value: 1
     }
-  ]
+  ];
   return (
     <Modal
       title={editId ? `Chỉnh sửa tài khoản` : 'Tạo tài khoản mới'}
@@ -156,8 +156,8 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
           label='Ngày sinh'
           name='birthday'
           rules={[{ required: true, message: 'Chưa điền ngày sinh' }]}
-          getValueFromEvent={onChange => dayjs(onChange).format('YYYY-MM-DD')}
-          getValueProps={i => ({ value: dayjs(i) })}
+          getValueFromEvent={(onChange) => dayjs(onChange).format('YYYY-MM-DD')}
+          getValueProps={(i) => ({ value: dayjs(i) })}
         >
           <DatePicker />
         </Form.Item>
@@ -196,7 +196,7 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
         </Row>
       </Form>
     </Modal>
-  )
-}
+  );
+};
 
-export default FormUser
+export default FormUser;

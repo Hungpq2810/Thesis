@@ -1,12 +1,12 @@
 // ** React Imports
-import useTrans from '@/hooks/useTrans'
-import BlankLayout from '@/layouts/BlankLayout'
-import { Button, Result } from 'antd'
-import Head from 'next/head'
-import Link from 'next/link'
+import useTrans from '@/hooks/useTrans';
+import BlankLayout from '@/layouts/BlankLayout';
+import { Button, Result } from 'antd';
+import Head from 'next/head';
+import Link from 'next/link';
 
 const Error401 = () => {
-  const { trans } = useTrans()
+  const { trans } = useTrans();
   return (
     <>
       <Head>
@@ -23,10 +23,10 @@ const Error401 = () => {
         }
       />
     </>
-  )
-}
+  );
+};
 
 Error401.getLayout = (children: React.ReactNode) => (
   <BlankLayout>{children}</BlankLayout>
-)
-export default Error401
+);
+export default Error401;

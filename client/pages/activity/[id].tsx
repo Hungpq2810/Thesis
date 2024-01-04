@@ -1,51 +1,65 @@
-import Head from 'next/head'
-import React from 'react'
-import { GetStaticPaths, GetStaticProps } from 'next/types'
-import { IBaseResponse } from '@/typeDefs/baseReponse.type'
-import { IActivity } from '@/typeDefs/schema/activity.type'
-import BlankLayout from '@/layouts/BlankLayout'
-import { Button, Avatar, List, Badge, message, Form, Input, Card } from 'antd'
-import { useMutation, useQuery } from 'react-query'
-import { activityService } from '@/services/activity.service'
-import { useAppSelector } from '@/hooks/useRedux'
-import { useRouter } from 'next/router'
-import { feedbackService } from '@/services/feedback.service'
-import { userService } from '@/services/user.service'
+import Head from 'next/head';
+import React, { useState } from 'react';
+import { GetStaticPaths, GetStaticProps } from 'next/types';
+import { IBaseResponse } from '@/typeDefs/baseReponse.type';
+import { IActivity } from '@/typeDefs/schema/activity.type';
+import BlankLayout from '@/layouts/BlankLayout';
+import {
+  Button,
+  Avatar,
+  List,
+  Badge,
+  message,
+  Form,
+  Input,
+  Card,
+  Space,
+  Rate
+} from 'antd';
+import { useMutation, useQuery } from 'react-query';
+import { activityService } from '@/services/activity.service';
+import { useAppSelector } from '@/hooks/useRedux';
+import { useRouter } from 'next/router';
+import { feedbackService } from '@/services/feedback.service';
+import { userService } from '@/services/user.service';
+import dayjs from 'dayjs';
 
 type Props = {
-  activity: IBaseResponse<IActivity>
-}
+  activity: IBaseResponse<IActivity>;
+};
 const DetailActivity = ({ activity }: Props) => {
+  const [rate, setRate] = useState(0);
   const { data: userDetail } = useQuery(
     ['userDetail'],
     () => userService.getUserByAuth(),
     {
       select(data) {
-        return data.data.data.activityApplied
+        return data.data.data.activityApplied;
       }
     }
-  )
-  const currentDate = new Date()
-  const router = useRouter()
-  const { user } = useAppSelector(state => state.appSlice)
-  console.log(user)
+  );
+  const currentDate = new Date();
+  const router = useRouter();
+  const { user } = useAppSelector((state) => state.appSlice);
+
   const newFeedbackMutation = useMutation({
     mutationKey: 'newFeedback',
     mutationFn: (body: {
-      activity_id: number
-      title: string
-      content: string
+      activity_id: number;
+      title: string;
+      content: string;
+      rate: number;
     }) => feedbackService.newActivity(body),
     onSuccess(data, _variables, _context) {
-      const res = data.data
-      if (!res) return
-      message.success('Tạo thành công')
-      window.location.reload()
+      const res = data.data;
+      if (!res) return;
+      message.success('Tạo thành công');
+      window.location.reload();
     },
     onError(error, variables, context) {
-      message.error('Tạo không thành công')
+      message.error('Tạo không thành công');
     }
-  })
+  });
 
   const applyActivityMutation = useMutation({
     mutationKey: 'applyActivity',
@@ -53,13 +67,13 @@ const DetailActivity = ({ activity }: Props) => {
       activityService.applyActivity(body),
     onSuccess(data, _variables, _context) {
       if (data) {
-        message.success('Đăng ký thành công')
+        message.success('Đăng ký thành công');
       }
     },
     onError(error, variables, context) {
-      message.error('Đăng ký không thành công')
+      message.error('Đăng ký không thành công');
     }
-  })
+  });
 
   const cancelActivityMutation = useMutation({
     mutationKey: 'cancelActivity',
@@ -67,23 +81,24 @@ const DetailActivity = ({ activity }: Props) => {
       activityService.cancelActivity(body),
     onSuccess(data, _variables, _context) {
       if (data) {
-        message.success('Hủy đăng ký thành công')
+        message.success('Hủy đăng ký thành công');
       }
     },
     onError(error, variables, context) {
-      message.error('Hủy đăng ký không thành công')
+      message.error('Hủy đăng ký không thành công');
     }
-  })
+  });
 
   function handleNewFeedback(value: any) {
     const body = {
       activity_id: activity.data.id,
       title: value.title,
-      content: value.content
-    }
-    newFeedbackMutation.mutate(body)
+      content: value.content,
+      rate: rate
+    };
+    newFeedbackMutation.mutate(body);
   }
-  if (!activity) return <React.Fragment></React.Fragment>
+  if (!activity) return <React.Fragment></React.Fragment>;
   return (
     <React.Fragment>
       <Head>
@@ -110,45 +125,79 @@ const DetailActivity = ({ activity }: Props) => {
               <h3>Kỹ năng</h3>
               <div className='flex flex-wrap justify-start items-start gap-3'>
                 {activity.data.skillsActivity?.map((skill, index) => (
-                  <p key={index} className='border-2 border-blue-700'>
-                    {skill.name}
-                  </p>
+                  <Badge
+                    key={index}
+                    className='site-badge-count-109'
+                    count={skill.name}
+                    style={{ backgroundColor: '#52c41a' }}
+                  />
                 ))}
               </div>
             </div>
-            <h3 style={{whiteSpace: 'pre-line'}}>Nội dung: {activity.data.description}</h3>
+            <h3 style={{ whiteSpace: 'pre-line' }}>
+              Mô tả hoạt động:
+              <br></br>
+              {activity.data.description}
+            </h3>
             <div className='w-full flex justify-between items-center'>
-              <p>Số lượng TN đã tham dự: {activity.data.num_of_volunteers}</p>
-              <p>Số lượng TN tối đa: {activity.data.max_of_volunteers}</p>
+              <p>
+                Số lượng tình nguyện đã đăng ký:{' '}
+                {activity.data.num_of_volunteers}
+              </p>
+              {/* dayjs(activity.data.from_at).format('DD/MM/YYYY') */}
+              <p>
+                Số lượng tình nguyện tối đa: {activity.data.max_of_volunteers}
+              </p>
             </div>
             <div className='w-full flex justify-between items-center'>
-              <p>Thời gian tham gia: {activity.data.from_at}</p>
-              <p>Thời gian kết thúc: {activity.data.to_at}</p>
+              <p>
+                Thời gian bắt đầu đăng ký:{' '}
+                {dayjs(activity.data.from_at).format('DD/MM/YYYY')}
+              </p>
+              <p>
+                Thời gian kết thúc đăng ký:{' '}
+                {dayjs(activity.data.to_at).format('DD/MM/YYYY')}
+              </p>
             </div>
-            {activity.data.num_of_volunteers === activity.data.max_of_volunteers ||
+            {activity.data.num_of_volunteers ===
+              activity.data.max_of_volunteers ||
             new Date(activity.data.to_at).getTime() < currentDate.getTime() ? (
               <>
-                <p>Đã đủ TN viên tham gia hoặc hoạt động hết hạn tham gia</p>
+                <p>
+                  Đã đủ tình nguyện viên tham gia hoặc hoạt động hết hạn tham
+                  gia
+                </p>
               </>
             ) : (
               <>
                 {activity.data.status === 0 && user ? (
                   <>
-                    {userDetail && userDetail.some((item: any) => item.activity_id === activity.data.id) ? (
+                    {userDetail &&
+                    userDetail.some(
+                      (item: any) => item.activity_id === activity.data.id
+                    ) ? (
                       <>
                         <p>Bạn đã đăng ký</p>
-                        <Button onClick={() => cancelActivityMutation.mutate({ activity_id: activity.data.id })}>
+                        <Button
+                          onClick={() =>
+                            cancelActivityMutation.mutate({
+                              activity_id: activity.data.id
+                            })
+                          }
+                        >
                           Huỷ đăng ký
                         </Button>
                       </>
                     ) : (
                       <Button
                         onClick={() => {
-                          applyActivityMutation.mutate({ activity_id: activity.data.id })
+                          applyActivityMutation.mutate({
+                            activity_id: activity.data.id
+                          });
                           setTimeout(() => {
-                            router.push('/activity')
-                            message.success('Đăng ký thành công')
-                          }, 500)
+                            router.push('/activity');
+                            message.success('Đăng ký thành công');
+                          }, 500);
                         }}
                       >
                         Đăng ký
@@ -156,7 +205,11 @@ const DetailActivity = ({ activity }: Props) => {
                     )}
                   </>
                 ) : (
-                  <Button onClick={() => (!user ? router.push('/login') : router.push('/activity'))}>
+                  <Button
+                    onClick={() =>
+                      !user ? router.push('/login') : router.push('/activity')
+                    }
+                  >
                     Vui lòng đăng ký tài khoản hoặc chờ hoạt động khác
                   </Button>
                 )}
@@ -174,6 +227,10 @@ const DetailActivity = ({ activity }: Props) => {
                 title={<span>{item.name}</span>}
                 description={
                   <div>
+                    <Space>
+                      <Rate disabled value={item.rate} />
+                      {rate ? <span>{[rate - 1]}</span> : ''}
+                    </Space>
                     <p>Tiêu đề: {item.title}</p>
                     <p>{item.content}</p>
                   </div>
@@ -184,7 +241,8 @@ const DetailActivity = ({ activity }: Props) => {
         />
         {userDetail &&
         userDetail.some(
-          (item: any) => item.activity_id === activity.data.id
+          (item: any) =>
+            item.activity_id === activity.data.id && item.status === 3
         ) ? (
           <Card title='Feedback'>
             <Form
@@ -210,8 +268,13 @@ const DetailActivity = ({ activity }: Props) => {
                 <Input />
               </Form.Item>
 
+              <Form.Item label='Đánh giá' name='rate'>
+                <Rate onChange={setRate} value={rate} />
+                {rate ? <span>{[rate]}</span> : ''}
+              </Form.Item>
+
               <Form.Item style={{ textAlign: 'center' }}>
-                <Button htmlType='submit'>Bình luận</Button>
+                <Button htmlType='submit'>Gửi đánh giá</Button>
               </Form.Item>
             </Form>
           </Card>
@@ -220,44 +283,44 @@ const DetailActivity = ({ activity }: Props) => {
         )}
       </section>
     </React.Fragment>
-  )
-}
+  );
+};
 DetailActivity.getLayout = (children: React.ReactNode) => (
   <BlankLayout>{children}</BlankLayout>
-)
-export default DetailActivity
+);
+export default DetailActivity;
 
-export const getStaticProps: GetStaticProps = async ctx => {
-  const id = ctx.params?.id
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  const id = ctx.params?.id;
   if (id) {
     try {
       const responseActivity = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/activities/${id}`
-      )
-      const activity = await responseActivity.json()
+      );
+      const activity = await responseActivity.json();
       return {
         props: {
           activity
         }
-      }
+      };
     } catch (error) {
       return {
         props: {
           activity: null,
           error: 'Failed to fetch activity data'
         }
-      }
+      };
     }
   } else {
     return {
       props: {},
       notFound: true
-    }
+    };
   }
-}
-export const getStaticPaths: GetStaticPaths = async _ctx => {
+};
+export const getStaticPaths: GetStaticPaths = async (_ctx) => {
   return {
     paths: [],
     fallback: true
-  }
-}
+  };
+};

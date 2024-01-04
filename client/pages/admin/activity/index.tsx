@@ -1,38 +1,38 @@
-import { DeleteOutlined } from '@ant-design/icons'
-import { Col, Image, message, Popconfirm, Row, Space, Table } from 'antd'
-import Search from 'antd/lib/input/Search'
-import { ColumnType } from 'antd/lib/table'
-import DashboardLayout from '@/layouts/DashboardLayout'
-import { useMutation, useQuery } from 'react-query'
-import React from 'react'
-import { activityService } from '@/services/activity.service'
-import { IActivity } from '@/typeDefs/schema/activity.type'
+import { DeleteOutlined } from '@ant-design/icons';
+import { Col, Image, message, Popconfirm, Row, Space, Table } from 'antd';
+import Search from 'antd/lib/input/Search';
+import { ColumnType } from 'antd/lib/table';
+import DashboardLayout from '@/layouts/DashboardLayout';
+import { useMutation, useQuery } from 'react-query';
+import React from 'react';
+import { activityService } from '@/services/activity.service';
+import { IActivity } from '@/typeDefs/schema/activity.type';
 
-type Props = {}
+type Props = {};
 
 const ActivityManagement = ({}: Props) => {
   const { data: dataActivity, refetch } = useQuery(['listActivty'], () =>
     activityService.getAllActivity()
-  )
+  );
   const deleteMutation = useMutation({
     mutationKey: ['deleteMutation'],
     mutationFn: (activityId: number) =>
       activityService.deleteActivity(activityId),
     onSuccess: () => {
-      message.success('Xoá thành công')
-      refetch()
+      message.success('Xoá thành công');
+      refetch();
     },
     onError() {
-      message.error('Xoá không thành công')
+      message.error('Xoá không thành công');
     }
-  })
+  });
   const columns: ColumnType<IActivity>[] = [
     {
       title: '#',
       key: 'id',
       render: (value, record, index) => (
         <div>
-          <p>{index}</p>
+          <p>{index + 1}</p>
         </div>
       )
     },
@@ -80,7 +80,7 @@ const ActivityManagement = ({}: Props) => {
           <Popconfirm
             okButtonProps={{ loading: deleteMutation.isLoading }}
             onConfirm={() => {
-              deleteMutation.mutate(record.id)
+              deleteMutation.mutate(record.id);
             }}
             title={'Xoá'}
           >
@@ -89,7 +89,7 @@ const ActivityManagement = ({}: Props) => {
         </Space>
       )
     }
-  ]
+  ];
 
   return (
     <>
@@ -117,9 +117,9 @@ const ActivityManagement = ({}: Props) => {
         </React.Fragment>
       )}
     </>
-  )
-}
+  );
+};
 ActivityManagement.getLayout = (children: React.ReactNode) => (
   <DashboardLayout>{children}</DashboardLayout>
-)
-export default ActivityManagement
+);
+export default ActivityManagement;

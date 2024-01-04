@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query';
 import {
   Button,
   Form,
@@ -9,41 +9,41 @@ import {
   Col,
   Select,
   SelectProps
-} from 'antd'
-import { useForm } from 'antd/lib/form/Form'
-import { useEffect } from 'react'
-import { organizationService } from '@/services/organization.service'
+} from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import { useEffect } from 'react';
+import { organizationService } from '@/services/organization.service';
 
 interface Props {
-  editId?: number
-  open: any
-  setOpen: any
-  refetch: any
+  editId?: number;
+  open: any;
+  setOpen: any;
+  refetch: any;
 }
 const FormOrganization = ({ editId, open, setOpen, refetch }: Props) => {
-  const [form] = useForm()
-  const isEditIdValidNumber = typeof editId === 'number'
+  const [form] = useForm();
+  const isEditIdValidNumber = typeof editId === 'number';
   const updateMutation = useMutation({
     mutationKey: 'update',
     mutationFn: (body: {
-      name: string
-      location: string
-      description: string
+      name: string;
+      location: string;
+      description: string;
     }) => organizationService.updateOrganization(editId as number, body),
     onSuccess(data, _variables, _context) {
-      const res = data.data
-      if (!res) return
-      message.success('Cập nhật thành công')
-      setOpen(false)
-      refetch()
+      const res = data.data;
+      if (!res) return;
+      message.success('Cập nhật thành công');
+      setOpen(false);
+      refetch();
     },
     onError(error, variables, context) {
-      message.error('Cập nhật không thành công')
+      message.error('Cập nhật không thành công');
     }
-  })
+  });
   function handleregister(value: any) {
     if (editId) {
-      updateMutation.mutate(value)
+      updateMutation.mutate(value);
     }
   }
   const { data } = useQuery(
@@ -52,7 +52,7 @@ const FormOrganization = ({ editId, open, setOpen, refetch }: Props) => {
     {
       enabled: isEditIdValidNumber
     }
-  )
+  );
   const options: SelectProps['options'] = [
     {
       label: 'Hoạt động',
@@ -62,15 +62,15 @@ const FormOrganization = ({ editId, open, setOpen, refetch }: Props) => {
       label: 'Không hoạt động',
       value: 1
     }
-  ]
+  ];
   useEffect(() => {
     if (editId && data) {
       form.setFieldsValue({
         // @ts-ignore
         ...data.data.data.organization
-      })
+      });
     }
-  }, [data])
+  }, [data]);
   return (
     <Modal
       title={editId ? `Chỉnh sửa ban tổ chức` : 'Tạo ban tổ chức mới'}
@@ -142,7 +142,7 @@ const FormOrganization = ({ editId, open, setOpen, refetch }: Props) => {
         </Row>
       </Form>
     </Modal>
-  )
-}
+  );
+};
 
-export default FormOrganization
+export default FormOrganization;

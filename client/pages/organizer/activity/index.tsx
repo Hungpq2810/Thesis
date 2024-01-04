@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
   Button,
   Col,
@@ -8,43 +8,43 @@ import {
   Row,
   Space,
   Table
-} from 'antd'
-import Search from 'antd/lib/input/Search'
-import { ColumnType } from 'antd/lib/table'
-import DashboardLayout from '@/layouts/DashboardLayout'
-import { useMutation, useQuery } from 'react-query'
-import React, { useState } from 'react'
-import { activityService } from '@/services/activity.service'
-import { IActivity } from '@/typeDefs/schema/activity.type'
-import FormActivity from './form'
-import { useAppSelector } from '@/hooks/useRedux'
+} from 'antd';
+import Search from 'antd/lib/input/Search';
+import { ColumnType } from 'antd/lib/table';
+import DashboardLayout from '@/layouts/DashboardLayout';
+import { useMutation, useQuery } from 'react-query';
+import React, { useState } from 'react';
+import { activityService } from '@/services/activity.service';
+import { IActivity } from '@/typeDefs/schema/activity.type';
+import FormActivity from './form';
+import { useAppSelector } from '@/hooks/useRedux';
 
-type Props = {}
+type Props = {};
 
 const ActivityManagement = ({}: Props) => {
-  const { user } = useAppSelector(state => state.appSlice)
-  const [open, setOpen] = useState(false)
-  const [action, setAtion] = useState<string>('')
-  const [rowId, setRowId] = useState<number>()
+  const { user } = useAppSelector((state) => state.appSlice);
+  const [open, setOpen] = useState(false);
+  const [action, setAtion] = useState<string>('');
+  const [rowId, setRowId] = useState<number>();
   const { data: dataActivity, refetch } = useQuery(
     ['listActivty'],
     () => activityService.getAllActivity(),
     {
       select(data) {
         const filterActivity = data.data.data.activities.filter(
-          activity => activity.creator_id === +user!.id
-        )
-        return filterActivity
+          (activity) => activity.creator_id === +user!.id
+        );
+        return filterActivity;
       }
     }
-  )
+  );
   const columns: ColumnType<IActivity>[] = [
     {
       title: '#',
       key: 'id',
       render: (value, record, index) => (
         <div>
-          <p>{index}</p>
+          <p>{index + 1}</p>
         </div>
       )
     },
@@ -57,7 +57,9 @@ const ActivityManagement = ({}: Props) => {
       title: 'Mô tả',
       dataIndex: 'description',
       key: 'description',
-      render: (_, record) => (<p style={{whiteSpace: 'pre-line'}}>{record.description}</p>)
+      render: (_, record) => (
+        <p style={{ whiteSpace: 'pre-line' }}>{record.description}</p>
+      )
     },
     {
       title: 'Địa điểm',
@@ -65,13 +67,15 @@ const ActivityManagement = ({}: Props) => {
       key: 'location'
     },
     {
-      title: 'Số lượng tình nguyện viên',
+      title: 'Số lượng TNV đăng ký / tối đa',
       key: 'num_of_volunteers',
       render: (_, record) => (
         <div className='w-full pr-5 max-h-[300px] overflow-y-scroll flex flex-col justify-start items-start gap-3'>
-          <p>Số lượng tình nguyện viên đăng ký: {record.num_of_volunteers}</p>
+          <p>
+            {record.num_of_volunteers} / {record.max_of_volunteers}
+          </p>
           {record.volunteersApplied &&
-            record.volunteersApplied.map(volunteer => (
+            record.volunteersApplied.map((volunteer) => (
               <>
                 <div className='w-2/3 flex justify-between items-center'>
                   {/* <Image src={volunteer.avatar} width={50} height={50} className='rounded-lg' /> */}
@@ -141,9 +145,9 @@ const ActivityManagement = ({}: Props) => {
           <div
             className='cursor-pointer'
             onClick={() => {
-              setAtion('edit')
-              setOpen(true)
-              setRowId(record.id)
+              setAtion('edit');
+              setOpen(true);
+              setRowId(record.id);
             }}
           >
             <EditOutlined />
@@ -151,7 +155,7 @@ const ActivityManagement = ({}: Props) => {
         </Space>
       )
     }
-  ]
+  ];
 
   return (
     <>
@@ -172,9 +176,9 @@ const ActivityManagement = ({}: Props) => {
                 />
                 <Button
                   onClick={() => {
-                    setAtion('create')
-                    setRowId(NaN)
-                    setOpen(true)
+                    setAtion('create');
+                    setRowId(NaN);
+                    setOpen(true);
                   }}
                 >
                   Tạo mới
@@ -200,9 +204,9 @@ const ActivityManagement = ({}: Props) => {
         </React.Fragment>
       )}
     </>
-  )
-}
+  );
+};
 ActivityManagement.getLayout = (children: React.ReactNode) => (
   <DashboardLayout>{children}</DashboardLayout>
-)
-export default ActivityManagement
+);
+export default ActivityManagement;

@@ -1,38 +1,38 @@
-import React, { useState } from 'react'
-import { Button, Checkbox, Form, message, Steps } from 'antd'
-import Head from 'next/head'
-import FormCreateOrganization from '@/components/request_organization/FormCreateOrganization'
-import { useAppSelector } from '@/hooks/useRedux'
-import { useMutation } from 'react-query'
-import { organizationService } from '@/services/organization.service'
+import React, { useState } from 'react';
+import { Button, Checkbox, Form, message, Steps } from 'antd';
+import Head from 'next/head';
+import FormCreateOrganization from '@/components/request_organization/FormCreateOrganization';
+import { useAppSelector } from '@/hooks/useRedux';
+import { useMutation } from 'react-query';
+import { organizationService } from '@/services/organization.service';
 
 const RequestOrganization = () => {
-  const { inforOrganization } = useAppSelector(state => state.appSlice)
-  const [current, setCurrent] = useState(0)
+  const { inforOrganization } = useAppSelector((state) => state.appSlice);
+  const [current, setCurrent] = useState(0);
   const next = () => {
-    setCurrent(current + 1)
-  }
+    setCurrent(current + 1);
+  };
   const prev = () => {
-    setCurrent(current - 1)
-  }
+    setCurrent(current - 1);
+  };
   const requestBecomeOrganizationMutation = useMutation({
     mutationKey: 'requestBecomeOrganizationMutation',
     mutationFn: (body: { organization_id: number }) =>
       organizationService.requestBecomeOrganization(body),
     onSuccess(data, _variables, _context) {
       if (data) {
-        message.success('Yêu cầu thành công')
+        message.success('Yêu cầu thành công');
       }
     },
     onError(error, variables, context) {
-      message.error('Yêu cầu không thành công')
+      message.error('Yêu cầu không thành công');
     }
-  })
+  });
 
   function handleRequest() {
     requestBecomeOrganizationMutation.mutate({
       organization_id: inforOrganization!.id
-    })
+    });
   }
   const steps = [
     {
@@ -77,8 +77,8 @@ const RequestOrganization = () => {
         </>
       )
     }
-  ]
-  const items = steps.map(item => ({ key: item.title, title: item.title }))
+  ];
+  const items = steps.map((item) => ({ key: item.title, title: item.title }));
   return (
     <React.Fragment>
       <Head>
@@ -96,7 +96,7 @@ const RequestOrganization = () => {
         )}
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default RequestOrganization
+export default RequestOrganization;

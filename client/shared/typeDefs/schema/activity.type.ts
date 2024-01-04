@@ -1,33 +1,33 @@
-import { IFeedback } from './feedback.type'
-import { IOrganization } from './organization.type'
-import { ISkill } from './skill.type'
+import { IFeedback } from './feedback.type';
+import { IOrganization } from './organization.type';
+import { ISkill } from './skill.type';
 
 export interface IActivityList {
-  activities: IActivity[]
+  activities: IActivity[];
 }
 export interface IActivity {
-  id: number
-  creator_id: number
-  creator: string
-  name: string
-  description: string
-  image: string
-  location: string
-  num_of_volunteers: number
-  max_of_volunteers: number
+  id: number;
+  creator_id: number;
+  creator: string;
+  name: string;
+  description: string;
+  image: string;
+  location: string;
+  num_of_volunteers: number;
+  max_of_volunteers: number;
   from_at: string;
   to_at: string;
-  status: number
-  created_at: string
-  updated_at: string
-  feedback?: IFeedback[]
-  skillsActivity?: ISkill[]
-  inforOrganizer?: IOrganization
-  volunteersApplied?: IAppliedVolunteerMapped[]
+  status: number;
+  created_at: string;
+  updated_at: string;
+  feedback?: IFeedback[];
+  skillsActivity?: ISkill[];
+  inforOrganizer?: IOrganization;
+  volunteersApplied?: IAppliedVolunteerMapped[];
 }
 
 export interface IAppliedVolunteers {
-  appliedVolunteers: IAppliedVolunteer[]
+  appliedVolunteers: IAppliedVolunteer[];
 }
 
 export interface IAppliedVolunteer {
@@ -38,19 +38,19 @@ export interface IAppliedVolunteer {
   avatar: string;
   organizer: number;
   status: number;
-  user_id:number;
+  user_id: number;
   activity_id: number;
   created_at: string;
   updated_at: string;
-  activity?: IActivity
+  activity?: IActivity;
 }
 
 export interface IAppliedVolunteerMapped {
-  id: number
-  name: string
-  avatar: string
-  status: number
-  organizer?: number
-  created_at: string
-  updated_at: string
+  id: number;
+  name: string;
+  avatar: string;
+  status: number;
+  organizer?: number;
+  created_at: string;
+  updated_at: string;
 }

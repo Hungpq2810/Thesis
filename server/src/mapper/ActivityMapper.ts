@@ -18,7 +18,6 @@ export const mappedActivities = (
       description,
       image,
       location,
-      num_of_volunteers,
       max_of_volunteers,
       from_at,
       to_at,
@@ -56,7 +55,7 @@ export const mappedActivities = (
         return skill;
       });
       const inforOrganizer = await Organization.findOne({
-        where: { id: creatorId },
+        where: { id: creator?.organization_id },
       });
       return {
         id,
