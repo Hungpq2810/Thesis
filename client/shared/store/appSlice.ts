@@ -1,7 +1,8 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { IDataMenu, IRoute } from '../typeDefs/route.type';
-import { IUser } from '../typeDefs/user.type';
+// import { IUser } from '../typeDefs/user.type';
+import { IUser } from '@/typeDefs/schema/user.type'
 import { IOrganization } from '@/typeDefs/schema/organization.type';
 
 type APPSTATE = {

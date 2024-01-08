@@ -9,6 +9,10 @@ import {
 } from '../../models/organization';
 import { Users } from '../../models/users';
 import { organizationMapper } from '../../mapper/OrganizationMapper';
+import { OrganizationRequest } from '../../models/organization_request';
+import { Op } from 'sequelize';
+import { sequelize } from '../../db';
+
 
 export const deleteOrganization = async (
   req: Request,
@@ -73,8 +77,7 @@ export const updateOrganization = async (
       updated_at: new Date(),
     };
 
-    const updatedOrganization =
-      await organization.update(updatedFields);
+    const updatedOrganization = await organization.update(updatedFields);
 
     if (updatedOrganization) {
       const response: GeneralResponse<{}> = {
@@ -84,9 +87,7 @@ export const updateOrganization = async (
       };
       commonResponse(req, res, response);
     } else {
-      res
-        .status(400)
-        .json({ message: 'Failed to update organization' });
+      res.status(400).json({ message: 'Failed to update organization' });
     }
   } catch (error: any) {
     console.error(error);
@@ -104,18 +105,27 @@ export const listOrganizationAdmin = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const organizationsCurrent = await Organization.findAll();
-    const organizations = await organizationMapper(
-      organizationsCurrent,
-    );
+    const notYetApprovedOrgs = await OrganizationRequest.findAll({
+      where: {status: 1}
+    })
+    const notYetApprovedOrgsId = notYetApprovedOrgs.map((orgRequest) => orgRequest.organization_id);
+    
+    const organizationsCurrent = await Organization.findAll({
+      where: {
+        orgId: {
+          [Op.notIn]: notYetApprovedOrgsId
+        }
+      }
+    });
+    
+    const organizations = await organizationMapper(organizationsCurrent);
     if (organizations.length > 0) {
       const response: GeneralResponse<{
         organizations: OrganizationAttributes[];
       }> = {
         status: 200,
         data: {
-          organizations:
-            organizations as unknown as OrganizationAttributes[],
+          organizations: organizations as unknown as OrganizationAttributes[],
         },
         message: 'Lấy danh sách tổ chức thành công',
       };

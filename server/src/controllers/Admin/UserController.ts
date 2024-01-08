@@ -9,10 +9,7 @@ import {
 import { UserAttributes, Users } from '../../models/users';
 dotenv.config();
 
-export const listUser = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+export const listUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await Users.findAll({
       where: {
@@ -21,7 +18,7 @@ export const listUser = async (
         },
         status: 0,
       },
-    attributes: { exclude: ['password'] },
+      attributes: { exclude: ['password'] },
     });
 
     const response: GeneralResponse<{

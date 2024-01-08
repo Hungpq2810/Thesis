@@ -31,6 +31,11 @@ const Profile = ({ next }: Props) => {
   const { user } = useAppSelector((state) => state.appSlice);
   const { data } = useQuery(['userDetail'], () => userService.getUserByAuth());
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(user?.avatar);
+  const [flag, setFlag] = useState<boolean | undefined>(
+    data?.data.data.role_id === 1
+  )  
+  console.log(flag);
+  
   const [belongsOrganizer, setBelongsOrganizer] = useState<number | undefined>(
     data?.data.data.belongsOrganizer?.organization_id
   );
@@ -100,7 +105,7 @@ const Profile = ({ next }: Props) => {
       }
     },
     onError(error, variables, context) {
-      message.error('Tạo không thành công');
+      message.error('Cập nhật không thành công');
     }
   });
   //Handle submit form Login
@@ -123,7 +128,9 @@ const Profile = ({ next }: Props) => {
         ...data.data.data.user
       });
     }
+    
   }, [data]);
+  
   const options: SelectProps['options'] = [
     {
       label: 'Nam',
@@ -145,7 +152,7 @@ const Profile = ({ next }: Props) => {
         avatar: updatedAvatarUrl
       });
     }
-  };
+  };  
 
   return (
     <React.Fragment>
@@ -236,12 +243,12 @@ const Profile = ({ next }: Props) => {
             <Input.Password />
           </Form.Item>
 
+          {skillsDefault && flag && (
           <Form.Item
             label='Kỹ năng'
             name='skills'
             rules={[{ required: false, message: 'Chưa điền kỹ năng' }]}
           >
-            {skillsDefault && (
               <Select
                 defaultValue={skillsDefault}
                 mode='multiple'
@@ -249,26 +256,26 @@ const Profile = ({ next }: Props) => {
                 optionLabelProp='label'
                 options={skills}
               />
-            )}
           </Form.Item>
-
-          {!belongsOrganizer ? (
+            )}
+          
+          {!belongsOrganizer && flag ? (
             <Form.Item
-              label='Thuộc tổ chức'
-              name='belongsOrganizer'
-              rules={[{ required: true, message: 'Chưa điền tổ chức' }]}
+            label='Thuộc tổ chức'
+            name='belongsOrganizer'
+            rules={[{ required: false, message: 'Chưa điền tổ chức' }]}
             >
-              <Select
-                defaultValue={belongsOrganizer && belongsOrganizer}
-                placeholder='select one belongsOrganizer'
-                optionLabelProp='label'
-                options={organizers}
-              />
+            <Select
+            defaultValue={belongsOrganizer && belongsOrganizer}
+            placeholder='Chọn tổ chức bạn muốn gia nhập'
+            optionLabelProp='label'
+            options={organizers}
+            />
             </Form.Item>
-          ) : (
-            <p>Thuộc tổ chức: {organizersCurrent && organizersCurrent.name}</p>
-          )}
-
+            ) : (
+              flag && <p>Thuộc tổ chức: {organizersCurrent && organizersCurrent.name}</p>
+            )}
+              
           <Form.Item style={{ textAlign: 'center' }}>
             <Button
               type='primary'
@@ -280,7 +287,7 @@ const Profile = ({ next }: Props) => {
           </Form.Item>
         </Form>
       </Card>
-      {data && data.data.data.activityApplied && (
+      {data && data.data.data.activityApplied  && (
         <div className='w-full flex flex-col justify-start items-start'>
           <p>Các hoạt động đã tham gia:</p>
           {data.data.data.activityApplied.map((item: any) => (

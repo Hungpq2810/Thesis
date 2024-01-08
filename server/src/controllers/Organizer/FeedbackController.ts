@@ -23,10 +23,7 @@ export const listFeedBackByOrganizer = async (
       return;
     }
 
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const organizerId = decodedToken.id;
     const organizer = await Users.findOne({
       where: { id: organizerId, role_id: 2 },

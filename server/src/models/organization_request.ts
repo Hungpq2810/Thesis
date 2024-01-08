@@ -1,7 +1,7 @@
-import { Association, DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../db';
-import { Users } from './users';
-import { Organization } from './organization';
+import { Association, DataTypes, Model, Optional } from "sequelize";
+import { sequelize } from "../db";
+import { Users } from "./users";
+import { Organization } from "./organization";
 
 export interface OrganizationRequestAttributes {
   id: number;
@@ -12,7 +12,7 @@ export interface OrganizationRequestAttributes {
   updated_at: Date;
 }
 interface OrganizationRequestCreationAttributes
-  extends Optional<OrganizationRequestAttributes, 'id'> {}
+  extends Optional<OrganizationRequestAttributes, "id"> {}
 
 class OrganizationRequest
   extends Model<
@@ -64,11 +64,11 @@ OrganizationRequest.init(
     },
   },
   {
-    tableName: 'organization_request',
+    tableName: "organization_request",
     sequelize: sequelize,
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-  },
+  }
 );
 export { OrganizationRequest };

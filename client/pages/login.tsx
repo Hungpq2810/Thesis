@@ -29,10 +29,12 @@ const Login = ({}: Props) => {
         setCookie(APP_SAVE_KEYS.ROLE, decodeData.role_id);
         dispatch(
           login({
-            role: decodeData.role_id,
-            userName: decodeData.username,
+            role_id: decodeData.role_id,
+            username: decodeData.username,
             id: decodeData.id,
-            avatar: decodeData.avatar
+            avatar: decodeData.avatar,
+            name: decodeData.name,
+            email: decodeData.email
           })
         );
         message.success('Đăng nhập thành công');
@@ -50,9 +52,12 @@ const Login = ({}: Props) => {
       const decodeData: any = jwt_decode(key);
       dispatch(
         login({
-          userName: decodeData.username,
-          role: decodeData.role_id,
-          id: decodeData.id
+          role_id: decodeData.role_id,
+            username: decodeData.username,
+            id: decodeData.id,
+            avatar: decodeData.avatar,
+            name: decodeData.name,
+            email: decodeData.email
         })
       );
       router.push('/');

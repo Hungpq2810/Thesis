@@ -38,12 +38,19 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
   const [form] = useForm();
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const isEditIdValidNumber = typeof editId === 'number';
+  
   const { data } = useQuery(
     ['activity'],
     () => activityService.getActivityById(editId as number),
     {
       enabled: isEditIdValidNumber
     }
+  );
+  const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(
+    data?.data.data.skillsActivity?.map((skill) => ({
+      label: skill.name,
+      value: skill.id
+    }))
   );
   const { data: skills } = useQuery(
     ['skills'],
@@ -60,12 +67,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       }
     }
   );
-  const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(
-    data?.data.data.skillsActivity?.map((skill) => ({
-      label: skill.name,
-      value: skill.id
-    }))
-  );
+  
   const newMutation = useMutation({
     mutationKey: 'NewActivity',
     mutationFn: (body: {
@@ -177,7 +179,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
           name='description'
           rules={[{ required: true, message: 'Chưa điền mô tả' }]}
         >
-          <Input.TextArea autoSize={{ minRows: 3, maxRows: 6 }} />
+          <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} />
         </Form.Item>
 
         <Form.Item
@@ -194,8 +196,8 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
 
         <Form.Item
           label='Từ ngày'
-          name='from_at'
-          rules={[{ required: true, message: 'Chưa điền từ ngày' }]}
+          name='register_from'
+          rules={[{ required: true, message: 'Chưa điền ngày bắt đầu đăng ký' }]}
           getValueFromEvent={(onChange) => dayjs(onChange).format('YYYY-MM-DD')}
           getValueProps={(i) => ({ value: dayjs(i) })}
         >
@@ -204,8 +206,8 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
 
         <Form.Item
           label='Đến ngày'
-          name='to_at'
-          rules={[{ required: true, message: 'Chưa điền đến ngày' }]}
+          name='register_to'
+          rules={[{ required: true, message: 'Chưa điền đến ngày kết thúc đăng ký' }]}
           getValueFromEvent={(onChange) => dayjs(onChange).format('YYYY-MM-DD')}
           getValueProps={(i) => ({ value: dayjs(i) })}
         >
@@ -213,9 +215,29 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
         </Form.Item>
 
         <Form.Item
-          label='Số lượng TN tối đa'
+          label='Ngày bắt đầu hoạt động'
+          name='start_date'
+          rules={[{ required: true, message: 'Chưa điền đến ngày bắt đầu hoạt động' }]}
+          getValueFromEvent={(onChange) => dayjs(onChange).format('YYYY-MM-DD')}
+          getValueProps={(i) => ({ value: dayjs(i) })}
+        >
+          <DatePicker />
+        </Form.Item>
+
+        <Form.Item
+          label='Ngày kết thúc hoạt động'
+          name='end_date'
+          rules={[{ required: true, message: 'Chưa điền đến ngày kết thúc đăng ký' }]}
+          getValueFromEvent={(onChange) => dayjs(onChange).format('YYYY-MM-DD')}
+          getValueProps={(i) => ({ value: dayjs(i) })}
+        >
+          <DatePicker />
+        </Form.Item>
+
+        <Form.Item
+          label='Số lượng TNV tối đa'
           name='max_of_volunteers'
-          rules={[{ required: true, message: 'Chưa điền số lượng TN tối đa' }]}
+          rules={[{ required: true, message: 'Chưa điền số lượng TNV tối đa' }]}
         >
           <Input type='number' />
         </Form.Item>
@@ -240,7 +262,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
           <Select
             defaultValue={skillsDefault && skillsDefault}
             mode='multiple'
-            placeholder='select one skills'
+            placeholder='Chọn kỹ năng cho hoạt động'
             optionLabelProp='label'
             options={skills}
           />

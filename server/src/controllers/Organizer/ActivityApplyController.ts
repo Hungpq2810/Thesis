@@ -25,10 +25,7 @@ export const listApplyVolunteers = async (
       res.status(401).json({ message: 'Unauthorized' });
       return;
     }
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const organizerId = decodedToken.id;
     const organizer = await Users.findOne({
       where: {
@@ -41,9 +38,7 @@ export const listApplyVolunteers = async (
       const activityExits = await Activities.findAll({
         where: { creator: organizerId },
       });
-      const activityIds = activityExits.map(
-        (activity) => activity.id,
-      );
+      const activityIds = activityExits.map((activity) => activity.id);
       const appliedVolunteersCurrent = await ActivityApply.findAll({
         where: { activity_id: activityIds },
       });
@@ -89,10 +84,7 @@ export const updateApplyVolunteer = async (
       res.status(401).json({ message: 'Unauthorized' });
       return;
     }
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const organizerId = decodedToken.id;
     const organizer = await Users.findOne({
       where: {
@@ -115,7 +107,7 @@ export const updateApplyVolunteer = async (
           );
           if (result && activity) {
             const resultTwo = await activity.update({
-              num_of_volunteers: activity.num_of_volunteers + 1,
+              num_of_accepted: activity.num_of_accepted + 1,
               updated_at: new Date(),
             });
             if (resultTwo) {

@@ -8,9 +8,7 @@ import { Organization } from '../models/organization';
 import { SkillActivities } from '../models/skill_activities';
 import { Skills } from '../models/skills';
 
-export const mappedActivities = (
-  activities: ActivityAttributes[],
-) => {
+export const mappedActivities = (activities: ActivityAttributes[]) => {
   const result = activities.map(async (activity) => {
     const {
       id,
@@ -18,9 +16,12 @@ export const mappedActivities = (
       description,
       image,
       location,
+      num_of_accepted,
       max_of_volunteers,
-      from_at,
-      to_at,
+      register_from,
+      register_to,
+      start_date,
+      end_date,
       status,
       created_at,
       updated_at,
@@ -38,9 +39,9 @@ export const mappedActivities = (
       });
       const mappedVolunteersApplied =
         await activityApplyMapper(volunteersApplied);
-      const countVolunteersApplied = await ActivityApply.count({
-        where: { activity_id: id },
-      });
+      // const countVolunteersApplied = await ActivityApply.count({
+      //   where: { activity_id: id },
+      // });
       const skillsActivity = await SkillActivities.findAll({
         where: { activity_id: id },
       });
@@ -49,9 +50,7 @@ export const mappedActivities = (
         where: { id: skillIds },
       });
       const skillsWithDetails = skillsActivity.map((activity) => {
-        const skill = skills.find(
-          (skill) => skill.id === activity.skill_id,
-        );
+        const skill = skills.find((skill) => skill.id === activity.skill_id);
         return skill;
       });
       const inforOrganizer = await Organization.findOne({
@@ -63,10 +62,12 @@ export const mappedActivities = (
         description,
         image,
         location,
-        num_of_volunteers: countVolunteersApplied,
+        num_of_accepted,
         max_of_volunteers,
-        from_at,
-        to_at,
+        register_from,
+        register_to,
+        start_date,
+        end_date,
         status,
         created_at,
         updated_at,

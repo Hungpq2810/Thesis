@@ -67,55 +67,16 @@ const ActivityManagement = ({}: Props) => {
       key: 'location'
     },
     {
-      title: 'Số lượng TNV đăng ký / tối đa',
+      title: 'Số lượng TNV đã duyệt / tối đa',
       key: 'num_of_volunteers',
       render: (_, record) => (
         <div className='w-full pr-5 max-h-[300px] overflow-y-scroll flex flex-col justify-start items-start gap-3'>
           <p>
-            {record.num_of_volunteers} / {record.max_of_volunteers}
+            {record.num_of_accepted} / {record.max_of_volunteers}
           </p>
-          {record.volunteersApplied &&
-            record.volunteersApplied.map((volunteer) => (
-              <>
-                <div className='w-2/3 flex justify-between items-center'>
-                  {/* <Image src={volunteer.avatar} width={50} height={50} className='rounded-lg' /> */}
-                  {/* <p>{volunteer.name}</p> */}
-                </div>
-                {/* <p>
-                  Trạng thái:
-                  {volunteer.status === 0
-                    ? ' Đăng ký'
-                    : volunteer.status === 1
-                    ? ' Phê duyệt'
-                    : volunteer.status === 2
-                    ? ' Không phê duyệt'
-                    : volunteer.status === 3
-                    ? ' Tham gia'
-                    : ' Không tham gia'}
-                </p> */}
-              </>
-            ))}
         </div>
       )
     },
-    // {
-    //   title: 'Feedbacks',
-    //   key: 'feedback',
-    //   render: (_, record) => (
-    //     <div className='w-full flex flex-col justify-start items-start gap-3'>
-    //       {record.feedback &&
-    //         record.feedback.map(feedback => (
-    //           <>
-    //             <div className='w-full flex justify-between items-center'>
-    //               {/* <Image src={feedback.avatar} width={50} height={50} className='rounded-lg' /> */}
-    //               <p>Người feedback: <br />{feedback.name}</p>
-    //             </div>
-    //             <p>Nội dung: {feedback.content}</p>
-    //           </>
-    //         ))}
-    //     </div>
-    //   )
-    // },
     {
       title: 'Hình ảnh',
       key: 'status',

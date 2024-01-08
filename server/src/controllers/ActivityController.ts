@@ -1,9 +1,6 @@
 import { Request, Response } from 'express';
 import * as dotenv from 'dotenv';
-import {
-  GeneralResponse,
-  commonResponse,
-} from '../utilities/CommonResponse';
+import { GeneralResponse, commonResponse } from '../utilities/CommonResponse';
 import { Activities, ActivityAttributes } from '../models/activities';
 import { Op } from 'sequelize';
 import { SkillActivities } from '../models/skill_activities';
@@ -17,9 +14,7 @@ export const listActivity = async (
 ): Promise<void> => {
   try {
     const activitiesCurrent = await Activities.findAll();
-    const activities = await Promise.all(
-      mappedActivities(activitiesCurrent),
-    );
+    const activities = await Promise.all(mappedActivities(activitiesCurrent));
     if (activities.length > 0) {
       const response: GeneralResponse<{
         activities: ActivityAttributes[];
@@ -60,9 +55,7 @@ export const detailActivity = async (
 
     if (activity) {
       const activities = [activity];
-      const mappedResult = await Promise.all(
-        mappedActivities(activities),
-      );
+      const mappedResult = await Promise.all(mappedActivities(activities));
 
       if (mappedResult.length > 0) {
         const resolvedActivity = mappedResult[0];
@@ -101,10 +94,7 @@ export const detailActivity = async (
   }
 };
 
-export const searchActivities = async (
-  req: Request,
-  res: Response,
-) => {
+export const searchActivities = async (req: Request, res: Response) => {
   try {
     const { key } = req.query;
     let activities;

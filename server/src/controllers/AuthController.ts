@@ -1,33 +1,35 @@
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { UserAttributes, Users } from '../models/users';
-import {
-  GeneralResponse,
-  commonResponse,
-} from '../utilities/CommonResponse';
+import { GeneralResponse, commonResponse } from '../utilities/CommonResponse';
 import * as dotenv from 'dotenv';
 dotenv.config();
+import bcrypt from 'bcrypt';
 const secretKey = process.env.SECRETKEY as string;
 
-export const login = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+export const login = async (req: Request, res: Response): Promise<void> => {
   const { username, password } = req.body;
+  console.log(req.body);
   try {
     const account = await Users.findOne({
       where: {
         username,
-        password,
         status: 0,
       },
     });
+
     if (account) {
       // const isPasswordValid = await bcrypt.compare(password, account.password);
       const isPasswordValid = true;
       if (isPasswordValid) {
         const user = account.toJSON();
-        const token = jwt.sign(user, secretKey);
+        const objectToken = {
+        id: user.id,
+        username: user.username,
+        role_id: user.role_id,
+        email: user.email,
+      };
+      const token = jwt.sign(objectToken, secretKey);
         const response: GeneralResponse<{ token: string }> = {
           status: 200,
           data: { token },
@@ -59,10 +61,7 @@ export const login = async (
   }
 };
 
-export const register = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
       username,

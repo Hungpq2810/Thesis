@@ -6,12 +6,10 @@ import {
   commonResponse,
 } from '../../utilities/CommonResponse';
 import { Users } from '../../models/users';
-import {
-  Activities,
-  ActivityAttributes,
-} from '../../models/activities';
+import { Activities, ActivityAttributes } from '../../models/activities';
 import { SkillActivities } from '../../models/skill_activities';
 import { mappedActivities } from '../../mapper/ActivityMapper';
+
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
@@ -26,10 +24,7 @@ export const createActivity = async (
       return;
     }
 
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const organizerId = decodedToken.id;
 
     const organizer = await Users.findOne({
@@ -42,12 +37,14 @@ export const createActivity = async (
         name: req.body.name as string,
         description: req.body.description as string,
         location: req.body.location as string,
-        num_of_volunteers: 0,
+        num_of_accepted: 0,
         max_of_volunteers: req.body.max_of_volunteers,
         image: req.body.image as string,
-        status: 1,
-        from_at: req.body.from_at,
-        to_at: req.body.to_at,
+        status: req.body.status,
+        register_from: req.body.register_from,
+        register_to: req.body.register_to,
+        start_date: req.body.start_date,
+        end_date: req.body.end_date,
         created_at: new Date(),
         updated_at: new Date(),
       };
@@ -63,9 +60,7 @@ export const createActivity = async (
                 created_at: new Date(),
                 updated_at: new Date(),
               };
-              return await SkillActivities.create(
-                bodySkillActivities,
-              );
+              return await SkillActivities.create(bodySkillActivities);
             },
           );
           await Promise.all(skillActivitiesPromises);
@@ -93,10 +88,7 @@ export const updateActivity = async (
       return;
     }
 
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const organizerId = decodedToken.id;
     const organizer = await Users.findOne({
       where: { id: organizerId, role_id: 2 },
@@ -112,26 +104,28 @@ export const updateActivity = async (
           name: req.body.name as string,
           description: req.body.description as string,
           location: req.body.location as string,
-          num_of_volunteers: 0,
           max_of_volunteers: req.body.max_of_volunteers,
+          start_date: req.body.start_date,
+          end_date: req.body.end_date,
           image: req.body.image as string,
           status: req.body.status,
-          from_at: req.body.from_at,
-          to_at: req.body.to_at,
+          register_from: req.body.register_from,
+          register_to: req.body.register_to,
           updated_at: new Date(),
         };
+        const today = new Date()
+        if (today > updatedActivity.register_to)
+          updatedActivity.status = 1;
 
         await Activities.update(updatedActivity, {
           where: { id: activityId },
         });
 
-        const existingSkillActivities = await SkillActivities.findAll(
-          {
-            where: {
-              activity_id: activityId,
-            },
+        const existingSkillActivities = await SkillActivities.findAll({
+          where: {
+            activity_id: activityId,
           },
-        );
+        });
         const existingSkills = existingSkillActivities.map(
           (skillActivity) => skillActivity.skill_id,
         );
@@ -184,10 +178,7 @@ export const deleteActivity = async (
       return;
     }
 
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const organizerId = decodedToken.id;
     const organizer = await Users.findOne({
       where: { id: organizerId, role_id: 2 },

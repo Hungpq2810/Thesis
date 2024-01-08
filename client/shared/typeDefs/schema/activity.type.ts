@@ -13,10 +13,12 @@ export interface IActivity {
   description: string;
   image: string;
   location: string;
-  num_of_volunteers: number;
+  num_of_accepted: number;
   max_of_volunteers: number;
-  from_at: string;
-  to_at: string;
+  register_from: string;
+  register_to: string;
+  start_date: string;
+  end_date: string;
   status: number;
   created_at: string;
   updated_at: string;

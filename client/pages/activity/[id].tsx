@@ -40,7 +40,7 @@ const DetailActivity = ({ activity }: Props) => {
   );
   const currentDate = new Date();
   const router = useRouter();
-  const { user } = useAppSelector((state) => state.appSlice);
+  const { user } = useAppSelector((state) => state.appSlice); 
 
   const newFeedbackMutation = useMutation({
     mutationKey: 'newFeedback',
@@ -133,35 +133,46 @@ const DetailActivity = ({ activity }: Props) => {
                   />
                 ))}
               </div>
+              <h3>Đơn vị tổ chức: {activity.data.inforOrganizer?.name}</h3>
             </div>
-            <h3 style={{ whiteSpace: 'pre-line' }}>
-              Mô tả hoạt động:
+            <span style={{ whiteSpace: 'pre-line' }}>
+              <h3>Mô tả hoạt động:</h3>
               <br></br>
               {activity.data.description}
-            </h3>
+            </span>
             <div className='w-full flex justify-between items-center'>
-              <p>
-                Số lượng tình nguyện đã đăng ký:{' '}
-                {activity.data.num_of_volunteers}
-              </p>
-              {/* dayjs(activity.data.from_at).format('DD/MM/YYYY') */}
-              <p>
-                Số lượng tình nguyện tối đa: {activity.data.max_of_volunteers}
-              </p>
+              <h3>
+                Số lượng tình nguyện viên đã được duyệt:{' '}
+                {activity.data.num_of_accepted}
+              </h3>
+              {/* dayjs(activity.data.register_from).format('DD/MM/YYYY') */}
+              <h3>
+                Số lượng tình nguyện viên tối đa: {activity.data.max_of_volunteers}
+              </h3>
             </div>
             <div className='w-full flex justify-between items-center'>
-              <p>
+              <h3>
                 Thời gian bắt đầu đăng ký:{' '}
-                {dayjs(activity.data.from_at).format('DD/MM/YYYY')}
-              </p>
-              <p>
+                {dayjs(activity.data.register_from).format('DD/MM/YYYY')}
+              </h3>
+              <h3>
                 Thời gian kết thúc đăng ký:{' '}
-                {dayjs(activity.data.to_at).format('DD/MM/YYYY')}
-              </p>
+                {dayjs(activity.data.register_to).format('DD/MM/YYYY')}
+              </h3>
             </div>
-            {activity.data.num_of_volunteers ===
+            <div className='w-full flex justify-between items-center'>
+              <h3>
+                Thời gian bắt đầu sự kiện:{' '}
+                {dayjs(activity.data.start_date).format('DD/MM/YYYY')}
+              </h3>
+              <h3>
+                Thời gian kết thúc sự kiện:{' '}
+                {dayjs(activity.data.end_date).format('DD/MM/YYYY')}
+              </h3>
+            </div>
+            {activity.data.num_of_accepted ===
               activity.data.max_of_volunteers ||
-            new Date(activity.data.to_at).getTime() < currentDate.getTime() ? (
+            new Date(activity.data.register_to).getTime() < currentDate.getTime() ? (
               <>
                 <p>
                   Đã đủ tình nguyện viên tham gia hoặc hoạt động hết hạn tham
@@ -172,32 +183,21 @@ const DetailActivity = ({ activity }: Props) => {
               <>
                 {activity.data.status === 0 && user ? (
                   <>
-                    {userDetail &&
-                    userDetail.some(
-                      (item: any) => item.activity_id === activity.data.id
-                    ) ? (
+                    {userDetail && userDetail.some((item: any) => item.activity_id === activity.data.id) ? (
                       <>
                         <p>Bạn đã đăng ký</p>
-                        <Button
-                          onClick={() =>
-                            cancelActivityMutation.mutate({
-                              activity_id: activity.data.id
-                            })
-                          }
-                        >
+                        <Button onClick={() => cancelActivityMutation.mutate({ activity_id: activity.data.id })}>
                           Huỷ đăng ký
                         </Button>
                       </>
                     ) : (
                       <Button
                         onClick={() => {
-                          applyActivityMutation.mutate({
-                            activity_id: activity.data.id
-                          });
+                          applyActivityMutation.mutate({ activity_id: activity.data.id })
                           setTimeout(() => {
-                            router.push('/activity');
-                            message.success('Đăng ký thành công');
-                          }, 500);
+                            router.push('/activity')
+                            message.success('Đăng ký thành công')
+                          }, 500)
                         }}
                       >
                         Đăng ký
@@ -210,7 +210,7 @@ const DetailActivity = ({ activity }: Props) => {
                       !user ? router.push('/login') : router.push('/activity')
                     }
                   >
-                    Vui lòng đăng ký tài khoản hoặc chờ hoạt động khác
+                    Bạn không phải tình nguyện viên hoặc chưa đăng nhập
                   </Button>
                 )}
               </>

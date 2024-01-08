@@ -21,10 +21,7 @@ export const getVolunteer = async (
       res.status(401).json({ message: 'Unauthorized' });
       return;
     }
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
     if (user) {
@@ -73,10 +70,7 @@ export const removeVolunteer = async (
       res.status(401).json({ message: 'Unauthorized' });
       return;
     }
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
     if (user) {

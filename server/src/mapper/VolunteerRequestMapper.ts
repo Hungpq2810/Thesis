@@ -8,14 +8,8 @@ export const volunteerRequestMapper = async (
 ) => {
   const result = await Promise.all(
     volunteerRequests.map(async (volunteerRequest) => {
-      const {
-        id,
-        user_id,
-        status,
-        organization_id,
-        created_at,
-        updated_at,
-      } = volunteerRequest;
+      const { id, user_id, status, organization_id, created_at, updated_at } =
+        volunteerRequest;
 
       try {
         const user = await Users.findByPk(user_id);

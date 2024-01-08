@@ -20,7 +20,7 @@ const FAQPage = () => {
           dataFaq.data.data.faqs.map((faq) => (
             <Collapse key={faq.id} collapsible='icon' defaultActiveKey={['1']}>
               <Panel header={faq.question} key='1'>
-                <p>{faq.answer}</p>
+                <span style={{ whiteSpace: 'pre-line' }}>{faq.answer}</span>
                 <p>
                   Cập nhật lúc: {dayjs(faq.updated_at).format('DD/MM/YYYY')}
                 </p>

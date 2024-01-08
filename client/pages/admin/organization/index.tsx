@@ -19,6 +19,8 @@ const OrganizationManagement = ({}: Props) => {
     ['listOrganizationAdmin'],
     () => organizationService.listOrganizationAdmin()
   );
+  console.log(dataOrganization);
+  
   const deleteMutation = useMutation({
     mutationKey: ['deleteMutation'],
     mutationFn: (userId: number) => userService.deleteUser(userId),
@@ -39,6 +41,11 @@ const OrganizationManagement = ({}: Props) => {
           <p>{index + 1}</p>
         </div>
       )
+    },
+    {
+      title: 'Id tổ chức',
+      dataIndex: 'orgId',
+      render:(_, record) => <p>{record.orgId}</p>
     },
     {
       title: 'Tên',
@@ -62,12 +69,12 @@ const OrganizationManagement = ({}: Props) => {
       dataIndex: 'creator',
       render: (_, record) => (
         <div className='w-1/3 flex justify-between items-center'>
-          <img
+          {/* <img
             src={record.creator.avatar}
             width={30}
             height={30}
             className='rounded-full'
-          />
+          /> */}
           <p>{record.creator.name}</p>
         </div>
       )

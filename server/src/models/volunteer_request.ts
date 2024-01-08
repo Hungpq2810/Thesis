@@ -15,10 +15,7 @@ interface VolunteerRequestCreationAttributes
   extends Optional<VolunteerRequestAttributes, 'id'> {}
 
 class VolunteerRequest
-  extends Model<
-    VolunteerRequestAttributes,
-    VolunteerRequestCreationAttributes
-  >
+  extends Model<VolunteerRequestAttributes, VolunteerRequestCreationAttributes>
   implements VolunteerRequestAttributes
 {
   public id!: number;

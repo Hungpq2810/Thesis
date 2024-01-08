@@ -25,11 +25,13 @@ const OrganizationPage = () => {
           dataOrganization.data &&
           dataOrganization.data.data.organizations.map((item) => (
             <Card key={item.id} style={{ width: 400 }}>
-              <div className='flex justify-between items-center'>
-                <p>Tên: {item.name}</p>
-                <p>Mô tả: {item.description}</p>
-              </div>
-              <p>Người đứng đầu: {item.creator.name}</p>
+              <h4 className=''>Tên: {item.name}</h4>
+              <p><strong>Người đứng đầu:</strong> {item.creator.name}</p>  
+              
+              <span style={{ whiteSpace: 'pre-line' }}> <strong> Mô tả: </strong>
+              <br />
+              {item.description}
+              </span>
             </Card>
           ))}
       </div>

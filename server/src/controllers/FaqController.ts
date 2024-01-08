@@ -1,13 +1,7 @@
 import { Request, Response } from 'express';
-import {
-  GeneralResponse,
-  commonResponse,
-} from '../utilities/CommonResponse';
+import { GeneralResponse, commonResponse } from '../utilities/CommonResponse';
 import { FAQ, FAQAttributes } from '../models/faq';
-export const listFaq = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+export const listFaq = async (req: Request, res: Response): Promise<void> => {
   try {
     const faqs = await FAQ.findAll();
     const response: GeneralResponse<{

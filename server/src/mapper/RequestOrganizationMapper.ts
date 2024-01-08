@@ -7,27 +7,20 @@ export const requestOrganizationMapper = async (
 ) => {
   const result = await Promise.all(
     requestOrganizations.map(async (request) => {
-      const {
-        id,
-        user_id,
-        organization_id,
-        status,
-        created_at,
-        updated_at,
-      } = request;
+      const { id, user_id, organization_id, status, created_at, updated_at } =
+        request;
+      if (status !== 1)
+        return null;
       try {
         const user = await Users.findByPk(user_id);
-        const organizer =
-          await Organization.findByPk(organization_id);
+        const organizer = await Organization.findOne({ where: {
+          orgId: organization_id
+        } });
 
         const userName = user ? user.name : null;
         const organizerName = organizer ? organizer.name : null;
-        const organizerDescription = organizer
-          ? organizer.description
-          : null;
-        const organizerLocation = organizer
-          ? organizer.location
-          : null;
+        const organizerDescription = organizer ? organizer.description : null;
+        const organizerLocation = organizer ? organizer.location : null;
 
         return {
           id,

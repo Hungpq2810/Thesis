@@ -7,14 +7,8 @@ export const activityApplyMapper = async (
 ) => {
   const result = await Promise.all(
     activityApplies.map(async (activityApply) => {
-      const {
-        id,
-        user_id,
-        activity_id,
-        status,
-        created_at,
-        updated_at,
-      } = activityApply;
+      const { id, user_id, activity_id, status, created_at, updated_at } =
+        activityApply;
 
       try {
         const user = await Users.findByPk(user_id);

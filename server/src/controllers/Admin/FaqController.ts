@@ -5,10 +5,7 @@ import {
 } from '../../utilities/CommonResponse';
 import { FAQ } from '../../models/faq';
 
-export const createFaq = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+export const createFaq = async (req: Request, res: Response): Promise<void> => {
   try {
     const body = {
       question: req.body.question,
@@ -35,10 +32,7 @@ export const createFaq = async (
     commonResponse(req, res, response);
   }
 };
-export const updateFaq = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+export const updateFaq = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const faq = await FAQ.findByPk(id);
@@ -71,10 +65,7 @@ export const updateFaq = async (
     commonResponse(req, res, response);
   }
 };
-export const deleteFaq = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+export const deleteFaq = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const faq = await FAQ.findByPk(id);

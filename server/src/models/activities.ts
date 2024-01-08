@@ -9,10 +9,12 @@ export interface ActivityAttributes {
   description: string;
   image: string;
   location: string;
-  num_of_volunteers: number;
+  num_of_accepted: number;
   max_of_volunteers: number;
-  from_at: Date;
-  to_at: Date;
+  register_from: Date;
+  register_to: Date;
+  start_date: Date;
+  end_date: Date;
   status: number;
   created_at: Date;
   updated_at: Date;
@@ -30,10 +32,12 @@ class Activities
   public description!: string;
   public image!: string;
   public location!: string;
-  public num_of_volunteers!: number;
+  public num_of_accepted!: number;
   public max_of_volunteers!: number;
-  public from_at!: Date;
-  public to_at!: Date;
+  public register_from!: Date;
+  public register_to!: Date;
+  public start_date!: Date;
+  public end_date!: Date;
   public status!: number;
   public created_at!: Date;
   public updated_at!: Date;
@@ -71,9 +75,9 @@ Activities.init(
       type: new DataTypes.STRING(100),
       allowNull: false,
     },
-    num_of_volunteers: {
+    num_of_accepted: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     max_of_volunteers: {
       type: DataTypes.INTEGER,
@@ -83,11 +87,19 @@ Activities.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    from_at: {
+    register_from: {
       type: DataTypes.DATE(),
       allowNull: false,
     },
-    to_at: {
+    register_to: {
+      type: DataTypes.DATE(),
+      allowNull: false,
+    },
+    start_date: {
+      type: DataTypes.DATE(),
+      allowNull: false,
+    },
+    end_date: {
       type: DataTypes.DATE(),
       allowNull: false,
     },

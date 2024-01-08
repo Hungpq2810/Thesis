@@ -16,10 +16,7 @@ interface ActivityApplyCreationAttributes
   extends Optional<ActivityApplyAttributes, 'id'> {}
 
 class ActivityApply
-  extends Model<
-    ActivityApplyAttributes,
-    ActivityApplyCreationAttributes
-  >
+  extends Model<ActivityApplyAttributes, ActivityApplyCreationAttributes>
   implements ActivityApplyAttributes
 {
   public id!: number;

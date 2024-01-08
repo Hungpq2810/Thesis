@@ -1,10 +1,7 @@
 import { Request, Response } from 'express';
 import * as dotenv from 'dotenv';
 import * as jwt from 'jsonwebtoken';
-import {
-  GeneralResponse,
-  commonResponse,
-} from '../utilities/CommonResponse';
+import { GeneralResponse, commonResponse } from '../utilities/CommonResponse';
 import { Users } from '../models/users';
 import { VolunteerRequest } from '../models/volunteer_request';
 import { EmailDetails, EmailUtils } from '../utilities/EmailUtils';
@@ -21,10 +18,7 @@ export const requestVolunteer = async (
       res.status(401).json({ message: 'Unauthorized' });
       return;
     }
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
     if (user) {
@@ -52,9 +46,7 @@ export const requestVolunteer = async (
         } else {
           const body = {
             user_id: Number(userId) as number,
-            organization_id: Number(
-              req.body.organization_id,
-            ) as number,
+            organization_id: Number(req.body.organization_id) as number,
             status: 1,
             created_at: new Date(),
             updated_at: new Date(),
@@ -99,10 +91,7 @@ export const cancelRequestVolunteer = async (
       res.status(401).json({ message: 'Unauthorized' });
       return;
     }
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
     if (user) {

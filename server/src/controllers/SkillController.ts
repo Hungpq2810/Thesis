@@ -1,8 +1,5 @@
 import { Request, Response } from 'express';
-import {
-  GeneralResponse,
-  commonResponse,
-} from '../utilities/CommonResponse';
+import { GeneralResponse, commonResponse } from '../utilities/CommonResponse';
 import { SkillAttributes, Skills } from '../models/skills';
 export const listSkills = async (
   req: Request,

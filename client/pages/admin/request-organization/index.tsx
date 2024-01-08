@@ -16,6 +16,8 @@ const RequestOrganizationManagement = ({}: Props) => {
     ['listRequestOrganization'],
     () => organizationService.getAllRequestOrganization()
   );
+  console.log(dataRequestOrganization);
+  
   const updateMutation = useMutation({
     mutationKey: ['updateMutation'],
     mutationFn: (body: { organization_id: number; status: number }) =>
@@ -39,6 +41,11 @@ const RequestOrganizationManagement = ({}: Props) => {
       )
     },
     {
+      title: 'Id tổ chức',
+      dataIndex: 'orgId',
+      render: (_, record) => <p>{record.organizer.id}</p>
+    },
+    {
       title: 'Tên người đăng ký',
       dataIndex: 'name',
       render: (_, record) => <p>{record.user.name}</p>
@@ -53,18 +60,11 @@ const RequestOrganizationManagement = ({}: Props) => {
       dataIndex: 'location_organizer',
       render: (_, record) => <p>{record.organizer.location}</p>
     },
+    // 
     {
-      title: 'Trạng thái',
-      dataIndex: 'status',
-      render: (_, record) => (
-        <p>
-          {record.status === 0
-            ? 'Phê duyệt'
-            : record.status === 1
-              ? 'Chưa phê duyệt'
-              : 'Không phê duyệt'}
-        </p>
-      )
+      title: 'Mô tả tổ chức',
+      dataIndex: 'description_organizer',
+      render: (_, record) => <p>{record.organizer.description}</p>
     },
     {
       title: 'Hành động',

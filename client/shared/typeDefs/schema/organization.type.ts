@@ -1,13 +1,15 @@
-import { ICreator } from '../baseReponse.type';
+import { IUser } from './../user.type';
+// import { IUser } from '../baseReponse.type';
 export interface IOrganizations {
   organizations: IOrganization[];
 }
 export interface IOrganization {
   id: number;
+  orgId: number;
   name: string;
   description: string;
   location: string;
-  creator: ICreator;
+  creator: IUser;
   status: number;
   created_at: string;
   updated_at: string;
@@ -17,7 +19,7 @@ export interface IRequestOrganizations {
 }
 export interface IRequestOrganization {
   id: number;
-  user: ICreator;
+  user: IUser;
   organizer: IOrganization;
   status: number;
   created_at: string;

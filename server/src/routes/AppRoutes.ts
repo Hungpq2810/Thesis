@@ -1,10 +1,6 @@
 import { listOrganizationAdmin } from './../controllers/Admin/OrganizationController';
 import express from 'express';
-import {
-  login,
-  register,
-  resetPassword,
-} from '../controllers/AuthController';
+import { login, register, resetPassword } from '../controllers/AuthController';
 import {
   deleteUser,
   getUserById,
@@ -12,14 +8,8 @@ import {
   updateUser,
 } from '../controllers/Admin/UserController';
 import { authenticateToken } from '../middleware/jwtMiddleware';
-import {
-  checkRoleAdmin,
-  checkRoleOrganizer,
-} from '../middleware/checkRole';
-import {
-  detailUser,
-  updateProfile,
-} from '../controllers/UserController';
+import { checkRoleAdmin, checkRoleOrganizer } from '../middleware/checkRole';
+import { detailUser, updateProfile } from '../controllers/UserController';
 import {
   createOrganization,
   listOrganization,
@@ -62,10 +52,7 @@ import {
   deleteSkill,
   updateSkill,
 } from '../controllers/Admin/SkillController';
-import {
-  listSkills,
-  getSkillById,
-} from '../controllers/SkillController';
+import { listSkills, getSkillById } from '../controllers/SkillController';
 import {
   listFeedBackNoAuth,
   newFeedBack,
@@ -92,12 +79,7 @@ router.post('/api/v1/register', register);
 router.post('/api/v1/reset_password', resetPassword);
 //Admin
 //User
-router.get(
-  '/api/v1/admin/users',
-  authenticateToken,
-  checkRoleAdmin,
-  listUser,
-);
+router.get('/api/v1/admin/users', authenticateToken, checkRoleAdmin, listUser);
 router.get(
   '/api/v1/admin/users/:id',
   authenticateToken,
@@ -168,12 +150,7 @@ router.delete(
   deleteSkill,
 );
 //FAQ
-router.post(
-  '/api/v1/admin/faq',
-  authenticateToken,
-  checkRoleAdmin,
-  createFaq,
-);
+router.post('/api/v1/admin/faq', authenticateToken, checkRoleAdmin, createFaq);
 router.put(
   '/api/v1/admin/faq/:id',
   authenticateToken,
@@ -295,17 +272,9 @@ router.post(
   authenticateToken,
   activityApplyVolunteer,
 );
-router.put(
-  '/api/v1/cancel_volunteer',
-  authenticateToken,
-  cancelApplyActivity,
-);
+router.put('/api/v1/cancel_volunteer', authenticateToken, cancelApplyActivity);
 //Request Join In Orgainzation By Volunteer
-router.post(
-  '/api/v1/request_volunteer',
-  authenticateToken,
-  requestVolunteer,
-);
+router.post('/api/v1/request_volunteer', authenticateToken, requestVolunteer);
 //Faq
 router.get('/api/v1/faq', listFaq);
 router.get('/api/v1/faq/:id', getFaqById);

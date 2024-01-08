@@ -1,10 +1,7 @@
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import {
-  GeneralResponse,
-  commonResponse,
-} from '../utilities/CommonResponse';
+import { GeneralResponse, commonResponse } from '../utilities/CommonResponse';
 import { UserAttributes, Users } from '../models/users';
 import { SkillUsers } from '../models/skill_users';
 import {
@@ -12,10 +9,7 @@ import {
   VolunteerRequestAttributes,
 } from '../models/volunteer_request';
 import { ActivityApply } from '../models/activity_apply';
-import {
-  Organization,
-  OrganizationAttributes,
-} from '../models/organization';
+import { Organization, OrganizationAttributes } from '../models/organization';
 import { activityApplyMapper } from '../mapper/ActivityApplyMapper';
 import { Skills } from '../models/skills';
 dotenv.config();
@@ -32,10 +26,7 @@ export const updateProfile = async (
       return;
     }
 
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
     if (!user) {
@@ -74,13 +65,13 @@ export const updateProfile = async (
       });
       await VolunteerRequest.create(requestApplyOrganizer);
       const body = req.body;
-      delete body.role_id;
+      // delete body.role_id;
       delete body.organization_id;
       const result = await user.update(body);
       const response: GeneralResponse<UserAttributes> = {
         status: 200,
         data: result.toJSON() as UserAttributes,
-        message: 'Update successfull',
+        message: 'Update successfully',
       };
       commonResponse(req, res, response);
     }
@@ -106,10 +97,7 @@ export const detailUser = async (
       return;
     }
 
-    const decodedToken = jwt.verify(
-      token,
-      secretKey,
-    ) as jwt.JwtPayload;
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
     if (!user) {
@@ -128,9 +116,7 @@ export const detailUser = async (
     const skillIds = userSkills.map((skill) => skill.skill_id);
     const skills = await Skills.findAll({ where: { id: skillIds } });
     const skillsWithDetails = userSkills.map((activity) => {
-      const skill = skills.find(
-        (skill) => skill.id === activity.skill_id,
-      );
+      const skill = skills.find((skill) => skill.id === activity.skill_id);
       return skill;
     });
     const userOrganizer = await VolunteerRequest.findOne({

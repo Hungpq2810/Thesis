@@ -2,9 +2,7 @@ import { Activities } from '../models/activities';
 import { FeedbackAttributes } from '../models/feedback';
 import { Users } from '../models/users';
 
-export const feedbackMapper = async (
-  feedbacks: FeedbackAttributes[],
-) => {
+export const feedbackMapper = async (feedbacks: FeedbackAttributes[]) => {
   const mappedFeedbacks = await Promise.all(
     feedbacks.map(async (feedback) => {
       const {

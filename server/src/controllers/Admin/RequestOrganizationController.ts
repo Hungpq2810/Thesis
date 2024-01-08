@@ -18,11 +18,11 @@ export const listRequestOrganization = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const requestOrganizationsCurrent =
-      await OrganizationRequest.findAll();
+    const requestOrganizationsCurrent = await OrganizationRequest.findAll();
     const requestOrganizations = await Promise.all(
       await requestOrganizationMapper(requestOrganizationsCurrent),
     );
+    
     if (requestOrganizations.length > 0) {
       const response: GeneralResponse<{
         requestOrganizations: OrganizationRequestAttributes[];
@@ -127,10 +127,9 @@ export const updateRequestOrganization = async (
     const checkStatus = req.body.status as number;
     if (checkStatus === 1) {
       const body = { status: 0, updated_at: new Date() };
-      const organizationRequestRecord =
-        await OrganizationRequest.findOne({
-          where: { organization_id: organizationId },
-        });
+      const organizationRequestRecord = await OrganizationRequest.findOne({
+        where: { organization_id: organizationId },
+      });
       console.log(organizationRequestRecord);
       if (organizationRequestRecord) {
         const result = await organizationRequestRecord.update(body);
@@ -140,8 +139,7 @@ export const updateRequestOrganization = async (
         if (result && accountUser) {
           const resultTwo = await accountUser.update({
             role_id: 2,
-            organization_id:
-              organizationRequestRecord.organization_id,
+            organization_id: organizationRequestRecord.organization_id,
             updated_at: new Date(),
           });
           if (resultTwo) {
@@ -158,8 +156,7 @@ export const updateRequestOrganization = async (
       const body = { status: 2, updated_at: new Date() };
       const organizationRequestRecord =
         await OrganizationRequest.findByPk(organizationId);
-      const organization =
-        await Organization.findByPk(organizationId);
+      const organization = await Organization.findByPk(organizationId);
       if (organizationRequestRecord && organization) {
         const result = await organizationRequestRecord.update(body);
         await organization.update({ status: 1 });

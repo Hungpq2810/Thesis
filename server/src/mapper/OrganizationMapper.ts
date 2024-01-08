@@ -8,6 +8,7 @@ export const organizationMapper = async (
     organizations.map(async (organization) => {
       const {
         id,
+        orgId,
         name,
         description,
         location,
@@ -24,6 +25,7 @@ export const organizationMapper = async (
 
         return {
           id,
+          orgId,
           name,
           description,
           location,
