@@ -7,9 +7,9 @@ import {
 } from '../../utilities/CommonResponse';
 import {
   VolunteerRequest,
-  VolunteerRequestAttributes,
 } from '../../models/volunteer_request';
 import { Users } from '../../models/users';
+import { volunteerRequestMapper } from '../../mapper/VolunteerRequestMapper';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
@@ -34,22 +34,14 @@ export const listRequestVolunteers = async (
     });
 
     if (organizer) {
-      const requestVolunteers = await VolunteerRequest.findAll({
-        where: {
-          organization_id: organizer.organization_id,
-        },
-        include: [
-          {
-            model: Users,
-            where: {
-              status: 0,
-            },
-          },
-        ],
+      const requestVolunteersCurrent = await VolunteerRequest.findAll({
+        where: { organization_id: organizer?.organization_id },
       });
+      const requestVolunteers = await volunteerRequestMapper(requestVolunteersCurrent);
+
       if (requestVolunteers.length > 0) {
         const response: GeneralResponse<{
-          requestVolunteers: VolunteerRequestAttributes[];
+          requestVolunteers: any[];
         }> = {
           status: 200,
           data: { requestVolunteers },
@@ -124,9 +116,19 @@ export const updateRequestVolunteer = async (
           }
         }
       } else {
-        const body = { status: 2, updated_at: new Date() };
+        const body = { 
+          user_id: volunteerId,
+          organization_id: organizer.organization_id,
+          status: 2, 
+          updated_at: new Date() 
+        };
         const volunteerRequestRecord =
-          await VolunteerRequest.findByPk(volunteerId);
+          await VolunteerRequest.findOne({
+            where: { 
+              user_id: volunteerId,
+              organization_id: organizer.organization_id 
+            }
+          });
         if (volunteerRequestRecord) {
           const result = await volunteerRequestRecord.update(body);
           if (result) {

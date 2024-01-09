@@ -4,7 +4,6 @@ import Search from 'antd/lib/input/Search';
 import { ColumnType } from 'antd/lib/table';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useMutation, useQuery } from 'react-query';
-import { userService } from '@/services/user.service';
 import React from 'react';
 import { organizationService } from '@/services/organization.service';
 import { IRequestOrganization } from '@/typeDefs/schema/organization.type';
@@ -41,30 +40,25 @@ const RequestOrganizationManagement = ({}: Props) => {
       )
     },
     {
-      title: 'Id tổ chức',
-      dataIndex: 'orgId',
-      render: (_, record) => <p>{record.organizer.id}</p>
-    },
-    {
       title: 'Tên người đăng ký',
       dataIndex: 'name',
       render: (_, record) => <p>{record.user.name}</p>
     },
     {
       title: 'Tên tổ chức',
-      dataIndex: 'name_organizer',
-      render: (_, record) => <p>{record.organizer.name}</p>
+      dataIndex: 'name_organization',
+      render: (_, record) => <p>{record.organization.name}</p>
     },
     {
       title: 'Địa chỉ tổ chức',
-      dataIndex: 'location_organizer',
-      render: (_, record) => <p>{record.organizer.location}</p>
+      dataIndex: 'location_organization',
+      render: (_, record) => <p>{record.organization.location}</p>
     },
     // 
     {
       title: 'Mô tả tổ chức',
-      dataIndex: 'description_organizer',
-      render: (_, record) => <p>{record.organizer.description}</p>
+      dataIndex: 'description_organization',
+      render: (_, record) => <p>{record.organization.description}</p>
     },
     {
       title: 'Hành động',
@@ -77,7 +71,7 @@ const RequestOrganizationManagement = ({}: Props) => {
                 okButtonProps={{ loading: updateMutation.isLoading }}
                 onConfirm={() => {
                   const body = {
-                    organization_id: record.organizer.id,
+                    organization_id: record.organization.id,
                     status: record.status
                   };
                   updateMutation.mutate(body);
@@ -90,7 +84,7 @@ const RequestOrganizationManagement = ({}: Props) => {
                 okButtonProps={{ loading: updateMutation.isLoading }}
                 onConfirm={() => {
                   const body = {
-                    organization_id: record.organizer.id,
+                    organization_id: record.organization.id,
                     status: 2
                   };
                   updateMutation.mutate(body);

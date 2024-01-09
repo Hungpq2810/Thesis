@@ -109,6 +109,40 @@ const SiderMenu = () => {
       ]
     }
   ];
+  const menuVolunteer = [
+    {
+      key: '/',
+      label: 'Trang chủ',
+      icon: <HomeOutlined />
+    },
+    {
+      key: '/volunteer',
+      icon: <AuditOutlined />,
+      label: 'Tình nguyện viên',
+      children: [
+        {
+          key: '/volunteer/activity',
+          icon: <MonitorOutlined />,
+          label: 'Hoạt động'
+        },
+        {
+          key: '/volunteer/feedback',
+          icon: <StarOutlined />,
+          label: 'Đánh giá'
+        },
+        {
+          key: '/volunteer/joinOrganization',
+          icon: <PullRequestOutlined />,
+          label: 'Tham gia tổ chức'
+        },
+        {
+          key: 'request_organization',
+          icon: <PullRequestOutlined />,
+          label: 'Trở thành tổ chức'
+        }
+      ]
+    }
+  ];
   return (
     <Sider
       style={{ backgroundColor: token.colorBgBase }}
@@ -151,7 +185,12 @@ const SiderMenu = () => {
         style={{ backgroundColor: token.colorBgBase }}
         defaultSelectedKeys={[router.pathname]}
         mode='inline'
-        items={user && +user?.role === 2 ? menuOrganizer : menuAdmin}
+        items={user && (
+          +user?.role_id === 3 ? menuAdmin :
+          +user?.role_id === 2 ? menuOrganizer :
+          +user?.role_id === 1 ? menuVolunteer :
+          menuAdmin
+        )}
         onClick={(menu) => {
           router.push(menu.key);
         }}

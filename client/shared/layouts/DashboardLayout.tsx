@@ -23,13 +23,19 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       const decodeData: any = jwt_decode(key);
       dispatch(
         login({
-          userName: decodeData.username,
-          role: decodeData.role_id,
-          id: decodeData.id
+          role_id: decodeData.role_id,
+            username: decodeData.username,
+            id: decodeData.id,
+            avatar: decodeData.avatar,
+            name: decodeData.name,
+            email: decodeData.email
         })
       );
     }
   }, []);
+  
+  console.log('abcabca')
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <SiderMenu />

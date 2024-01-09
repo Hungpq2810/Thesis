@@ -7,7 +7,7 @@ export interface ActivityAttributes {
   creator: number;
   name: string;
   description: string;
-  image: string;
+  image?: string;
   location: string;
   num_of_accepted: number;
   max_of_volunteers: number;
@@ -30,7 +30,7 @@ class Activities
   public creator!: number;
   public name!: string;
   public description!: string;
-  public image!: string;
+  public image: string|undefined;
   public location!: string;
   public num_of_accepted!: number;
   public max_of_volunteers!: number;
@@ -69,7 +69,7 @@ Activities.init(
     },
     image: {
       type: new DataTypes.STRING(1250),
-      allowNull: false,
+      allowNull: true,
     },
     location: {
       type: new DataTypes.STRING(100),

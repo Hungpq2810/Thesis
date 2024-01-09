@@ -10,7 +10,7 @@ import Search from 'antd/lib/input/Search';
 import { ColumnType } from 'antd/lib/table';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useMutation, useQuery } from 'react-query';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { activityService } from '@/services/activity.service';
 import { IAppliedVolunteer } from '@/typeDefs/schema/activity.type';
 import { useAppSelector } from '@/hooks/useRedux';
@@ -65,19 +65,25 @@ const ApplyActivityManagement = ({}: Props) => {
       message.error('Cập nhật không thành công');
     }
   });
-  let filterActivityByName: { text: string; value: string }[] = [];
 
+  const filterActivityByName: { text: string; value: string }[] = useMemo(() => {
+    
   if (dataApplyActivity) {
-    filterActivityByName = dataApplyActivity.map((item) => ({
+    console.log(dataApplyActivity);
+    
+
+    return dataApplyActivity.map((item) => ({
       text: item.activity!.name,
       value: item.activity!.name
     }));
   } else {
-    filterActivityByName.push({
+    return [{
       text: '',
       value: ''
-    });
+    }];
   }
+  }, [dataApplyActivity]);
+
   const columns: ColumnType<IAppliedVolunteer>[] = [
     {
       title: '#',
@@ -130,7 +136,7 @@ const ApplyActivityManagement = ({}: Props) => {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          {record.status ? (
+          {(
             <>
               <Popconfirm
                 okButtonProps={{ loading: updateMutation.isLoading }}
@@ -185,8 +191,6 @@ const ApplyActivityManagement = ({}: Props) => {
                 <ExclamationCircleOutlined className='cursor-pointer'></ExclamationCircleOutlined>
               </Popconfirm>
             </>
-          ) : (
-            <></>
           )}
         </Space>
       )

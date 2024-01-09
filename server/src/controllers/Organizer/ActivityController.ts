@@ -24,6 +24,7 @@ export const createActivity = async (
       return;
     }
 
+    // debugger
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const organizerId = decodedToken.id;
 

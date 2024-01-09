@@ -23,33 +23,37 @@ export const getVolunteer = async (
     }
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
-    const user = await Users.findByPk(userId);
-    if (user) {
-      if (!user.organization_id && user.role_id !== 2) {
+    const organizer = await Users.findByPk(userId);
+    
+    if (organizer) {
+      if (!organizer.organization_id && organizer.role_id !== 2) {
         const response: GeneralResponse<{}> = {
           status: 400,
           data: null,
-          message: 'Bạn đã là tổ chức',
+          message: "Have an organization or you're an organization",
         };
         commonResponse(req, res, response);
       } else {
-        const volunteerRequest = await VolunteerRequest.findAll({
+        const volunteers = await Users.findAll({
           where: {
-            organization_id: user.organization_id, // user.id
+            organization_id: organizer.organization_id,
+            role_id: 1,
             status: 0,
           },
         });
-        const volunteerRequestMapped =
-          await volunteerRequestMapper(volunteerRequest);
+        // const volunteerRequestMapped = await volunteerRequestMapper(
+        //   volunteerRequest
+        // );
         const response: GeneralResponse<{}> = {
           status: 200,
-          data: volunteerRequestMapped,
-          message: 'Lấy danh sách tnv thành công',
+          data: volunteers,
+          message: "Lấy danh sách thành công",
         };
         commonResponse(req, res, response);
       }
     }
-  } catch (error: any) {
+    }
+  catch (error: any) {
     console.error(error);
     const response: GeneralResponse<{}> = {
       status: 400,
@@ -71,10 +75,10 @@ export const removeVolunteer = async (
       return;
     }
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
-    const userId = decodedToken.id;
-    const user = await Users.findByPk(userId);
-    if (user) {
-      if (!user.organization_id && user.role_id !== 2) {
+    const organizerId = decodedToken.id;
+    const organizer = await Users.findByPk(organizerId);
+    if (organizer) {
+      if (!organizer.organization_id && organizer.role_id !== 2) {
         const response: GeneralResponse<{}> = {
           status: 400,
           data: null,
@@ -84,8 +88,9 @@ export const removeVolunteer = async (
       } else {
         const { id } = req.params;
         const volunteer = await Users.findOne({
-          where: { id: id, organization_id: userId },
+          where: { id: id, organization_id: organizer.organization_id },
         });
+        
         if (volunteer) {
           await volunteer.update({ organization_id: null });
         }

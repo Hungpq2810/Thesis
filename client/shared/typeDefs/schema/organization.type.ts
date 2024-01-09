@@ -5,7 +5,6 @@ export interface IOrganizations {
 }
 export interface IOrganization {
   id: number;
-  orgId: number;
   name: string;
   description: string;
   location: string;
@@ -20,7 +19,7 @@ export interface IRequestOrganizations {
 export interface IRequestOrganization {
   id: number;
   user: IUser;
-  organizer: IOrganization;
+  organization: IOrganization;
   status: number;
   created_at: string;
   updated_at: string;

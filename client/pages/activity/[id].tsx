@@ -29,7 +29,7 @@ type Props = {
 };
 const DetailActivity = ({ activity }: Props) => {
   const [rate, setRate] = useState(0);
-  const { data: userDetail } = useQuery(
+  const { data: userDetail, refetch } = useQuery(
     ['userDetail'],
     () => userService.getUserByAuth(),
     {
@@ -68,6 +68,7 @@ const DetailActivity = ({ activity }: Props) => {
     onSuccess(data, _variables, _context) {
       if (data) {
         message.success('Đăng ký thành công');
+        refetch();
       }
     },
     onError(error, variables, context) {
@@ -82,9 +83,12 @@ const DetailActivity = ({ activity }: Props) => {
     onSuccess(data, _variables, _context) {
       if (data) {
         message.success('Hủy đăng ký thành công');
+        refetch();
       }
     },
     onError(error, variables, context) {
+      // console.log(error);
+      
       message.error('Hủy đăng ký không thành công');
     }
   });
@@ -99,6 +103,8 @@ const DetailActivity = ({ activity }: Props) => {
     newFeedbackMutation.mutate(body);
   }
   if (!activity) return <React.Fragment></React.Fragment>;
+  console.log(user);
+  
   return (
     <React.Fragment>
       <Head>
@@ -181,7 +187,7 @@ const DetailActivity = ({ activity }: Props) => {
               </>
             ) : (
               <>
-                {activity.data.status === 0 && user ? (
+                {activity.data.status === 0 && user && user.role_id === 1 ? (
                   <>
                     {userDetail && userDetail.some((item: any) => item.activity_id === activity.data.id) ? (
                       <>
@@ -194,10 +200,6 @@ const DetailActivity = ({ activity }: Props) => {
                       <Button
                         onClick={() => {
                           applyActivityMutation.mutate({ activity_id: activity.data.id })
-                          setTimeout(() => {
-                            router.push('/activity')
-                            message.success('Đăng ký thành công')
-                          }, 500)
                         }}
                       >
                         Đăng ký

@@ -27,7 +27,7 @@ class Users
   implements UserAttributes
 {
   public id!: number;
-  public role_id!: number | null;
+  public role_id!: number;
   public organization_id!: number | null;
   public username!: string;
   public password!: string;

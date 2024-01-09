@@ -239,8 +239,8 @@ router.delete(
   removeVolunteer,
 );
 //User
-router.put('/api/v1/user', authenticateToken, updateProfile);
 router.get('/api/v1/user', authenticateToken, detailUser);
+router.post('/api/v1/user', authenticateToken, updateProfile);
 //Organization
 router.get('/api/v1/organizations', listOrganization);
 router.get('/api/v1/organization/:id', detailOrganization);
@@ -272,7 +272,7 @@ router.post(
   authenticateToken,
   activityApplyVolunteer,
 );
-router.put('/api/v1/cancel_volunteer', authenticateToken, cancelApplyActivity);
+router.post('/api/v1/cancel_volunteer', authenticateToken, cancelApplyActivity);
 //Request Join In Orgainzation By Volunteer
 router.post('/api/v1/request_volunteer', authenticateToken, requestVolunteer);
 //Faq

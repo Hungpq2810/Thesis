@@ -112,7 +112,7 @@ export const listOrganizationAdmin = async (
     
     const organizationsCurrent = await Organization.findAll({
       where: {
-        orgId: {
+        id: {
           [Op.notIn]: notYetApprovedOrgsId
         }
       }

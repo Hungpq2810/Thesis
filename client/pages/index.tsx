@@ -50,7 +50,7 @@ const Home: NextPageWithLayout = () => {
       <Section_Home2 />
       <Section_Home3 />
       <Section_Home4 activities={dataActivity as unknown as IActivity[]} />
-      <Section_Home5 faqs={dataFeedback as unknown as IFeedback[]} />
+      <Section_Home5 feedbacks={dataFeedback as unknown as IFeedback[]} />
     </Fragment>
   );
 };

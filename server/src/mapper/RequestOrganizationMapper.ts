@@ -13,33 +13,31 @@ export const requestOrganizationMapper = async (
         return null;
       try {
         const user = await Users.findByPk(user_id);
-        const organizer = await Organization.findOne({ where: {
-          orgId: organization_id
-        } });
+        const organization = await Organization.findByPk(organization_id)
 
-        const userName = user ? user.name : null;
-        const organizerName = organizer ? organizer.name : null;
-        const organizerDescription = organizer ? organizer.description : null;
-        const organizerLocation = organizer ? organizer.location : null;
+        const username = user ? user.name : null;
+        const organizationName = organization ? organization.name : null;
+        const organizationDescription = organization ? organization.description : null;
+        const organizationLocation = organization ? organization.location : null;
 
         return {
           id,
           user: {
             id: user_id,
-            name: userName,
+            name: username,
           },
-          organizer: {
+          organization: {
             id: organization_id,
-            name: organizerName,
-            description: organizerDescription,
-            location: organizerLocation,
+            name: organizationName,
+            description: organizationDescription,
+            location: organizationLocation,
           },
           status,
           created_at,
           updated_at,
         };
       } catch (error) {
-        console.error('Error fetching user or organizer:', error);
+        console.error('Error fetching user or organization:', error);
         return null;
       }
     }),

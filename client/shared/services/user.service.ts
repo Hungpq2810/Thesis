@@ -20,7 +20,7 @@ class UserService {
     return https.put(`/admin/users/${id}`, body);
   }
   updateProfile(body: IUser) {
-    return https.put(`/user`, body);
+    return https.post(`/user`, body);
   }
   deleteUser(id: number) {
     return https.delete(`/admin/users/${id}`);

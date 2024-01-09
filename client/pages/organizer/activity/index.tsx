@@ -34,6 +34,8 @@ const ActivityManagement = ({}: Props) => {
         const filterActivity = data.data.data.activities.filter(
           (activity) => activity.creator_id === +user!.id
         );
+        
+        
         return filterActivity;
       }
     }
@@ -79,7 +81,7 @@ const ActivityManagement = ({}: Props) => {
     },
     {
       title: 'Hình ảnh',
-      key: 'status',
+      key: 'image',
       render: (_, record) => (
         <>
           <Image
@@ -117,6 +119,7 @@ const ActivityManagement = ({}: Props) => {
       )
     }
   ];
+  console.log(dataActivity);
 
   return (
     <>

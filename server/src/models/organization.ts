@@ -3,7 +3,6 @@ import { sequelize } from "../db";
 
 export interface OrganizationAttributes {
   id: number;
-  orgId: string;
   name: string;
   description: string;
   location: string;
@@ -20,7 +19,7 @@ class Organization
   implements OrganizationAttributes
 {
   public id!: number;
-  public orgId!: string;
+  
   public name!: string;
   public description!: string;
   public location!: string;
@@ -36,10 +35,6 @@ Organization.init(
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
-    },
-    orgId: {
-      type: new DataTypes.STRING(6),
-      allowNull: false,
     },
     name: {
       type: new DataTypes.STRING(100),

@@ -18,7 +18,7 @@ class AxiosConfig {
   axiosConfig = {
     baseURL: this.baseUrl,
     headers: {
-      'Accept-Language': 'en-US',
+      'Accept-Language': 'vi-VN',
       'Content-Type': 'application/json'
     }
   };

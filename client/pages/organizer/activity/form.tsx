@@ -26,13 +26,13 @@ interface Props {
 }
 const status = [
   {
-    lable: 'Đang mở',
+    label: 'Đang mở',
     value: 0
   },
   {
-    lable: 'Đã đóng',
+    label: 'Đã đóng',
     value: 1
-  }
+  },
 ];
 const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
   const [form] = useForm();
@@ -46,12 +46,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       enabled: isEditIdValidNumber
     }
   );
-  const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(
-    data?.data.data.skillsActivity?.map((skill) => ({
-      label: skill.name,
-      value: skill.id
-    }))
-  );
+  
   const { data: skills } = useQuery(
     ['skills'],
     () => skillService.getAllSkill(),
@@ -67,6 +62,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       }
     }
   );
+  console.log(skills);
   
   const newMutation = useMutation({
     mutationKey: 'NewActivity',
@@ -126,14 +122,13 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
   useEffect(() => {
     if (editId && data) {
       setImageUrl(data.data.data.image);
-      setSkillsDefault(
-        data.data.data.skillsActivity?.map((skill) => ({
+      
+      form.setFieldsValue({
+        ...data.data.data,
+        skillsActivity: data.data.data.skillsActivity?.map((skill) => ({
           label: skill.name,
           value: skill.id
         }))
-      );
-      form.setFieldsValue({
-        ...data.data.data
       });
     }
   }, [data]);
@@ -161,7 +156,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       <Form
         form={form}
         name='basic'
-        initialValues={{ remember: true }}
+        // initialValues={{ remember: true }}
         onFinish={handleNewActivity}
         autoComplete='off'
         layout='vertical'
@@ -249,18 +244,17 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
         >
           <Select
             placeholder='Thay đổi trạng thái'
-            optionLabelProp='label'
             options={status}
           />
         </Form.Item>
 
         <Form.Item
           label='Kỹ năng'
-          name='skills'
+          name='skillsActivity'
           rules={[{ required: true, message: 'Chưa điền kỹ năng' }]}
         >
           <Select
-            defaultValue={skillsDefault && skillsDefault}
+            defaultValue={0}
             mode='multiple'
             placeholder='Chọn kỹ năng cho hoạt động'
             optionLabelProp='label'

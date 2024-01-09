@@ -15,11 +15,11 @@ import { APP_SAVE_KEYS } from '@/constant/AppConstant';
 import { useDispatch } from 'react-redux';
 import { login } from '@/store/appSlice';
 import jwt_decode from 'jwt-decode';
-import { activityService } from '@/services/activity.service';
+import DashboardLayout from './DashboardLayout';
 
 const { Header, Content, Footer } = Layout;
 
-function BlankLayout({ children }: { children: React.ReactNode }) {
+function RequestOrganization({ children }: { children: React.ReactNode }) {
   const { user } = useAppSelector((state) => state.appSlice);
   const dispatch = useDispatch();
   const [current, setCurrent] = useState('');
@@ -41,7 +41,7 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
       icon: <ContactsOutlined />
     },
     {
-      label: 'Nhà tổ chức',
+      label: 'Ban tổ chức',
       key: 'organization',
       icon: <GroupOutlined />
     },
@@ -68,9 +68,12 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
       const decodeData: any = jwt_decode(key);
       dispatch(
         login({
-          userName: decodeData.username,
-          role: decodeData.role_id,
-          id: decodeData.id
+          role_id: decodeData.role_id,
+            username: decodeData.username,
+            id: decodeData.id,
+            avatar: decodeData.avatar,
+            name: decodeData.name,
+            email: decodeData.email
         })
       );
     }
@@ -107,17 +110,17 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
             {!user && (
               <Button onClick={() => router.push('/login')}>Đăng nhập</Button>
             )}
-            {user && Number(user?.role) === 3 && (
+            {user && Number(user?.role_id) === 3 && (
               <Button onClick={() => router.push('/admin/user')}>ADMIN</Button>
             )}
-            {user && Number(user?.role) === 2 && (
+            {user && Number(user?.role_id) === 2 && (
               <Button onClick={() => router.push('/organizer/activity')}>
                 TỔ CHỨC
               </Button>
             )}
-            {user && Number(user?.role) === 1 && (
-              <Button onClick={() => router.push('/request_organization')}>
-                Trở thành tổ chức
+            {user && Number(user?.role_id) === 1 && (
+              <Button onClick={() => router.push('/volunteer_activity')}>
+                TÌNH NGUYỆN VIÊN
               </Button>
             )}
             {user && <Button onClick={() => handleLogout()}>Đăng xuất</Button>}
@@ -133,5 +136,7 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
     </React.Fragment>
   );
 }
-
-export default BlankLayout;
+RequestOrganization.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+);
+export default RequestOrganization;

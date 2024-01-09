@@ -50,17 +50,25 @@ export const updateProfile = async (
           await SkillUsers.create(skill);
         }
       }
+
+      const currentRequest = await VolunteerRequest.findOne({
+        where: {user_id: user.id}
+      })
+      console.log(currentRequest?.organization_id);
+      
       const requestApplyOrganizer = {
         user_id: Number(userId) as number,
-        organization_id: Number(req.body.belongsOrgainzer) as number,
+        organization_id: currentRequest?.organization_id || Number(req.body.belongsOrganizer) as number,
         status: 1,
         created_at: new Date(),
         updated_at: new Date(),
       };
+      console.log(requestApplyOrganizer);
+      
       await VolunteerRequest.destroy({
         where: {
           user_id: userId,
-          organization_id: req.body.belongsOrgainzer,
+          organization_id: req.body.belongsOrganizer,
         },
       });
       await VolunteerRequest.create(requestApplyOrganizer);
@@ -131,14 +139,14 @@ export const detailUser = async (
       user: UserAttributes;
       skills: any[];
       activityApplied: any[];
-      belongsOrgainzer: VolunteerRequestAttributes | null;
+      belongsOrganizer: VolunteerRequestAttributes | null;
     }> = {
       status: 200,
       data: {
         user: user.toJSON() as UserAttributes,
         skills: skillsWithDetails,
         activityApplied: activityMapper,
-        belongsOrgainzer: userOrganizer,
+        belongsOrganizer: userOrganizer,
       },
       message: 'Lấy thông tin người dùng thành công',
     };

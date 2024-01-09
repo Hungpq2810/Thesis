@@ -79,7 +79,7 @@ const Appbar = () => {
                     alt='userIcon'
                     src='/userIcon.png'
                   />
-                  <p className='text-sm'>Xin chào: {user?.userName}</p>
+                  <p className='text-sm'>Xin chào: {user?.username}</p>
                 </div>
               </Dropdown>
             </Col>

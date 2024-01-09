@@ -6,7 +6,7 @@ const nextConfig = {
     webpack5: true
   },
   i18n: {
-    locales: ['en', 'vi'],
+    locales: ['vi', 'en'],
     defaultLocale: 'vi'
   }
 };

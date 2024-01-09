@@ -128,9 +128,7 @@ const RequestVolunteerManagement = ({}: Props) => {
             </Col>
           </Row>
           <Table
-            dataSource={dataRequestVolunteers?.data.data.requestVolunteers.filter(
-              (volunteer) => volunteer.status !== 0
-            )}
+            dataSource={dataRequestVolunteers?.data.data.requestVolunteers}
             columns={columns}
           />
         </React.Fragment>

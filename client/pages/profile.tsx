@@ -31,10 +31,6 @@ const Profile = ({ next }: Props) => {
   const { user } = useAppSelector((state) => state.appSlice);
   const { data } = useQuery(['userDetail'], () => userService.getUserByAuth());
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(user?.avatar);
-  const [flag, setFlag] = useState<boolean | undefined>(
-    data?.data.data.role_id === 1
-  )  
-  console.log(flag);
   
   const [belongsOrganizer, setBelongsOrganizer] = useState<number | undefined>(
     data?.data.data.belongsOrganizer?.organization_id
@@ -243,7 +239,7 @@ const Profile = ({ next }: Props) => {
             <Input.Password />
           </Form.Item>
 
-          {skillsDefault && flag && (
+          {skillsDefault && user?.role_id === 1 && (
           <Form.Item
             label='Kỹ năng'
             name='skills'
@@ -259,7 +255,7 @@ const Profile = ({ next }: Props) => {
           </Form.Item>
             )}
           
-          {!belongsOrganizer && flag ? (
+          {!belongsOrganizer && user?.role_id === 1 ? (
             <Form.Item
             label='Thuộc tổ chức'
             name='belongsOrganizer'
@@ -273,7 +269,7 @@ const Profile = ({ next }: Props) => {
             />
             </Form.Item>
             ) : (
-              flag && <p>Thuộc tổ chức: {organizersCurrent && organizersCurrent.name}</p>
+              <p>Thuộc tổ chức: {organizersCurrent && organizersCurrent.name}</p>
             )}
               
           <Form.Item style={{ textAlign: 'center' }}>

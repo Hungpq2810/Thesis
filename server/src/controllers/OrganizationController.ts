@@ -105,14 +105,12 @@ export const createOrganization = async (
       return;
     }
     if (userId) {
-      let organizationId = randomId();
       const body = {
-        orgId: organizationId,
         name: req.body.name as string,
         description: req.body.description as string,
         location: req.body.location as string,
         creator: userId as number,
-        status: 2,
+        status: 1,
         created_at: new Date(),
         updated_at: new Date(),
       };

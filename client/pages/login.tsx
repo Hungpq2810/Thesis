@@ -11,6 +11,7 @@ import { APP_SAVE_KEYS } from '@/constant/AppConstant';
 import useTrans from '@/hooks/useTrans';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { log } from 'console';
 type Props = {};
 
 const Login = ({}: Props) => {
@@ -68,6 +69,7 @@ const Login = ({}: Props) => {
   function handleLogin(value: { username: string; password: string }) {
     loginMutation.mutate(value);
   }
+
   return (
     <React.Fragment>
       <Head>
