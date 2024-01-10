@@ -33,7 +33,7 @@ export const activityApplyVolunteer = async (
       } else {
         const checkRequestTime = await ActivityApply.findAll({
           where: {
-            // id: req.body.activity_id,
+            id: req.body.activity_id,
             user_id: userId,
             status: 0,
           },

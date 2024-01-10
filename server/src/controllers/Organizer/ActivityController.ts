@@ -8,7 +8,6 @@ import {
 import { Users } from '../../models/users';
 import { Activities, ActivityAttributes } from '../../models/activities';
 import { SkillActivities } from '../../models/skill_activities';
-import { mappedActivities } from '../../mapper/ActivityMapper';
 
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;

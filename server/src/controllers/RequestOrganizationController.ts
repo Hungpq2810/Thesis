@@ -23,12 +23,12 @@ export const requestOrganization = async (
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
-    const org = await Organization.findOne({ where: { creator: user.id }}) 
+    
     if (user) {
       {
         const body = {
           user_id: userId as number,
-          organization_id: Number(org.orgId) as number,
+          organization_id: Number(req.body.organization_id) as number,
           status: 1,
           created_at: new Date(),
           updated_at: new Date(),

@@ -15,6 +15,8 @@ export const volunteerRequestMapper = async (
         const user = await Users.findByPk(user_id);
         const userName = user ? user.name : null;
         const userAvatar = user ? user.avatar : null;
+        const email = user ? user.email: null;
+        const phone = user ? user.phone: null;
         const volunteersApplied = await ActivityApply.findAll({
           where: { user_id: id },
         });
@@ -27,6 +29,8 @@ export const volunteerRequestMapper = async (
           organization_id,
           name: userName,
           avatar: userAvatar,
+          email,
+          phone,
           status,
           created_at,
           updated_at,

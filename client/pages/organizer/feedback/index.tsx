@@ -46,13 +46,13 @@ const FeedbackManagement = ({}: Props) => {
       key: 'user',
       render: (_, record) => (
         <div className='w-1/3 flex justify-between items-center'>
-          <Image
+          {/* <Image
             preview={false}
             src={record.avatar}
             width={50}
             height={50}
             className='rounded-lg'
-          />
+          /> */}
           <p>{record.name}</p>
         </div>
       )

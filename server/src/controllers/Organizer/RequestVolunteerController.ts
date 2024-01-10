@@ -38,7 +38,7 @@ export const listRequestVolunteers = async (
         where: { organization_id: organizer?.organization_id },
       });
       const requestVolunteers = await volunteerRequestMapper(requestVolunteersCurrent);
-
+      
       if (requestVolunteers.length > 0) {
         const response: GeneralResponse<{
           requestVolunteers: any[];

@@ -21,6 +21,7 @@ const { Header, Content, Footer } = Layout;
 
 function RequestOrganization({ children }: { children: React.ReactNode }) {
   const { user } = useAppSelector((state) => state.appSlice);
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const dispatch = useDispatch();
   const [current, setCurrent] = useState('');
   const router = useRouter();
@@ -66,6 +67,7 @@ function RequestOrganization({ children }: { children: React.ReactNode }) {
     const role = getCookie(APP_SAVE_KEYS.ROLE);
     if (typeof key === 'string' && role) {
       const decodeData: any = jwt_decode(key);
+      setIsLoggedIn(true);
       dispatch(
         login({
           role_id: decodeData.role_id,
@@ -114,12 +116,12 @@ function RequestOrganization({ children }: { children: React.ReactNode }) {
               <Button onClick={() => router.push('/admin/user')}>ADMIN</Button>
             )}
             {user && Number(user?.role_id) === 2 && (
-              <Button onClick={() => router.push('/organizer/activity')}>
+              <Button onClick={() => router.push('/organizer/activities')}>
                 TỔ CHỨC
               </Button>
             )}
             {user && Number(user?.role_id) === 1 && (
-              <Button onClick={() => router.push('/volunteer_activity')}>
+              <Button onClick={() => router.push('/volunteer/activities')}>
                 TÌNH NGUYỆN VIÊN
               </Button>
             )}

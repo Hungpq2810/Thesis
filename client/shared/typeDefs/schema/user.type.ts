@@ -1,3 +1,4 @@
+import { IOrganization } from './organization.type';
 import { ISkill } from './skill.type';
 
 export interface IUserList {
@@ -20,6 +21,6 @@ export interface IUser {
   created_at?: string;
   updated_at?: string;
   skills?: ISkill[];
-  belongsOrganizer?: any;
+  belongsOrganizer?: IOrganization;
   activityApplied?: any;
 }

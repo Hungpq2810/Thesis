@@ -5,8 +5,25 @@ import {
   IRequestVolunteers,
   IVolunteerGroupOrganizer
 } from '@/typeDefs/schema/volunteer.type';
+import { IActivityApplyList } from '../typeDefs/schema/activity_apply.type';
 
 class VolunteerService {
+  // Volunteer
+  getAppliedActivities(): Promise<
+    AxiosResponse<IBaseResponse<IActivityApplyList>>
+  > {
+    return https.get('/volunteer/activities');
+  }
+  requestToOrganization(body: {
+    id: number
+  }) {
+    return https.post('/volunteer/request_to_org', body)
+  }
+  cancelRequestToOrganization() {
+    return https.post('/volunteer/cancel_request_to_org')
+  }
+
+  // Organizer
   getAllRequestVolunteer(): Promise<
     AxiosResponse<IBaseResponse<IRequestVolunteers>>
   > {
@@ -20,9 +37,10 @@ class VolunteerService {
   > {
     return https.get('/organizer/volunteers');
   }
-  removeVolunteerByOrganizer({ id }: { id: number }) {
-    return https.delete(`/organizer/volunteers/${id}`);
+  removeVolunteerByOrganizer(id: number) {
+    return https.post(`/organizer/volunteers/${id}`);
   }
+
 }
 
 export const volunteerService = new VolunteerService();

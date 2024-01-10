@@ -24,7 +24,7 @@ import {
   listRequestOrganization,
   updateRequestOrganization,
 } from '../controllers/Admin/RequestOrganizationController';
-import { requestVolunteer } from '../controllers/RequestVolunteerController';
+import { cancelRequestVolunteer, requestVolunteer } from '../controllers/RequestVolunteerController';
 import {
   listRequestVolunteers,
   updateRequestVolunteer,
@@ -71,6 +71,7 @@ import {
   getVolunteer,
   removeVolunteer,
 } from '../controllers/Organizer/VolunteerController';
+import { listActivityApplied } from '../controllers/Volunteer/ActivityApplyController';
 
 const router = express.Router();
 //Auth
@@ -172,6 +173,7 @@ router.delete(
   checkRoleAdmin,
   deleteActivityByAdmin,
 );
+
 //Organizer
 //Request Volunteer
 router.get(
@@ -232,15 +234,33 @@ router.get(
   checkRoleOrganizer,
   getVolunteer,
 );
-router.delete(
+router.post(
   '/api/v1/organizer/volunteers/:id',
   authenticateToken,
   checkRoleOrganizer,
   removeVolunteer,
 );
-//User
+
+//User Management
 router.get('/api/v1/user', authenticateToken, detailUser);
 router.post('/api/v1/user', authenticateToken, updateProfile);
+
+//Volunteer
+//List activity applied
+router.get('/api/v1/volunteer/activities', authenticateToken, listActivityApplied)
+//Request Organization
+router.post(
+  '/api/v1/request_tobe_organization',
+  authenticateToken,
+  requestOrganization,
+);
+//Request Join In Orgainzation By Volunteer
+router.post('/api/v1/volunteer/request_to_organization', authenticateToken, requestVolunteer);
+//Cancel Request
+router.post('/api/v1/volunteer/cancel_request_to_organization', authenticateToken, cancelRequestVolunteer)
+
+
+//public 
 //Organization
 router.get('/api/v1/organizations', listOrganization);
 router.get('/api/v1/organization/:id', detailOrganization);
@@ -249,12 +269,7 @@ router.post(
   authenticateToken,
   createOrganization,
 );
-//Request Organization
-router.post(
-  '/api/v1/request_organization',
-  authenticateToken,
-  requestOrganization,
-);
+
 //Activity
 router.get('/api/v1/activities', listActivity);
 router.get('/api/v1/search_activities', searchActivities);
@@ -273,8 +288,7 @@ router.post(
   activityApplyVolunteer,
 );
 router.post('/api/v1/cancel_volunteer', authenticateToken, cancelApplyActivity);
-//Request Join In Orgainzation By Volunteer
-router.post('/api/v1/request_volunteer', authenticateToken, requestVolunteer);
+
 //Faq
 router.get('/api/v1/faq', listFaq);
 router.get('/api/v1/faq/:id', getFaqById);

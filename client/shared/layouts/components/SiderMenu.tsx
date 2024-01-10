@@ -126,11 +126,6 @@ const SiderMenu = () => {
           label: 'Hoạt động'
         },
         {
-          key: '/volunteer/feedback',
-          icon: <StarOutlined />,
-          label: 'Đánh giá'
-        },
-        {
           key: '/volunteer/joinOrganization',
           icon: <PullRequestOutlined />,
           label: 'Tham gia tổ chức'

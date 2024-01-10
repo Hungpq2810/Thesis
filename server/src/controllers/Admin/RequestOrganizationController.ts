@@ -11,6 +11,7 @@ import {
 import { Users } from '../../models/users';
 import { Organization } from '../../models/organization';
 import { requestOrganizationMapper } from '../../mapper/RequestOrganizationMapper';
+import { EmailUtils, EmailDetails } from '../../utilities/EmailUtils';
 dotenv.config();
 
 export const listRequestOrganization = async (
@@ -143,9 +144,16 @@ export const updateRequestOrganization = async (
             updated_at: new Date(),
           });
           if (resultTwo) {
+            const emailUtils = new EmailUtils();
+            const receiverEmail = accountUser.email as string;
+            const emailDetails: EmailDetails = {
+              subject: 'Volunteer Request Confirmation',
+              body: 'Your volunteer request has been successfully submitted.',
+            };
+            emailUtils.sendEmail(receiverEmail, emailDetails);
             const response: GeneralResponse<{}> = {
               status: 200,
-              data: null,
+              data: emailDetails,
               message: 'Update successfully',
             };
             commonResponse(req, res, response);
@@ -160,6 +168,16 @@ export const updateRequestOrganization = async (
       if (organizationRequestRecord && organization) {
         const result = await organizationRequestRecord.update(body);
         await organization.update({ status: 1 });
+        // const accountUser = await Users.findByPk(
+        //   organizationRequestRecord.user_id,
+        // );
+        //     const emailUtils = new EmailUtils();
+        //     const receiverEmail = accountUser.email as string;
+        //     const emailDetails: EmailDetails = {
+        //       subject: 'Volunteer Request Confirmation',
+        //       body: 'Your volunteer request has been successfully submitted.',
+        //     };
+        //     emailUtils.sendEmail(receiverEmail, emailDetails);
         if (result) {
           const response: GeneralResponse<{}> = {
             status: 200,

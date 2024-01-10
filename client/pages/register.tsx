@@ -15,6 +15,7 @@ import { useMutation } from 'react-query';
 import BlankLayout from '@/layouts/BlankLayout';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { validateVNPhone } from '../shared/utils/formValidator';
 type Props = {};
 
 const Register = ({}: Props) => {
@@ -93,7 +94,16 @@ const Register = ({}: Props) => {
           <Form.Item
             label='Tên tài khoản'
             name='username'
-            rules={[{ required: true, message: 'Chưa điền tên tài khoản' }]}
+            rules={[
+              { type: 'string', required: true, message: 'Vui lòng tên đăng nhập' },
+              { validator: (_,value) => {
+                if (value.length < 8) {
+                  return Promise.reject('Tên đăng nhập phải có ít nhất 8 ký tự');
+                } else {
+                  return Promise.resolve();
+                }
+              }, },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -101,7 +111,19 @@ const Register = ({}: Props) => {
           <Form.Item
             label='Email'
             name='email'
-            rules={[{ required: true, message: 'Chưa điền email' }]}
+            rules={[
+              {
+                type: 'email',
+                required: true,
+                message: 'Chưa điền email',
+              },
+              {
+                validator: (_,value) => {
+                  const regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+                  return regex.test(value) ? Promise.resolve() : Promise.reject('Định dạng email không hợp lệ');
+                },
+              },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -117,9 +139,23 @@ const Register = ({}: Props) => {
           <Form.Item
             label='Số điện thoại'
             name='phone'
-            rules={[{ required: true, message: 'Chưa điền số điện thoại' }]}
+            rules={[
+              { required: true, message: 'Chưa điền số điện thoại' },
+              {
+                
+                message: 'Số điện thoại có 10 chữ số',
+                validator: (_, value) => {
+                  if (/(0[3|5|7|8|9])+([0-9]{8})\b/g.test(value)) {
+                    return Promise.resolve();
+                  } else {
+                    return Promise.reject('Số điện thoại có 10 chữ số');
+                  }
+                 }
+               }
+            ]}
+            hasFeedback
           >
-            <Input type='number' />
+            <Input type='string' />
           </Form.Item>
 
           <Form.Item
@@ -128,7 +164,7 @@ const Register = ({}: Props) => {
             rules={[{ required: true, message: 'Chưa điền giới tính' }]}
           >
             <Select
-              placeholder='select one country'
+              placeholder='Giới tính của bạn'
               defaultValue={['']}
               optionLabelProp='label'
               options={options}
@@ -154,7 +190,16 @@ const Register = ({}: Props) => {
           <Form.Item
             label='Mật khẩu'
             name='password'
-            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
+            rules={[
+              { type: 'string', required: true, message: 'Vui lòng nhập mật khẩu' },
+              { validator: (_,value) => {
+                if (value.length < 6) {
+                  return Promise.reject('Mật khẩu phải có ít nhất 6 ký tự');
+                } else {
+                  return Promise.resolve();
+                }
+              }, },
+            ]}
           >
             <Input.Password />
           </Form.Item>

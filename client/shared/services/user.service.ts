@@ -23,7 +23,7 @@ class UserService {
     return https.post(`/user`, body);
   }
   deleteUser(id: number) {
-    return https.delete(`/admin/users/${id}`);
+    return https.post(`/admin/users/${id}`);
   }
 }
 

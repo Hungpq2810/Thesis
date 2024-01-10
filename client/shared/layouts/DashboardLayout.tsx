@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, theme } from 'antd';
 import Appbar from './components/Appbar';
 import SiderMenu from './components/SiderMenu';
@@ -13,6 +13,7 @@ const { Header, Content } = Layout;
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const {
     token: { colorBgContainer }
   } = theme.useToken();
@@ -21,6 +22,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
     const role = getCookie(APP_SAVE_KEYS.ROLE);
     if (typeof key === 'string' && role) {
       const decodeData: any = jwt_decode(key);
+      setIsLoggedIn(true);
       dispatch(
         login({
           role_id: decodeData.role_id,
@@ -33,31 +35,31 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       );
     }
   }, []);
-  
-  console.log('abcabca')
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <SiderMenu />
-      <Layout className='site-layout p-2'>
-        <Header style={{ background: colorBgContainer }}>
-          <Appbar />
-        </Header>
-        <br />
-        <Content>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer
-            }}
-          >
-            {children}
-          </div>
-        </Content>
-        <FooterContent />
+    (
+      <Layout style={{ minHeight: '100vh' }}>
+        <SiderMenu />
+        <Layout className="site-layout p-2">
+          <Header style={{ background: colorBgContainer }}>
+            <Appbar />
+          </Header>
+          <Content>
+            <div
+              style={{
+                padding: 24,
+                minHeight: 360,
+                background: colorBgContainer,
+              }}
+            >
+              {children}
+            </div>
+          </Content>
+          {/* <FooterContent>
+            </FooterContent> */}
+        </Layout>
       </Layout>
-    </Layout>
+    ) 
   );
 }
 

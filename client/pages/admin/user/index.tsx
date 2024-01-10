@@ -9,15 +9,20 @@ import { useMutation, useQuery } from 'react-query';
 import { userService } from '@/services/user.service';
 import React from 'react';
 import { IUser } from '@/typeDefs/schema/user.type';
+import { organizationService } from '../../../shared/services/organization.service';
 
 type Props = {};
 
 const UserManagement = ({}: Props) => {
   const [open, setOpen] = useState(false);
-  const [action, setAtion] = useState<string>('');
+  const [action, setAction] = useState<string>('');
   const [rowId, setRowId] = useState<number>();
   const { data: dataUser, refetch } = useQuery(['listUser'], () =>
     userService.getAllUser()
+  );
+  const { data: dataOrganization } = useQuery(
+    ['listOrganizationAdmin'],
+    () => organizationService.listOrganizationAdmin()
   );
   const deleteMutation = useMutation({
     mutationKey: ['deleteUserMutation'],
@@ -30,6 +35,7 @@ const UserManagement = ({}: Props) => {
       message.error('Xoá không thành công');
     }
   });
+
   const columns: ColumnType<IUser>[] = [
     {
       title: '#',
@@ -41,14 +47,37 @@ const UserManagement = ({}: Props) => {
       )
     },
     {
-      title: 'Tên đăng nhập',
-      dataIndex: 'username',
-      key: 'username'
+      title: 'Tên',
+      dataIndex: 'name',
+      key: 'name'
     },
     {
-      title: 'Mật khẩu',
-      key: 'password',
-      render: (_, record) => <p>********</p>
+      title: 'Vai trò',
+      dataIndex: 'role_id',
+      key: 'role_id',
+      render: (value) => {
+        switch (value) {
+          case 2:
+            return 'Ban tổ chức';
+          case 1:
+            return 'Tình nguyện viên';
+          default:
+            return 'Chưa xác định';
+        }
+      },
+    },
+    {
+      title: 'Thuộc tổ chức',
+      dataIndex: 'organization_id',
+      render: (_, record) => <p>{record.belongsOrganizer?.name}</p>
+    },
+    { 
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      key: 'status',
+      render: (value) => {
+        return value === 0 ? 'Hoạt động' : 'Không hoạt động';
+      },
     },
     {
       title: 'Hành động',
@@ -58,14 +87,14 @@ const UserManagement = ({}: Props) => {
           <div
             className='cursor-pointer'
             onClick={() => {
-              setAtion('edit');
+              setAction('edit');
               setOpen(true);
               setRowId(record.id);
             }}
           >
             <EditOutlined />
           </div>
-          <Popconfirm
+          {/* <Popconfirm
             okButtonProps={{ loading: deleteMutation.isLoading }}
             onConfirm={() => {
               deleteMutation.mutate(record.id);
@@ -73,12 +102,12 @@ const UserManagement = ({}: Props) => {
             title={'Xoá'}
           >
             <DeleteOutlined className='cursor-pointer'></DeleteOutlined>
-          </Popconfirm>
+          </Popconfirm> */}
         </Space>
       )
     }
   ];
-
+  
   return (
     <>
       {dataUser && dataUser.data.data && (
@@ -97,7 +126,7 @@ const UserManagement = ({}: Props) => {
                 />
                 <Button
                   onClick={() => {
-                    setAtion('create');
+                    setAction('create');
                     setRowId(NaN);
                     setOpen(true);
                   }}

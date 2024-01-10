@@ -17,6 +17,7 @@ import React, { useState } from 'react';
 import { faqService } from '@/services/faq.service';
 import { IFaq } from '@/typeDefs/schema/faq.type';
 import FormFaq from './form';
+import dayjs from 'dayjs';
 
 type Props = {};
 
@@ -63,12 +64,12 @@ const FAQManagement = ({}: Props) => {
     {
       title: 'Ngày tạo',
       key: 'created_at',
-      render: (_, record) => <p>{record.created_at}</p>
+      render: (_, record) => <p>{dayjs(record.created_at).format('DD/MM/YYYY')}</p>
     },
     {
       title: 'Ngày cập nhật',
       key: 'updated_at',
-      render: (_, record) => <p>{record.updated_at}</p>
+      render: (_, record) => <p>{dayjs(record.updated_at).format('DD/MM/YYYY')}</p>
     },
     {
       title: 'Hành động',

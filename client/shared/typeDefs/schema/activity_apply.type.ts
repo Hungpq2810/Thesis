@@ -1,3 +1,6 @@
+import { IUser } from "../user.type";
+import { IActivity } from "./activity.type";
+
 export interface IActivityApplyList {
   activityApplyList: IActivityApply[];
 }
@@ -9,4 +12,6 @@ export interface IActivityApply {
   status: number;
   created_at: string;
   updated_at: string;
+  user?: IUser;
+  activity?: IActivity;
 }

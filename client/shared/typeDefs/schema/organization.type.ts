@@ -19,7 +19,7 @@ export interface IRequestOrganizations {
 export interface IRequestOrganization {
   id: number;
   user: IUser;
-  organization: IOrganization;
+  organizer: IOrganization;
   status: number;
   created_at: string;
   updated_at: string;

@@ -30,7 +30,7 @@ class OrganizationService {
     return https.post('/create_organization', body);
   }
   requestBecomeOrganization(body: { organization_id: number }) {
-    return https.post('/request_organization', body);
+    return https.post('/request_tobe_organization', body);
   }
   updateOrganization(
     id: number,

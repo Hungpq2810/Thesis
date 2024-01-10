@@ -9,12 +9,14 @@ import {
   Col,
   DatePicker,
   Select,
-  SelectProps
+  SelectProps,
+  Popconfirm
 } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { useEffect } from 'react';
 import { userService } from '@/services/user.service';
 import dayjs from 'dayjs';
+import { CheckCircleOutlined } from '@ant-design/icons';
 
 interface Props {
   editId?: number;
@@ -22,6 +24,18 @@ interface Props {
   setOpen: any;
   refetch: any;
 }
+
+const status = [
+  {
+    label: 'Hoạt động',
+    value: 0
+  },
+  {
+    label: 'Không hoạt động',
+    value: 1
+  },
+];
+
 const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
   const [form] = useForm();
   const isEditIdValidNumber = typeof editId === 'number';
@@ -110,7 +124,16 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
         <Form.Item
           label='Tên tài khoản'
           name='username'
-          rules={[{ required: true, message: 'Chưa điền tên tài khoản' }]}
+          rules={[
+            { type: 'string', required: true, message: 'Vui lòng tên đăng nhập' },
+            { validator: (_,value) => {
+              if (value.length < 8) {
+                return Promise.reject('Tên đăng nhập phải có ít nhất 8 ký tự');
+              } else {
+                return Promise.resolve();
+              }
+            }, },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -118,7 +141,19 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
         <Form.Item
           label='Email'
           name='email'
-          rules={[{ required: true, message: 'Chưa điền email' }]}
+          rules={[
+            {
+              type: 'email',
+              required: true,
+              message: 'Chưa điền email',
+            },
+            {
+              validator: (_,value) => {
+                const regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+                return regex.test(value) ? Promise.resolve() : Promise.reject('Định dạng email không hợp lệ');
+              },
+            },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -134,9 +169,22 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
         <Form.Item
           label='Số điện thoại'
           name='phone'
-          rules={[{ required: true, message: 'Chưa điền số điện thoại' }]}
+          rules={[
+            { required: true, message: 'Chưa điền số điện thoại' },
+            {
+              
+              message: 'Số điện thoại có 10 chữ số',
+              validator: (_, value) => {
+                if (/(0[3|5|7|8|9])+([0-9]{8})\b/g.test(value)) {
+                  return Promise.resolve();
+                } else {
+                  return Promise.reject('Số điện thoại có 10 chữ số');
+                }
+               }
+             }
+          ]}
         >
-          <Input type='number' />
+          <Input type='string' />
         </Form.Item>
 
         <Form.Item
@@ -173,9 +221,30 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
         <Form.Item
           label='Mật khẩu'
           name='password'
-          rules={[{ required: false, message: 'Vui lòng nhập mật khẩu' }]}
+            rules={[
+              { type: 'string', required: false, message: 'Vui lòng nhập mật khẩu' },
+              { validator: (_,value) => {
+                if (!value) return Promise.resolve()
+                if (value.length < 6 && value) {
+                  return Promise.reject('Mật khẩu phải có ít nhất 6 ký tự');
+                } else {
+                  return Promise.resolve();
+                }
+              }, },
+            ]}
         >
-          <Input.Password visibilityToggle={false} />
+          <Input.Password required={false}/>
+        </Form.Item>
+
+        <Form.Item
+          label='Trạng thái'
+          name='status'
+          rules={[{ required: true, message: 'Chưa điền trạng thái' }]}
+        >
+          <Select
+            placeholder='Thay đổi trạng thái'
+            options={status}
+          />
         </Form.Item>
 
         <Row justify={'center'} align={'middle'} gutter={16}>
@@ -190,6 +259,14 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
             <Form.Item style={{ textAlign: 'center' }}>
               <Button htmlType='submit'>
                 {editId ? 'Chỉnh sửa' : 'Tạo mới'}
+                <Popconfirm
+              title="Bạn có chắc chắn muốn cập nhật hồ sơ của mình không?"
+              onConfirm={() => {
+                handleregister
+              }}
+        >
+          <CheckCircleOutlined />
+          </Popconfirm>
               </Button>
             </Form.Item>
           </Col>

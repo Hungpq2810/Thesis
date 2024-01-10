@@ -51,30 +51,29 @@ export const updateProfile = async (
         }
       }
 
-      const currentRequest = await VolunteerRequest.findOne({
-        where: {user_id: user.id}
-      })
-      console.log(currentRequest?.organization_id);
+      // const currentRequest = await VolunteerRequest.findOne({
+      //   where: {user_id: user.id}
+      // })
       
-      const requestApplyOrganizer = {
-        user_id: Number(userId) as number,
-        organization_id: currentRequest?.organization_id || Number(req.body.belongsOrganizer) as number,
-        status: 1,
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-      console.log(requestApplyOrganizer);
+      // const requestApplyOrganizer = {
+      //   user_id: Number(userId) as number,
+      //   organization_id: currentRequest?.organization_id || Number(req.body.belongsOrganizer) as number,
+      //   status: 1,
+      //   created_at: new Date(),
+      //   updated_at: new Date(),
+      // };
+      // console.log(requestApplyOrganizer);
       
-      await VolunteerRequest.destroy({
-        where: {
-          user_id: userId,
-          organization_id: req.body.belongsOrganizer,
-        },
-      });
-      await VolunteerRequest.create(requestApplyOrganizer);
+      // await VolunteerRequest.destroy({
+      //   where: {
+      //     user_id: userId,
+      //     organization_id: req.body.belongsOrganizer,
+      //   },
+      // });
+      // await VolunteerRequest.create(requestApplyOrganizer);
       const body = req.body;
       // delete body.role_id;
-      delete body.organization_id;
+      // delete body.organization_id;
       const result = await user.update(body);
       const response: GeneralResponse<UserAttributes> = {
         status: 200,

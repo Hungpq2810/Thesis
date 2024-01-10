@@ -4,6 +4,7 @@ import {
   DatePicker,
   Form,
   Input,
+  Popconfirm,
   Select,
   SelectProps,
   message
@@ -22,6 +23,7 @@ import { organizationService } from '@/services/organization.service';
 import dayjs from 'dayjs';
 import InputUpload from '@/components/common/UploadInput';
 import { useRouter } from 'next/router';
+import { CheckCircleOutlined } from '@ant-design/icons';
 type Props = {
   next: any;
 };
@@ -145,7 +147,8 @@ const Profile = ({ next }: Props) => {
       form.setFieldsValue({
         // @ts-ignore
         ...data.data.data.user,
-        avatar: updatedAvatarUrl
+        avatar: updatedAvatarUrl,
+        confirmPassword: data.data.data.password
       });
     }
   };  
@@ -185,7 +188,19 @@ const Profile = ({ next }: Props) => {
           <Form.Item
             label='Email'
             name='email'
-            rules={[{ required: true, message: 'Vui lòng nhập email' }]}
+            rules={[
+              {
+                type: 'email',
+                required: true,
+                message: 'Chưa điền email',
+              },
+              {
+                validator: (_,value) => {
+                  const regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+                  return regex.test(value) ? Promise.resolve() : Promise.reject('Định dạng email không hợp lệ');
+                },
+              },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -193,7 +208,20 @@ const Profile = ({ next }: Props) => {
           <Form.Item
             label='Số điện thoại'
             name='phone'
-            rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
+            rules={[
+              { required: true, message: 'Chưa điền số điện thoại' },
+              {
+                
+                message: 'Số điện thoại có 10 chữ số',
+                validator: (_, value) => {
+                  if (/(0[3|5|7|8|9])+([0-9]{8})\b/g.test(value)) {
+                    return Promise.resolve();
+                  } else {
+                    return Promise.reject('Số điện thoại có 10 chữ số');
+                  }
+                 }
+               }
+            ]}
           >
             <Input />
           </Form.Item>
@@ -234,7 +262,37 @@ const Profile = ({ next }: Props) => {
           <Form.Item
             label='Mật khẩu'
             name='password'
-            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
+            rules={[
+              { type: 'string', required: true, message: 'Vui lòng nhập mật khẩu' },
+              { validator: (_,value) => {
+                if (value.length < 6) {
+                  return Promise.reject('Mật khẩu phải có ít nhất 6 ký tự');
+                } else {
+                  return Promise.resolve();
+                }
+              }, },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+
+          <Form.Item
+            label='Xác nhận mật khẩu'
+            name='confirmPassword'
+            dependencies={['password']}
+            rules={[
+              { required: true, message: 'Vui lòng xác nhận mật khẩu' },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error('Mật khẩu xác nhận không khớp')
+                  );
+                }
+              })
+            ]}
           >
             <Input.Password />
           </Form.Item>
@@ -255,7 +313,7 @@ const Profile = ({ next }: Props) => {
           </Form.Item>
             )}
           
-          {!belongsOrganizer && user?.role_id === 1 ? (
+          {belongsOrganizer && user?.role_id === 1 ? (
             <Form.Item
             label='Thuộc tổ chức'
             name='belongsOrganizer'
@@ -279,26 +337,19 @@ const Profile = ({ next }: Props) => {
               loading={updateProfile.isLoading}
             >
               Cập nhật
+              <Popconfirm
+              title="Bạn có chắc chắn muốn cập nhật hồ sơ của mình không?"
+              onConfirm={() => {
+                handleCreate
+              }}
+        >
+          <CheckCircleOutlined />
+          </Popconfirm>
+
             </Button>
           </Form.Item>
         </Form>
       </Card>
-      {data && data.data.data.activityApplied  && (
-        <div className='w-full flex flex-col justify-start items-start'>
-          <p>Các hoạt động đã tham gia:</p>
-          {data.data.data.activityApplied.map((item: any) => (
-            <div className='w-full flex justify-center items-center gap-2'>
-              <p>Tên hoạt động: {item.name}</p>
-              <p
-                onClick={() => router.push(`/activity/${item.id}`)}
-                className='underline hover:text-cyan-500 cursor-pointer'
-              >
-                Chi tiết
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
     </React.Fragment>
   );
 };

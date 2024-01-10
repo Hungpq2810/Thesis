@@ -30,6 +30,8 @@ const ApplyActivityManagement = ({}: Props) => {
       }
     }
   );
+  console.log(dataActivity);
+  
   const { data: dataApplyActivity, refetch } = useQuery(
     ['listApplyActivity'],
     () => activityService.getAllApplyActivity(),
@@ -53,6 +55,9 @@ const ApplyActivityManagement = ({}: Props) => {
       }
     }
   );
+  console.log(dataApplyActivity);
+  
+
   const updateMutation = useMutation({
     mutationKey: ['updateMutation'],
     mutationFn: (body: { user_id: number; status: number }) =>
@@ -69,9 +74,6 @@ const ApplyActivityManagement = ({}: Props) => {
   const filterActivityByName: { text: string; value: string }[] = useMemo(() => {
     
   if (dataApplyActivity) {
-    console.log(dataApplyActivity);
-    
-
     return dataApplyActivity.map((item) => ({
       text: item.activity!.name,
       value: item.activity!.name
@@ -98,9 +100,9 @@ const ApplyActivityManagement = ({}: Props) => {
       title: 'Người đăng ký',
       dataIndex: 'user_id',
       render: (_, record) => (
-        <div className='flex flex-col justify-start items-start gap-3'>
-          <p>Tên: {record.name}</p>
-          <p>Email: {record.email}</p>
+        <div className='flex flex-col justify-start items-start'>
+          <p className='mb-1'>Tên: {record.name}</p>
+          <p className='mb-1'>Email: {record.email}</p>
           <p>SĐT: {record.phone}</p>
         </div>
       )
@@ -136,9 +138,10 @@ const ApplyActivityManagement = ({}: Props) => {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          {(
+          {/* {(
+            
             <>
-              <Popconfirm
+              <Popconfirm 
                 okButtonProps={{ loading: updateMutation.isLoading }}
                 onConfirm={() => {
                   const body = {
@@ -191,7 +194,68 @@ const ApplyActivityManagement = ({}: Props) => {
                 <ExclamationCircleOutlined className='cursor-pointer'></ExclamationCircleOutlined>
               </Popconfirm>
             </>
-          )}
+          )} */}
+          {(
+          new Date(record.activity?.register_to) < new Date() ? (
+        <>
+          <Popconfirm
+            okButtonProps={{ loading: updateMutation.isLoading }}
+            onConfirm={() => {
+              const body = {
+                user_id: record.user_id,
+                status: 1
+              };
+              updateMutation.mutate(body);
+            }}
+            title={'Phê duyệt'}
+          >
+            <CheckOutlined className='cursor-pointer'></CheckOutlined>
+          </Popconfirm>
+          <Popconfirm
+            okButtonProps={{ loading: updateMutation.isLoading }}
+            onConfirm={() => {
+              const body = {
+                user_id: record.user_id,
+                status: 2
+              };
+              updateMutation.mutate(body);
+            }}
+            title={'Từ chối'}
+          >
+            <CloseOutlined className='cursor-pointer'></CloseOutlined>
+          </Popconfirm>
+        </>
+      ) : record.status in [2,3,4] && new Date(record.activity?.register_to) > new Date() ? (
+        <>
+          <Popconfirm
+            okButtonProps={{ loading: updateMutation.isLoading }}
+            onConfirm={() => {
+              const body = {
+                user_id: record.user_id,
+                status: 3
+              };
+              updateMutation.mutate(body);
+            }}
+            title={'Đã tham gia'}
+          >
+            <CheckCircleOutlined className='cursor-pointer'></CheckCircleOutlined>
+          </Popconfirm>
+          <Popconfirm
+            okButtonProps={{ loading: updateMutation.isLoading }}
+            onConfirm={() => {
+              const body = {
+                user_id: record.user_id,
+                status: 4
+              };
+              updateMutation.mutate(body);
+            }}
+            title={'Không tham gia'}
+          >
+            <ExclamationCircleOutlined className='cursor-pointer'></ExclamationCircleOutlined>
+          </Popconfirm>
+        </>
+      ) : null
+    )}
         </Space>
       )
     }

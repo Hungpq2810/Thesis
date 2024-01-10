@@ -77,6 +77,7 @@ export const removeVolunteer = async (
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const organizerId = decodedToken.id;
     const organizer = await Users.findByPk(organizerId);
+    
     if (organizer) {
       if (!organizer.organization_id && organizer.role_id !== 2) {
         const response: GeneralResponse<{}> = {
@@ -86,18 +87,18 @@ export const removeVolunteer = async (
         };
         commonResponse(req, res, response);
       } else {
-        const { id } = req.params;
         const volunteer = await Users.findOne({
-          where: { id: id, organization_id: organizer.organization_id },
+          where: { id: req.params.id, organization_id: organizer.organization_id },
         });
+        console.log(volunteer);
         
         if (volunteer) {
           await volunteer.update({ organization_id: null });
         }
         const response: GeneralResponse<{}> = {
           status: 200,
-          data: null,
-          message: 'Successfull',
+          data: volunteer,
+          message: 'Xóa thành công',
         };
         commonResponse(req, res, response);
       }

@@ -43,12 +43,12 @@ const SkillManagement = ({}: Props) => {
       )
     },
     {
-      title: 'Tên skill',
+      title: 'Kỹ năng',
       dataIndex: 'name',
       key: 'name'
     },
     {
-      title: 'Mo ta skill',
+      title: 'Mô tả',
       dataIndex: 'description',
       key: 'description'
     },

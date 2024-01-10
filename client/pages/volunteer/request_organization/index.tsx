@@ -5,6 +5,7 @@ import FormCreateOrganization from '@/components/request_organization/FormCreate
 import { useAppSelector } from '@/hooks/useRedux'
 import { useMutation } from 'react-query'
 import { organizationService } from '@/services/organization.service'
+import DashboardLayout from '../../../shared/layouts/DashboardLayout'
 
 const RequestOrganization = () => {
   const { inforOrganization } = useAppSelector(state => state.appSlice)
@@ -86,5 +87,7 @@ const RequestOrganization = () => {
     </React.Fragment>
   )
 }
-
+RequestOrganization.getLayout = (children: React.ReactNode) => (
+  <DashboardLayout>{children}</DashboardLayout>
+);
 export default RequestOrganization

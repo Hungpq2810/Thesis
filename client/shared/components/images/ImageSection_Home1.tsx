@@ -33,7 +33,7 @@ export default function ImageSection_Home1({
           width='483.663'
           height='546.231'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          // color-interpolation-filters='sRGB'
         >
           <feFlood flood-opacity='0' result='BackgroundImageFix' />
           <feColorMatrix

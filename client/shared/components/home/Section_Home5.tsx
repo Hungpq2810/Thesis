@@ -2,6 +2,8 @@ import React from 'react';
 import { Collapse } from 'antd';
 import dayjs from 'dayjs';
 import { IFeedback } from '@/typeDefs/schema/feedback.type';
+import { useQuery } from 'react-query';
+import { feedbackService } from '../../services/feedback.service';
 const { Panel } = Collapse;
 
 type Props = {
@@ -9,6 +11,9 @@ type Props = {
 };
 
 const Section_Home5 = ({ feedbacks }: Props) => {
+  const { data: dataFeedback } = useQuery(['listFeedback'], () =>
+    feedbackService.getAllFeedbackNoAuth()
+  );
   return (
     <React.Fragment>
       <div className='mt-5 flex flex-col justify-center items-center'>

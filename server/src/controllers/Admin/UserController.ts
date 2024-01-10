@@ -16,7 +16,7 @@ export const listUser = async (req: Request, res: Response): Promise<void> => {
         role_id: {
           [Op.not]: 3,
         },
-        status: 0,
+        
       },
       attributes: { exclude: ['password'] },
     });

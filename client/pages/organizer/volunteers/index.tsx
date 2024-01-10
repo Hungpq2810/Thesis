@@ -18,8 +18,8 @@ const VolunteersManagement = ({}: Props) => {
   );
   const removeMutation = useMutation({
     mutationKey: ['removeMutation'],
-    mutationFn: (body: { id: number }) =>
-      volunteerService.removeVolunteerByOrganizer(body),
+    mutationFn: (id: number) =>
+      volunteerService.removeVolunteerByOrganizer(id),
     onSuccess: () => {
       message.success('Xoá thành công');
       refetch();
@@ -44,29 +44,19 @@ const VolunteersManagement = ({}: Props) => {
       key: 'name'
     },
     {
-      title: 'Ảnh đại diện',
-      key: 'avatar',
-      render: (_, record) => (
-        <>
-          <Image
-            src={record.avatar}
-            width={50}
-            height={50}
-            className='rounded-lg'
-          />
-        </>
-      )
+      title: 'Số điện thoại',
+      dataIndex: 'phone',
+      key: 'phone'
     },
     {
-      title: 'Hoạt động đăng ký',
-      dataIndex: 'activity_id',
-      render: (_, record) => (
-        <div className='flex flex-col flex-wrap justify-start items-start gap-3'>
-          {record.volunteersApplied
-            ?.filter((activity) => activity.organizer === user?.id)
-            .map((activity) => <p>{activity.name}</p>)}
-        </div>
-      )
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email'
+    },
+    {
+      title: 'SĐT',
+      dataIndex: 'phone',
+      key: 'phone'
     },
     {
       title: 'Hành động',
@@ -76,12 +66,9 @@ const VolunteersManagement = ({}: Props) => {
           <Popconfirm
             okButtonProps={{ loading: removeMutation.isLoading }}
             onConfirm={() => {
-              const body = {
-                id: record.user_id
-              };
-              removeMutation.mutate(body);
+              removeMutation.mutate(record.id);
             }}
-            title={'Xoá'}
+            title={'Xác nhận xóa TNV khỏi tổ chức?'}
           >
             <CloseOutlined className='cursor-pointer'></CloseOutlined>
           </Popconfirm>

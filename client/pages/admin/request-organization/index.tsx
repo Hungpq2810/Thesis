@@ -42,23 +42,23 @@ const RequestOrganizationManagement = ({}: Props) => {
     {
       title: 'Tên người đăng ký',
       dataIndex: 'name',
-      render: (_, record) => <p>{record.user.name}</p>
+      render: (_, record) => <p>{record.user?.name}</p>
     },
     {
       title: 'Tên tổ chức',
       dataIndex: 'name_organization',
-      render: (_, record) => <p>{record.organization.name}</p>
+      render: (_, record) => <p>{record.organizer?.name}</p>
     },
     {
       title: 'Địa chỉ tổ chức',
       dataIndex: 'location_organization',
-      render: (_, record) => <p>{record.organization.location}</p>
+      render: (_, record) => <p>{record.organizer?.location}</p>
     },
     // 
     {
       title: 'Mô tả tổ chức',
       dataIndex: 'description_organization',
-      render: (_, record) => <p>{record.organization.description}</p>
+      render: (_, record) => <p>{record.organizer?.description}</p>
     },
     {
       title: 'Hành động',
@@ -71,7 +71,7 @@ const RequestOrganizationManagement = ({}: Props) => {
                 okButtonProps={{ loading: updateMutation.isLoading }}
                 onConfirm={() => {
                   const body = {
-                    organization_id: record.organization.id,
+                    organization_id: record.id,
                     status: record.status
                   };
                   updateMutation.mutate(body);
@@ -84,7 +84,7 @@ const RequestOrganizationManagement = ({}: Props) => {
                 okButtonProps={{ loading: updateMutation.isLoading }}
                 onConfirm={() => {
                   const body = {
-                    organization_id: record.organization.id,
+                    organization_id: record.id,
                     status: 2
                   };
                   updateMutation.mutate(body);

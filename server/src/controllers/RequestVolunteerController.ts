@@ -21,6 +21,8 @@ export const requestVolunteer = async (
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
+    console.log(user);
+    
     if (user) {
       if (user.organization_id && user.role_id === 2) {
         const response: GeneralResponse<{}> = {
@@ -51,22 +53,21 @@ export const requestVolunteer = async (
             created_at: new Date(),
             updated_at: new Date(),
           };
-          const result = await VolunteerRequest.create(body);
-          if (result) {
-            const emailUtils = new EmailUtils();
-            const receiverEmail = user.email as string;
-            const emailDetails: EmailDetails = {
-              subject: 'Volunteer Request Confirmation',
-              body: 'Your volunteer request has been successfully submitted.',
-            };
-            emailUtils.sendEmail(receiverEmail, emailDetails);
+          const existingRequest = await VolunteerRequest.findOne({
+            where: {user_id : userId}
+          })
+          if (existingRequest) {
+            await existingRequest.update(body);
+          } else {
+            await VolunteerRequest.create(body);
+          }
             const response: GeneralResponse<{}> = {
               status: 200,
               data: null,
-              message: 'Request successfull',
+              message: 'Đăng ký thành công',
             };
             commonResponse(req, res, response);
-          }
+          
         }
       }
     }
@@ -94,6 +95,8 @@ export const cancelRequestVolunteer = async (
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
+    
+    
     if (user) {
       if (user.organization_id && user.role_id === 2) {
         const response: GeneralResponse<{}> = {
@@ -109,6 +112,7 @@ export const cancelRequestVolunteer = async (
             status: 1,
           },
         });
+        
         if (checkRequestTime.length > 0) {
           await VolunteerRequest.destroy({
             where: { user_id: userId },
@@ -117,8 +121,9 @@ export const cancelRequestVolunteer = async (
         const response: GeneralResponse<{}> = {
           status: 200,
           data: null,
-          message: 'Hủy đăng ký thành công',
+          message: 'Hủy đăng ký vào tổ chức thành công',
         };
+        commonResponse(req, res, response)
       }
     }
   } catch (error: any) {

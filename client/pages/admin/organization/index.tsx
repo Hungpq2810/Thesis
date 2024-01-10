@@ -43,6 +43,13 @@ const OrganizationManagement = ({}: Props) => {
       )
     },
     {
+      title: 'Id tổ chức',
+      key: 'orgId',
+      render: (_,record) => {
+        return <p>{record.id}</p>
+      }
+    },
+    {
       title: 'Tên',
       dataIndex: 'name',
       key: 'name'
