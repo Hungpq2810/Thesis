@@ -30,7 +30,7 @@ class Activities
   public creator!: number;
   public name!: string;
   public description!: string;
-  public image: string|undefined;
+  public image: string | undefined;
   public location!: string;
   public num_of_accepted!: number;
   public max_of_volunteers!: number;

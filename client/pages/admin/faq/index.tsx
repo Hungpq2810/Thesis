@@ -64,12 +64,16 @@ const FAQManagement = ({}: Props) => {
     {
       title: 'Ngày tạo',
       key: 'created_at',
-      render: (_, record) => <p>{dayjs(record.created_at).format('DD/MM/YYYY')}</p>
+      render: (_, record) => (
+        <p>{dayjs(record.created_at).format('DD/MM/YYYY')}</p>
+      )
     },
     {
       title: 'Ngày cập nhật',
       key: 'updated_at',
-      render: (_, record) => <p>{dayjs(record.updated_at).format('DD/MM/YYYY')}</p>
+      render: (_, record) => (
+        <p>{dayjs(record.updated_at).format('DD/MM/YYYY')}</p>
+      )
     },
     {
       title: 'Hành động',

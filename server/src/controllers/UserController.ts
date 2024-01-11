@@ -54,7 +54,7 @@ export const updateProfile = async (
       // const currentRequest = await VolunteerRequest.findOne({
       //   where: {user_id: user.id}
       // })
-      
+
       // const requestApplyOrganizer = {
       //   user_id: Number(userId) as number,
       //   organization_id: currentRequest?.organization_id || Number(req.body.belongsOrganizer) as number,
@@ -63,7 +63,7 @@ export const updateProfile = async (
       //   updated_at: new Date(),
       // };
       // console.log(requestApplyOrganizer);
-      
+
       // await VolunteerRequest.destroy({
       //   where: {
       //     user_id: userId,

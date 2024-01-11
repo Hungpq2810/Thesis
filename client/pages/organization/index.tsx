@@ -26,11 +26,15 @@ const OrganizationPage = () => {
           dataOrganization.data.data.organizations.map((item) => (
             <Card key={item.id} style={{ width: 400 }}>
               <h4 className=''>Tên: {item.name}</h4>
-              <p><strong>Người đứng đầu:</strong> {item.creator.name}</p>  
-              
-              <span style={{ whiteSpace: 'pre-line' }}> <strong> Mô tả: </strong>
-              <br />
-              {item.description}
+              <p>
+                <strong>Người đứng đầu:</strong> {item.creator.name}
+              </p>
+
+              <span style={{ whiteSpace: 'pre-line' }}>
+                {' '}
+                <strong> Mô tả: </strong>
+                <br />
+                {item.description}
               </span>
             </Card>
           ))}

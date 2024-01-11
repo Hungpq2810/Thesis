@@ -35,9 +35,7 @@ const Appbar = () => {
       onClick: () => setOpenModalLogout(true)
     }
   ];
-  const handleSearch = (value: string | number) => {
-    console.log('search value:', value);
-  };
+  const handleSearch = (value: string | number) => {};
   function handleLogout() {
     deleteCookie('keys');
     deleteCookie('sessionKey');

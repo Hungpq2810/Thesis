@@ -15,8 +15,7 @@ const RequestOrganizationManagement = ({}: Props) => {
     ['listRequestOrganization'],
     () => organizationService.getAllRequestOrganization()
   );
-  console.log(dataRequestOrganization);
-  
+
   const updateMutation = useMutation({
     mutationKey: ['updateMutation'],
     mutationFn: (body: { organization_id: number; status: number }) =>
@@ -54,11 +53,15 @@ const RequestOrganizationManagement = ({}: Props) => {
       dataIndex: 'location_organization',
       render: (_, record) => <p>{record.organizer?.location}</p>
     },
-    // 
+    //
     {
       title: 'Mô tả tổ chức',
       dataIndex: 'description_organization',
-      render: (_, record) => <p>{record.organizer?.description}</p>
+      render: (_, record) => (
+        <span style={{ whiteSpace: 'pre-line' }}>
+          {record.organizer?.description}
+        </span>
+      )
     },
     {
       title: 'Hành động',
@@ -71,8 +74,8 @@ const RequestOrganizationManagement = ({}: Props) => {
                 okButtonProps={{ loading: updateMutation.isLoading }}
                 onConfirm={() => {
                   const body = {
-                    organization_id: record.id,
-                    status: record.status
+                    organization_id: record.organizer.id,
+                    status: 0
                   };
                   updateMutation.mutate(body);
                 }}
@@ -84,7 +87,7 @@ const RequestOrganizationManagement = ({}: Props) => {
                 okButtonProps={{ loading: updateMutation.isLoading }}
                 onConfirm={() => {
                   const body = {
-                    organization_id: record.id,
+                    organization_id: record.organizer.id,
                     status: 2
                   };
                   updateMutation.mutate(body);

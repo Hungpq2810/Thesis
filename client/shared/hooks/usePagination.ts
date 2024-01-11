@@ -36,9 +36,7 @@ export default function usePagination<T>({
   const { data, isFetching, refetch } = useQuery({
     queryKey: ['usePagination', router.query],
     queryFn: () => apiFn(queryParams),
-    onSuccess(data) {
-      // console.log(data)
-    }
+    onSuccess(data) {}
     // select(data) {
     //     return data.data.data
     // },

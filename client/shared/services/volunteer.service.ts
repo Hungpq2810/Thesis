@@ -2,30 +2,29 @@ import { AxiosResponse } from 'axios';
 import { https, httpsNoToken } from '../config/https.config';
 import { IBaseResponse } from '@/typeDefs/baseReponse.type';
 import {
+  IRequestVolunteer,
   IRequestVolunteers,
   IVolunteerGroupOrganizer
 } from '@/typeDefs/schema/volunteer.type';
-import { IActivityApplyList } from '../typeDefs/schema/activity_apply.type';
+import { IAppliedVolunteers } from '../typeDefs/schema/activity.type';
 
 class VolunteerService {
   // Volunteer
   getAppliedActivities(): Promise<
-    AxiosResponse<IBaseResponse<IActivityApplyList>>
+    AxiosResponse<IBaseResponse<IAppliedVolunteers>>
   > {
     return https.get('/volunteer/activities');
   }
-  requestToOrganization(body: {
-    id: number
-  }) {
-    return https.post('/volunteer/request_to_org', body)
+  requestToOrganization(body: { id: number }) {
+    return https.post('/volunteer/request_to_org', body);
   }
   cancelRequestToOrganization() {
-    return https.post('/volunteer/cancel_request_to_org')
+    return https.post('/volunteer/cancel_request_to_org');
   }
 
   // Organizer
   getAllRequestVolunteer(): Promise<
-    AxiosResponse<IBaseResponse<IRequestVolunteers>>
+    AxiosResponse<IBaseResponse<IRequestVolunteer>>
   > {
     return https.get('/organizer/request_volunteer');
   }
@@ -40,7 +39,6 @@ class VolunteerService {
   removeVolunteerByOrganizer(id: number) {
     return https.post(`/organizer/volunteers/${id}`);
   }
-
 }
 
 export const volunteerService = new VolunteerService();

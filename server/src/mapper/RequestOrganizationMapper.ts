@@ -9,11 +9,10 @@ export const requestOrganizationMapper = async (
     requestOrganizations.map(async (request) => {
       const { id, user_id, organization_id, status, created_at, updated_at } =
         request;
-      if (status !== 1)
-        return null;
+      if (status !== 1) return null;
       try {
         const user = await Users.findByPk(user_id);
-        const organizer = await Organization.findByPk(organization_id)
+        const organizer = await Organization.findByPk(organization_id);
 
         const userName = user ? user.name : null;
         const organizerName = organizer ? organizer.name : null;

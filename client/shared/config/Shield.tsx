@@ -21,7 +21,7 @@ export function Shield({ children }: Props) {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center', 
+          justifyContent: 'center',
           alignItems: 'center',
           height: '100vh'
         }}

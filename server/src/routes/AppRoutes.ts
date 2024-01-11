@@ -1,3 +1,4 @@
+import { cancelRequestTobeOrg } from './../controllers/Volunteer/RequestOrganizationController';
 import { listOrganizationAdmin } from './../controllers/Admin/OrganizationController';
 import express from 'express';
 import { login, register, resetPassword } from '../controllers/AuthController';
@@ -19,12 +20,18 @@ import {
   deleteOrganization,
   updateOrganization,
 } from '../controllers/Admin/OrganizationController';
-import { requestOrganization } from '../controllers/RequestOrganizationController';
+import {
+  getCurrentRequestOrganization,
+  requestOrganization,
+} from '../controllers/Volunteer/RequestOrganizationController';
 import {
   listRequestOrganization,
   updateRequestOrganization,
 } from '../controllers/Admin/RequestOrganizationController';
-import { cancelRequestVolunteer, requestVolunteer } from '../controllers/RequestVolunteerController';
+import {
+  cancelRequestVolunteer,
+  requestVolunteer,
+} from '../controllers/RequestVolunteerController';
 import {
   listRequestVolunteers,
   updateRequestVolunteer,
@@ -247,28 +254,60 @@ router.post('/api/v1/user', authenticateToken, updateProfile);
 
 //Volunteer
 //List activity applied
-router.get('/api/v1/volunteer/activities', authenticateToken, listActivityApplied)
-//Request Organization
-router.post(
-  '/api/v1/request_tobe_organization',
+router.get(
+  '/api/v1/volunteer/activities',
   authenticateToken,
-  requestOrganization,
+  listActivityApplied,
 );
-//Request Join In Orgainzation By Volunteer
-router.post('/api/v1/volunteer/request_to_organization', authenticateToken, requestVolunteer);
-//Cancel Request
-router.post('/api/v1/volunteer/cancel_request_to_organization', authenticateToken, cancelRequestVolunteer)
-
-
-//public 
-//Organization
-router.get('/api/v1/organizations', listOrganization);
-router.get('/api/v1/organization/:id', detailOrganization);
+//Request Organization
+//Create Organization
 router.post(
-  '/api/v1/create_organization',
+  '/api/v1/volunteer/create_organization',
   authenticateToken,
   createOrganization,
 );
+//Request to be organization
+router.post(
+  '/api/v1/volunteer/request_tobe_organization',
+  authenticateToken,
+  requestOrganization,
+);
+//Get current request to be org
+router.get(
+  '/api/v1/volunteer/get_current_request_tobe_organization',
+  authenticateToken,
+  getCurrentRequestOrganization,
+);
+//Cancel request to be org
+router.delete(
+  '/api/v1/volunteer/request_tobe_organization',
+  authenticateToken,
+  cancelRequestTobeOrg,
+);
+//Request Join In Orgainzation By Volunteer
+router.post(
+  '/api/v1/volunteer/request_to_organization',
+  authenticateToken,
+  requestVolunteer,
+);
+//Cancel Request
+router.post(
+  '/api/v1/volunteer/cancel_request_to_organization',
+  authenticateToken,
+  cancelRequestVolunteer,
+);
+//Activity application By Volunteer
+router.post(
+  '/api/v1/apply_volunteer',
+  authenticateToken,
+  activityApplyVolunteer,
+);
+router.post('/api/v1/cancel_volunteer', authenticateToken, cancelApplyActivity);
+
+//public
+//Organization
+router.get('/api/v1/organizations', listOrganization);
+router.get('/api/v1/organization/:id', detailOrganization);
 
 //Activity
 router.get('/api/v1/activities', listActivity);
@@ -281,13 +320,6 @@ router.get('/api/v1/skills/:id', getSkillById);
 //Feedback
 router.post('/api/v1/feedback', newFeedBack);
 router.get('/api/v1/feedback', listFeedBackNoAuth);
-//Request Join in Activity By Volunteer
-router.post(
-  '/api/v1/apply_volunteer',
-  authenticateToken,
-  activityApplyVolunteer,
-);
-router.post('/api/v1/cancel_volunteer', authenticateToken, cancelApplyActivity);
 
 //Faq
 router.get('/api/v1/faq', listFaq);

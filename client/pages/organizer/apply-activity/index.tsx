@@ -14,8 +14,25 @@ import React, { useMemo } from 'react';
 import { activityService } from '@/services/activity.service';
 import { IAppliedVolunteer } from '@/typeDefs/schema/activity.type';
 import { useAppSelector } from '@/hooks/useRedux';
+import { ApplyAction } from './action';
 
 type Props = {};
+
+export const ApplyActivityStatus = {
+  REGISTER: 0,
+  ACCEPTED: 1,
+  REJECTED: 2,
+  JOINED: 3,
+  ABSENT: 4
+};
+
+export const ApplyActivityStatusLabel: any = {
+  [ApplyActivityStatus.REGISTER]: 'Đăng ký',
+  [ApplyActivityStatus.ACCEPTED]: 'Phê duyệt',
+  [ApplyActivityStatus.REJECTED]: 'Từ chối',
+  [ApplyActivityStatus.JOINED]: 'Đã tham gia',
+  [ApplyActivityStatus.ABSENT]: 'Không tham gia'
+};
 
 const ApplyActivityManagement = ({}: Props) => {
   const { user } = useAppSelector((state) => state.appSlice);
@@ -30,8 +47,7 @@ const ApplyActivityManagement = ({}: Props) => {
       }
     }
   );
-  console.log(dataActivity);
-  
+
   const { data: dataApplyActivity, refetch } = useQuery(
     ['listApplyActivity'],
     () => activityService.getAllApplyActivity(),
@@ -55,8 +71,6 @@ const ApplyActivityManagement = ({}: Props) => {
       }
     }
   );
-  console.log(dataApplyActivity);
-  
 
   const updateMutation = useMutation({
     mutationKey: ['updateMutation'],
@@ -71,20 +85,22 @@ const ApplyActivityManagement = ({}: Props) => {
     }
   });
 
-  const filterActivityByName: { text: string; value: string }[] = useMemo(() => {
-    
-  if (dataApplyActivity) {
-    return dataApplyActivity.map((item) => ({
-      text: item.activity!.name,
-      value: item.activity!.name
-    }));
-  } else {
-    return [{
-      text: '',
-      value: ''
-    }];
-  }
-  }, [dataApplyActivity]);
+  const filterActivityByName: { text: string; value: string }[] =
+    useMemo(() => {
+      if (dataApplyActivity) {
+        return dataApplyActivity.map((item) => ({
+          text: item.activity!.name,
+          value: item.activity!.name
+        }));
+      } else {
+        return [
+          {
+            text: '',
+            value: ''
+          }
+        ];
+      }
+    }, [dataApplyActivity]);
 
   const columns: ColumnType<IAppliedVolunteer>[] = [
     {
@@ -119,144 +135,18 @@ const ApplyActivityManagement = ({}: Props) => {
     {
       title: 'Trạng thái',
       dataIndex: 'status',
-      render: (_, record) => (
-        <p>
-          {record.status === 0
-            ? 'Đăng ký'
-            : record.status === 1
-              ? 'Phê duyệt'
-              : record.status === 2
-                ? 'Không phê duyệt'
-                : record.status === 3
-                  ? 'Đã tham gia'
-                  : 'Không tham gia'}
-        </p>
-      )
+      filters: Object.keys(ApplyActivityStatusLabel).map((key) => ({
+        value: key,
+        text: ApplyActivityStatusLabel[key]
+      })),
+      render: (_, record) => <p>{ApplyActivityStatusLabel[record.status]}</p>,
+      onFilter: (value, record) => record.status === Number(value)
     },
     {
       title: 'Hành động',
       key: 'action',
       render: (_, record) => (
-        <Space size='middle'>
-          {/* {(
-            
-            <>
-              <Popconfirm 
-                okButtonProps={{ loading: updateMutation.isLoading }}
-                onConfirm={() => {
-                  const body = {
-                    user_id: record.user_id,
-                    status: 1
-                  };
-                  updateMutation.mutate(body);
-                }}
-                title={'Phê duyệt'}
-              >
-                <CheckOutlined className='cursor-pointer'></CheckOutlined>
-              </Popconfirm>
-              <Popconfirm
-                okButtonProps={{ loading: updateMutation.isLoading }}
-                onConfirm={() => {
-                  const body = {
-                    user_id: record.user_id,
-                    status: 2
-                  };
-                  updateMutation.mutate(body);
-                }}
-                title={'Từ chối'}
-              >
-                <CloseOutlined className='cursor-pointer'></CloseOutlined>
-              </Popconfirm>
-              <Popconfirm
-                okButtonProps={{ loading: updateMutation.isLoading }}
-                onConfirm={() => {
-                  const body = {
-                    user_id: record.user_id,
-                    status: 3
-                  };
-                  updateMutation.mutate(body);
-                }}
-                title={'Đã tham gia'}
-              >
-                <CheckCircleOutlined className='cursor-pointer'></CheckCircleOutlined>
-              </Popconfirm>
-              <Popconfirm
-                okButtonProps={{ loading: updateMutation.isLoading }}
-                onConfirm={() => {
-                  const body = {
-                    user_id: record.user_id,
-                    status: 4
-                  };
-                  updateMutation.mutate(body);
-                }}
-                title={'Không tham gia'}
-              >
-                <ExclamationCircleOutlined className='cursor-pointer'></ExclamationCircleOutlined>
-              </Popconfirm>
-            </>
-          )} */}
-          {(
-          new Date(record.activity?.register_to) < new Date() ? (
-        <>
-          <Popconfirm
-            okButtonProps={{ loading: updateMutation.isLoading }}
-            onConfirm={() => {
-              const body = {
-                user_id: record.user_id,
-                status: 1
-              };
-              updateMutation.mutate(body);
-            }}
-            title={'Phê duyệt'}
-          >
-            <CheckOutlined className='cursor-pointer'></CheckOutlined>
-          </Popconfirm>
-          <Popconfirm
-            okButtonProps={{ loading: updateMutation.isLoading }}
-            onConfirm={() => {
-              const body = {
-                user_id: record.user_id,
-                status: 2
-              };
-              updateMutation.mutate(body);
-            }}
-            title={'Từ chối'}
-          >
-            <CloseOutlined className='cursor-pointer'></CloseOutlined>
-          </Popconfirm>
-        </>
-      ) : record.status in [2,3,4] && new Date(record.activity?.register_to) > new Date() ? (
-        <>
-          <Popconfirm
-            okButtonProps={{ loading: updateMutation.isLoading }}
-            onConfirm={() => {
-              const body = {
-                user_id: record.user_id,
-                status: 3
-              };
-              updateMutation.mutate(body);
-            }}
-            title={'Đã tham gia'}
-          >
-            <CheckCircleOutlined className='cursor-pointer'></CheckCircleOutlined>
-          </Popconfirm>
-          <Popconfirm
-            okButtonProps={{ loading: updateMutation.isLoading }}
-            onConfirm={() => {
-              const body = {
-                user_id: record.user_id,
-                status: 4
-              };
-              updateMutation.mutate(body);
-            }}
-            title={'Không tham gia'}
-          >
-            <ExclamationCircleOutlined className='cursor-pointer'></ExclamationCircleOutlined>
-          </Popconfirm>
-        </>
-      ) : null
-    )}
-        </Space>
+        <ApplyAction record={record} updateMutation={updateMutation} />
       )
     }
   ];

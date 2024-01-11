@@ -1,7 +1,16 @@
 import { faqService } from '@/services/faq.service';
 import React, { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { Button, Card, Collapse, Input, Form, Rate, message, Space } from 'antd';
+import {
+  Button,
+  Card,
+  Collapse,
+  Input,
+  Form,
+  Rate,
+  message,
+  Space
+} from 'antd';
 import dayjs from 'dayjs';
 import { feedbackService } from '../shared/services/feedback.service';
 import { useAppSelector } from '../shared/hooks/useRedux';
@@ -57,12 +66,14 @@ const FeedbackPage = () => {
               defaultActiveKey={['1']}
             >
               <Panel header={feedback.title} key='1'>
-              <Space>
-                      <Rate disabled value={feedback.rate} />
-                      {/* {rate ? <span>{[rate - 1]}</span> : ''} */}
-              </Space>
-              <br></br>
-                <span style={{ whiteSpace: 'pre-line' }}>{feedback.content}</span>
+                <Space>
+                  <Rate disabled value={feedback.rate} />
+                  {/* {rate ? <span>{[rate - 1]}</span> : ''} */}
+                </Space>
+                <br></br>
+                <span style={{ whiteSpace: 'pre-line' }}>
+                  {feedback.content}
+                </span>
                 <p>
                   Cập nhật lúc:{' '}
                   {dayjs(feedback.updated_at).format('DD/MM/YYYY')}
@@ -73,39 +84,38 @@ const FeedbackPage = () => {
       </div>
 
       <Card title='Feedback' className='mt-10' style={{ width: '100%' }}>
-            <Form
-              name='newFeedback'
-              initialValues={{ remember: true }}
-              onFinish={handleNewFeedback}
-              autoComplete='off'
-              layout='vertical'
-            >
-              <Form.Item
-                label='Tiêu đề'
-                name='title'
-                rules={[{ required: true, message: 'Chưa điền tiêu đề' }]}
-              >
-                <Input />
-              </Form.Item>
+        <Form
+          name='newFeedback'
+          onFinish={handleNewFeedback}
+          autoComplete='off'
+          layout='vertical'
+        >
+          <Form.Item
+            label='Tiêu đề'
+            name='title'
+            rules={[{ required: true, message: 'Chưa điền tiêu đề' }]}
+          >
+            <Input />
+          </Form.Item>
 
-              <Form.Item
-                label='Nội dung'
-                name='content'
-                rules={[{ required: true, message: 'Chưa điền nội dung' }]}
-              >
-                <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} />
-              </Form.Item>
+          <Form.Item
+            label='Nội dung'
+            name='content'
+            rules={[{ required: true, message: 'Chưa điền nội dung' }]}
+          >
+            <Input.TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
+          </Form.Item>
 
-              <Form.Item label='Đánh giá' name='rate'>
-                <Rate onChange={setRate} value={rate} />
-                {rate ? <span> {[rate]}</span> : ''}
-              </Form.Item>
+          <Form.Item label='Đánh giá' name='rate'>
+            <Rate onChange={setRate} value={rate} />
+            {rate ? <span> {[rate]}</span> : ''}
+          </Form.Item>
 
-              <Form.Item style={{ textAlign: 'center' }}>
-                <Button htmlType='submit'>Gửi đánh giá</Button>
-              </Form.Item>
-            </Form>
-          </Card>
+          <Form.Item style={{ textAlign: 'center' }}>
+            <Button htmlType='submit'>Gửi đánh giá</Button>
+          </Form.Item>
+        </Form>
+      </Card>
     </React.Fragment>
   );
 };

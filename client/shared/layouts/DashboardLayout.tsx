@@ -26,40 +26,38 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       dispatch(
         login({
           role_id: decodeData.role_id,
-            username: decodeData.username,
-            id: decodeData.id,
-            avatar: decodeData.avatar,
-            name: decodeData.name,
-            email: decodeData.email
+          username: decodeData.username,
+          id: decodeData.id,
+          avatar: decodeData.avatar,
+          name: decodeData.name,
+          email: decodeData.email
         })
       );
     }
   }, []);
 
   return (
-    (
-      <Layout style={{ minHeight: '100vh' }}>
-        <SiderMenu />
-        <Layout className="site-layout p-2">
-          <Header style={{ background: colorBgContainer }}>
-            <Appbar />
-          </Header>
-          <Content>
-            <div
-              style={{
-                padding: 24,
-                minHeight: 360,
-                background: colorBgContainer,
-              }}
-            >
-              {children}
-            </div>
-          </Content>
-          {/* <FooterContent>
+    <Layout style={{ minHeight: '100vh' }}>
+      <SiderMenu />
+      <Layout className='site-layout p-2'>
+        <Header style={{ background: colorBgContainer }}>
+          <Appbar />
+        </Header>
+        <Content>
+          <div
+            style={{
+              padding: 24,
+              minHeight: 360,
+              background: colorBgContainer
+            }}
+          >
+            {children}
+          </div>
+        </Content>
+        {/* <FooterContent>
             </FooterContent> */}
-        </Layout>
       </Layout>
-    ) 
+    </Layout>
   );
 }
 

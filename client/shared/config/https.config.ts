@@ -13,8 +13,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
 class AxiosConfig {
   baseUrl = BASE_URL;
-  token =
-    getCookie(APP_SAVE_KEYS.KEYS);
+  getToken = () => getCookie(APP_SAVE_KEYS.KEYS);
   axiosConfig = {
     baseURL: this.baseUrl,
     headers: {
@@ -26,8 +25,8 @@ class AxiosConfig {
   get getAxiosInstance() {
     const axiosInstance = axios.create(this.axiosConfig);
     axiosInstance.interceptors.request.use((req) => {
-      if (this.token && req.headers)
-        req.headers['Authorization'] = `Bearer ${this.token}`;
+      if (this.getToken() && req.headers)
+        req.headers['Authorization'] = `Bearer ${this.getToken()}`;
       return req;
     });
     axiosInstance.interceptors.response.use(

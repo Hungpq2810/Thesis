@@ -21,7 +21,7 @@ const { Header, Content, Footer } = Layout;
 
 function RequestOrganization({ children }: { children: React.ReactNode }) {
   const { user } = useAppSelector((state) => state.appSlice);
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const dispatch = useDispatch();
   const [current, setCurrent] = useState('');
   const router = useRouter();
@@ -71,11 +71,11 @@ function RequestOrganization({ children }: { children: React.ReactNode }) {
       dispatch(
         login({
           role_id: decodeData.role_id,
-            username: decodeData.username,
-            id: decodeData.id,
-            avatar: decodeData.avatar,
-            name: decodeData.name,
-            email: decodeData.email
+          username: decodeData.username,
+          id: decodeData.id,
+          avatar: decodeData.avatar,
+          name: decodeData.name,
+          email: decodeData.email
         })
       );
     }

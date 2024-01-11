@@ -31,7 +31,7 @@ class ActivityService {
     name: string;
     description: string;
     location: string;
-    skills: string[];
+    skillsActivity: string[];
   }) {
     return https.post('/organizer/create_activity', body);
   }
@@ -41,7 +41,7 @@ class ActivityService {
       name: string;
       description: string;
       location: string;
-      skills: string[];
+      skillsActivity: string[];
     }
   ) {
     return https.put(`/organizer/update_activity/${id}`, body);

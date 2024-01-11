@@ -82,7 +82,7 @@ const SiderMenu = () => {
       label: 'Ban tổ chức',
       children: [
         {
-          key: '/organizer/activity',
+          key: '/organizer/activities',
           icon: <CalendarOutlined />,
           label: 'Quản lý hoạt động'
         },
@@ -121,7 +121,7 @@ const SiderMenu = () => {
       label: 'Tình nguyện viên',
       children: [
         {
-          key: '/volunteer/activity',
+          key: '/volunteer/activities',
           icon: <MonitorOutlined />,
           label: 'Hoạt động'
         },
@@ -180,12 +180,16 @@ const SiderMenu = () => {
         style={{ backgroundColor: token.colorBgBase }}
         defaultSelectedKeys={[router.pathname]}
         mode='inline'
-        items={user && (
-          +user?.role_id === 3 ? menuAdmin :
-          +user?.role_id === 2 ? menuOrganizer :
-          +user?.role_id === 1 ? menuVolunteer :
-          menuAdmin
-        )}
+        items={
+          user &&
+          (+user?.role_id === 3
+            ? menuAdmin
+            : +user?.role_id === 2
+              ? menuOrganizer
+              : +user?.role_id === 1
+                ? menuVolunteer
+                : menuAdmin)
+        }
         onClick={(menu) => {
           router.push(menu.key);
         }}

@@ -2,7 +2,7 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Col, message, Popconfirm, Row, Space, Table } from 'antd';
 import Search from 'antd/lib/input/Search';
 import { ColumnType } from 'antd/lib/table';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import FormUser from './form';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useMutation, useQuery } from 'react-query';
@@ -20,21 +20,29 @@ const UserManagement = ({}: Props) => {
   const { data: dataUser, refetch } = useQuery(['listUser'], () =>
     userService.getAllUser()
   );
-  const { data: dataOrganization } = useQuery(
-    ['listOrganizationAdmin'],
-    () => organizationService.listOrganizationAdmin()
+  const { data: dataOrganization } = useQuery(['listOrganizationAdmin'], () =>
+    organizationService.listOrganizationAdmin()
   );
-  const deleteMutation = useMutation({
-    mutationKey: ['deleteUserMutation'],
-    mutationFn: (userId: number) => userService.deleteUser(userId),
-    onSuccess: () => {
-      message.success('Xoá thành công');
-      refetch();
-    },
-    onError() {
-      message.error('Xoá không thành công');
-    }
-  });
+  // const deleteMutation = useMutation({
+  //   mutationKey: ['deleteUserMutation'],
+  //   mutationFn: (userId: number) => userService.deleteUser(userId),
+  //   onSuccess: () => {
+  //     message.success('Xoá thành công');
+  //     refetch();
+  //   },
+  //   onError() {
+  //     message.error('Xoá không thành công');
+  //   }
+  // });
+  const organizationNameMap = useMemo(() => {
+    const map: any = {};
+
+    (dataOrganization?.data.data.organizations || []).forEach((item) => {
+      map[item.id] = item.name;
+    });
+
+    return map;
+  }, [dataOrganization]);
 
   const columns: ColumnType<IUser>[] = [
     {
@@ -64,20 +72,22 @@ const UserManagement = ({}: Props) => {
           default:
             return 'Chưa xác định';
         }
-      },
+      }
     },
     {
       title: 'Thuộc tổ chức',
       dataIndex: 'organization_id',
-      render: (_, record) => <p>{record.belongsOrganizer?.name}</p>
+      render: (_, record) => (
+        <p>{organizationNameMap[record.organization_id]}</p>
+      )
     },
-    { 
+    {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
       render: (value) => {
         return value === 0 ? 'Hoạt động' : 'Không hoạt động';
-      },
+      }
     },
     {
       title: 'Hành động',
@@ -94,20 +104,11 @@ const UserManagement = ({}: Props) => {
           >
             <EditOutlined />
           </div>
-          {/* <Popconfirm
-            okButtonProps={{ loading: deleteMutation.isLoading }}
-            onConfirm={() => {
-              deleteMutation.mutate(record.id);
-            }}
-            title={'Xoá'}
-          >
-            <DeleteOutlined className='cursor-pointer'></DeleteOutlined>
-          </Popconfirm> */}
         </Space>
       )
     }
   ];
-  
+
   return (
     <>
       {dataUser && dataUser.data.data && (

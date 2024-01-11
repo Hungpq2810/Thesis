@@ -1,5 +1,5 @@
-import { DataTypes, Model, Optional } from "sequelize";
-import { sequelize } from "../db";
+import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../db';
 
 export interface OrganizationAttributes {
   id: number;
@@ -12,14 +12,14 @@ export interface OrganizationAttributes {
   updated_at: Date;
 }
 interface OrganizationCreationAttributes
-  extends Optional<OrganizationAttributes, "id"> {}
+  extends Optional<OrganizationAttributes, 'id'> {}
 
 class Organization
   extends Model<OrganizationAttributes, OrganizationCreationAttributes>
   implements OrganizationAttributes
 {
   public id!: number;
-  
+
   public name!: string;
   public description!: string;
   public location!: string;
@@ -66,11 +66,11 @@ Organization.init(
     },
   },
   {
-    tableName: "organization",
+    tableName: 'organization',
     sequelize: sequelize,
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-  }
+  },
 );
 export { Organization };

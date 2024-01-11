@@ -9,7 +9,6 @@ const secretKey = process.env.SECRETKEY as string;
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   const { username, password } = req.body;
-  console.log(req.body);
   try {
     const account = await Users.findOne({
       where: {
@@ -24,12 +23,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       if (isPasswordValid) {
         const user = account.toJSON();
         const objectToken = {
-        id: user.id,
-        username: user.username,
-        role_id: user.role_id,
-        email: user.email,
-      };
-      const token = jwt.sign(objectToken, secretKey);
+          id: user.id,
+          username: user.username,
+          role_id: user.role_id,
+          email: user.email,
+        };
+        const token = jwt.sign(objectToken, secretKey);
         const response: GeneralResponse<{ token: string }> = {
           status: 200,
           data: { token },

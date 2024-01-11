@@ -14,7 +14,6 @@ import { useForm } from 'antd/lib/form/Form';
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { faqService } from '@/services/faq.service';
-import { log } from 'console';
 
 interface Props {
   editId?: number;
@@ -86,7 +85,6 @@ const FormFaq = ({ editId, open, setOpen, refetch }: Props) => {
       <Form
         form={form}
         name='basic'
-        initialValues={{ remember: true }}
         onFinish={handlenew}
         autoComplete='off'
         layout='vertical'

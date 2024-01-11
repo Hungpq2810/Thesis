@@ -21,8 +21,7 @@ export const requestVolunteer = async (
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
-    console.log(user);
-    
+
     if (user) {
       if (user.organization_id && user.role_id === 2) {
         const response: GeneralResponse<{}> = {
@@ -54,20 +53,19 @@ export const requestVolunteer = async (
             updated_at: new Date(),
           };
           const existingRequest = await VolunteerRequest.findOne({
-            where: {user_id : userId}
-          })
+            where: { user_id: userId },
+          });
           if (existingRequest) {
             await existingRequest.update(body);
           } else {
             await VolunteerRequest.create(body);
           }
-            const response: GeneralResponse<{}> = {
-              status: 200,
-              data: null,
-              message: 'Đăng ký thành công',
-            };
-            commonResponse(req, res, response);
-          
+          const response: GeneralResponse<{}> = {
+            status: 200,
+            data: null,
+            message: 'Đăng ký thành công',
+          };
+          commonResponse(req, res, response);
         }
       }
     }
@@ -95,8 +93,7 @@ export const cancelRequestVolunteer = async (
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
-    
-    
+
     if (user) {
       if (user.organization_id && user.role_id === 2) {
         const response: GeneralResponse<{}> = {
@@ -112,7 +109,7 @@ export const cancelRequestVolunteer = async (
             status: 1,
           },
         });
-        
+
         if (checkRequestTime.length > 0) {
           await VolunteerRequest.destroy({
             where: { user_id: userId },
@@ -123,7 +120,7 @@ export const cancelRequestVolunteer = async (
           data: null,
           message: 'Hủy đăng ký vào tổ chức thành công',
         };
-        commonResponse(req, res, response)
+        commonResponse(req, res, response);
       }
     }
   } catch (error: any) {

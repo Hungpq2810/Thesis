@@ -1,10 +1,8 @@
-import DashboardLayout from "../../../shared/layouts/DashboardLayout";
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 
-const JoinOrganization = () => {
-
-}
+const JoinOrganization = () => {};
 
 JoinOrganization.getLayout = (children: React.ReactNode) => (
-    <DashboardLayout>{children}</DashboardLayout>
-  );
-  export default JoinOrganization;
+  <DashboardLayout>{children}</DashboardLayout>
+);
+export default JoinOrganization;

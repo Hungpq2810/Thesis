@@ -27,10 +27,10 @@ class OrganizationService {
     location: string;
     description: string;
   }): Promise<AxiosResponse<IBaseResponse<IOrganization>>> {
-    return https.post('/create_organization', body);
+    return https.post('/volunteer/create_organization', body);
   }
   requestBecomeOrganization(body: { organization_id: number }) {
-    return https.post('/request_tobe_organization', body);
+    return https.post('/volunteer/request_tobe_organization', body);
   }
   updateOrganization(
     id: number,
@@ -46,9 +46,6 @@ class OrganizationService {
   updateRequestOrganization(body: { organization_id: number; status: number }) {
     return https.put('/admin/update_request_organization', body);
   }
-  // deleteUser(id: number) {
-  //     return https.delete(`/admin/users/${id}`)
-  // }
 }
 
 export const organizationService = new OrganizationService();

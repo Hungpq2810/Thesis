@@ -13,9 +13,6 @@ class FeedbackService {
   getAllFeedbackOrganizer(): Promise<AxiosResponse<IBaseResponse<IFeedBacks>>> {
     return https.get('/organizer/feedback');
   }
-  //   getActivityById(id: number): Promise<AxiosResponse<IBaseResponse<IActivity>>> {
-  //     return httpsNoToken.get(`/activities/${id}`)
-  //   }
   newActivity(body: {
     activity_id: number;
     title: string;
@@ -24,12 +21,6 @@ class FeedbackService {
   }) {
     return https.post('/feedback', body);
   }
-  //   updateActivity(id: number, body: { name: string; description: string; location: string; skills: string[] }) {
-  //     return https.put(`/organizer/update_activity/${id}`, body)
-  //   }
-  //   deleteActivity(id: number) {
-  //     return https.delete(`/admin/activity/${id}`)
-  //   }
 }
 
 export const feedbackService = new FeedbackService();

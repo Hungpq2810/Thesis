@@ -4,7 +4,6 @@ import * as dotenv from 'dotenv';
 import { GeneralResponse, commonResponse } from '../utilities/CommonResponse';
 import { Organization, OrganizationAttributes } from '../models/organization';
 import { organizationMapper } from '../mapper/OrganizationMapper';
-import { randomId } from '../utilities/random';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
@@ -55,6 +54,7 @@ export const detailOrganization = async (
   try {
     const { id } = req.params;
     const organization = await Organization.findByPk(id);
+
     if (organization) {
       const response: GeneralResponse<{
         organization: OrganizationAttributes;
@@ -100,7 +100,7 @@ export const createOrganization = async (
     const userId = decodedToken.id;
     const userRole = decodedToken.role_id;
 
-    if(userRole !== 1 ){
+    if (userRole !== 1) {
       res.status(401).json({ message: 'Unauthorized' });
       return;
     }
@@ -114,8 +114,7 @@ export const createOrganization = async (
         created_at: new Date(),
         updated_at: new Date(),
       };
-      console.log(body);
-      
+
       await Organization.destroy({ where: { creator: userId } });
       const result = await Organization.create(body);
       if (result) {

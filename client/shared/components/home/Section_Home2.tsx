@@ -2,9 +2,7 @@ import { Carousel } from 'antd';
 import React from 'react';
 
 const Section_Home2 = () => {
-  const onChange = (currentSlide: number) => {
-    console.log(currentSlide);
-  };
+  const onChange = (currentSlide: number) => {};
   return (
     <React.Fragment>
       <div className='w-full grid grid-cols-1 justify-center items-center gap-5'>
@@ -12,7 +10,7 @@ const Section_Home2 = () => {
           Sinh viên tình nguyện
           <span>Đại học Bách Khoa Hà Nội</span>
         </h1>
-        <Carousel afterChange={onChange}>
+        <Carousel afterChange={onChange} autoplay={true} autoplaySpeed={10000}>
           <div className='max-w-[1980px] max-h-[700px] relative overflow-hidden'>
             <img
               className='w-full h-full object-cover object-center rounded-lg'
@@ -24,7 +22,7 @@ const Section_Home2 = () => {
           <div className='max-w-[1980px] max-h-[700px] relative'>
             <img
               className='w-full h-full object-cover object-center rounded-lg overflow-hidden'
-              src='https://scontent.fhan18-1.fna.fbcdn.net/v/t39.30808-6/382960363_698788452284615_2506049564570849784_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=3635dc&_nc_eui2=AeEjFra4haRnIp-p3WpJEpbdI9CQn8XGir0j0JCfxcaKvRjbDwPX_XMTKDXWH3xF9FgJv5bwhCH49xJSgRl1bswY&_nc_ohc=qu7gNrpmUe8AX8CYX1z&_nc_ht=scontent.fhan18-1.fna&oh=00_AfCpmOI6Wy4FhFG5C_mv82RLGBFCx_aPAk7GQ-ft3zwKbg&oe=65942766'
+              src='https://thanhnien.mediacdn.vn/Uploaded/trongnth/2022_07_08/truc-7-8226.jpg'
               style={{ maxWidth: '100%', maxHeight: '100%' }}
               alt='Carousel Image'
             />
@@ -32,7 +30,23 @@ const Section_Home2 = () => {
           <div className='max-w-[1980px] max-h-[700px] relative'>
             <img
               className='w-full h-full object-cover object-center rounded-lg overflow-hidden'
-              src='https://scontent.fhan18-1.fna.fbcdn.net/v/t39.30808-6/369599880_823716053089965_7860870651474304212_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=3635dc&_nc_eui2=AeFE56mcSuksgctqT62B7ZRGXl8y1TYl0bteXzLVNiXRuwuAxaKMCvUiYZ3e_-UrlRAQgi4D2qEeR0YJxNzD_ojV&_nc_ohc=4tEaaDJVCKgAX9Ehe_y&_nc_ht=scontent.fhan18-1.fna&oh=00_AfCw9gTrWsmhBNrlClJLyRVrIA6up0nzXRf3s7SqeRqSQg&oe=65955258'
+              src='https://scontent.fhan18-1.fna.fbcdn.net/v/t39.30808-6/371355413_717856537046816_4577845481359544141_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=3635dc&_nc_eui2=AeE2BqVrKDYpNzxAcVlgupiME4hoMUvku9ITiGgxS-S70lgDXNOYtH0Ryu6L2BqYz14E8HSUcurzv1bcEUAn1Xdb&_nc_ohc=av_bRKu3xMkAX9GmAiC&_nc_ht=scontent.fhan18-1.fna&oh=00_AfBprjpMHHAH-H3WC5V1GV-jZPwvuu54GGGWk3BIb4Ao1Q&oe=65A4AD97'
+              style={{ maxWidth: '100%', maxHeight: '100%' }}
+              alt='Carousel Image'
+            />
+          </div>
+          <div className='max-w-[1980px] max-h-[700px] relative'>
+            <img
+              className='w-full h-full object-cover object-center rounded-lg overflow-hidden'
+              src='https://scontent.fhan18-1.fna.fbcdn.net/v/t39.30808-6/372764760_717856150380188_222603127376741645_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=3635dc&_nc_eui2=AeEPge2U_3NEhqavW5a2GwqQ4R5lQRI_VzXhHmVBEj9XNV9ME7IMnUk4ZrU3COSsVcxRiB_pLl8XNXAu10CWV-Co&_nc_ohc=n12s2EGEW9AAX8X_VgL&_nc_ht=scontent.fhan18-1.fna&oh=00_AfBQDc5Dt4eFxwsXLQXNA2-6knafWIdpKxGlZKxlP8k4eA&oe=65A4173E'
+              style={{ maxWidth: '100%', maxHeight: '100%' }}
+              alt='Carousel Image'
+            />
+          </div>
+          <div className='max-w-[1980px] max-h-[700px] relative'>
+            <img
+              className='w-full h-full object-cover object-center rounded-lg overflow-hidden'
+              src='https://scontent.fhan18-1.fna.fbcdn.net/v/t39.30808-6/372679129_716716493827487_5152202459787610745_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=3635dc&_nc_eui2=AeHClb0zymhiMynNLlrA3Jj7lHnj1pfXpASUeePWl9ekBIC7DQRCafMLQwVKhGoS-I4SiQFoTRD0YNvY7swUrDFE&_nc_ohc=BUkkMi5gaW0AX_n2IZU&_nc_ht=scontent.fhan18-1.fna&oh=00_AfCg7ryRkWawcEsNr9ikrjnOdBIMxE7seqS4omzzxTLbNQ&oe=65A55F4B'
               style={{ maxWidth: '100%', maxHeight: '100%' }}
               alt='Carousel Image'
             />

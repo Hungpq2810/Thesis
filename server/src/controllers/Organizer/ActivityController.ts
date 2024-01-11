@@ -8,6 +8,7 @@ import {
 import { Users } from '../../models/users';
 import { Activities, ActivityAttributes } from '../../models/activities';
 import { SkillActivities } from '../../models/skill_activities';
+import { register } from '../AuthController';
 
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
@@ -23,7 +24,6 @@ export const createActivity = async (
       return;
     }
 
-    // debugger
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const organizerId = decodedToken.id;
 
@@ -40,17 +40,19 @@ export const createActivity = async (
         num_of_accepted: 0,
         max_of_volunteers: req.body.max_of_volunteers,
         image: req.body.image as string,
-        status: req.body.status,
         register_from: req.body.register_from,
         register_to: req.body.register_to,
         start_date: req.body.start_date,
         end_date: req.body.end_date,
+        status: req.body.status,
         created_at: new Date(),
         updated_at: new Date(),
       };
+
+      // body.status = new Date() > req.body.register_to ? 1 : 0;
       const result = await Activities.create(body);
       if (result) {
-        const skillsActivity = req.body.skills;
+        const skillsActivity = req.body.skillsActivity;
         try {
           const skillActivitiesPromises = skillsActivity.map(
             async (skill: number) => {
@@ -96,8 +98,8 @@ export const updateActivity = async (
 
     if (organizer) {
       const activityId = req.params.id;
+
       const activity = await Activities.findByPk(activityId);
-      const newSkills = req.body.skills;
       if (activity && activity.creator === organizerId) {
         const updatedActivity = {
           creator: organizerId as number,
@@ -113,40 +115,37 @@ export const updateActivity = async (
           register_to: req.body.register_to,
           updated_at: new Date(),
         };
-        const today = new Date()
-        if (today > updatedActivity.register_to)
+        debugger;
+        const today = new Date();
+
+        if (today > new Date(updatedActivity.register_to))
           updatedActivity.status = 1;
+        else {
+          updatedActivity.status = 0;
+        }
 
         await Activities.update(updatedActivity, {
           where: { id: activityId },
         });
 
-        const existingSkillActivities = await SkillActivities.findAll({
-          where: {
-            activity_id: activityId,
-          },
-        });
-        const existingSkills = existingSkillActivities.map(
-          (skillActivity) => skillActivity.skill_id,
-        );
-        const skillsToDelete = existingSkills.filter(
-          (skill: number) => !newSkills.includes(skill),
-        );
         await SkillActivities.destroy({
           where: {
             activity_id: activityId,
-            skill_id: skillsToDelete,
           },
         });
-        const skillActivitiesToAdd = newSkills
-          .filter((skill: number) => !existingSkills.includes(skill))
-          .map((skill: number) => ({
-            activity_id: activityId,
-            skill_id: skill,
-            created_at: new Date(),
-            updated_at: new Date(),
-          }));
-        await SkillActivities.bulkCreate(skillActivitiesToAdd);
+        const skillsActivity = req.body.skillsActivity;
+        const skillActivitiesPromises = skillsActivity.map(
+          async (skill: number) => {
+            const bodySkillActivities = {
+              activity_id: Number(activityId),
+              skill_id: skill,
+              created_at: new Date(),
+              updated_at: new Date(),
+            };
+            return await SkillActivities.create(bodySkillActivities);
+          },
+        );
+        await Promise.all(skillActivitiesPromises);
         const response: GeneralResponse<{}> = {
           status: 200,
           data: null,

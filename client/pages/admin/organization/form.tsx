@@ -46,13 +46,15 @@ const FormOrganization = ({ editId, open, setOpen, refetch }: Props) => {
       updateMutation.mutate(value);
     }
   }
+
   const { data } = useQuery(
-    ['user'],
+    ['user', editId],
     () => organizationService.getOrganizationById(editId as number),
     {
       enabled: isEditIdValidNumber
     }
   );
+
   const options: SelectProps['options'] = [
     {
       label: 'Hoạt động',
@@ -82,7 +84,6 @@ const FormOrganization = ({ editId, open, setOpen, refetch }: Props) => {
       <Form
         form={form}
         name='basic'
-        initialValues={{ remember: true }}
         onFinish={handleregister}
         autoComplete='off'
         layout='vertical'
@@ -108,7 +109,7 @@ const FormOrganization = ({ editId, open, setOpen, refetch }: Props) => {
           name='description'
           rules={[{ required: true, message: 'Chưa điền mô tả' }]}
         >
-          <Input />
+          <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} />
         </Form.Item>
 
         <Form.Item

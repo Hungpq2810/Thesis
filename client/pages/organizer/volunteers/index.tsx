@@ -18,8 +18,7 @@ const VolunteersManagement = ({}: Props) => {
   );
   const removeMutation = useMutation({
     mutationKey: ['removeMutation'],
-    mutationFn: (id: number) =>
-      volunteerService.removeVolunteerByOrganizer(id),
+    mutationFn: (id: number) => volunteerService.removeVolunteerByOrganizer(id),
     onSuccess: () => {
       message.success('Xoá thành công');
       refetch();

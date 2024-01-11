@@ -31,11 +31,13 @@ const Profile = ({ next }: Props) => {
   const [form] = useForm();
   const router = useRouter();
   const { user } = useAppSelector((state) => state.appSlice);
-  const { data } = useQuery(['userDetail'], () => userService.getUserByAuth());
+  const { data, refetch } = useQuery(['userDetail'], () =>
+    userService.getUserByAuth()
+  );
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(user?.avatar);
-  
+
   const [belongsOrganizer, setBelongsOrganizer] = useState<number | undefined>(
-    data?.data.data.belongsOrganizer?.organization_id
+    data?.data.data.belongsOrganizer?.id
   );
   const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(
     data?.data.data.skills?.map((skill) => ({
@@ -43,6 +45,7 @@ const Profile = ({ next }: Props) => {
       value: skill.id
     }))
   );
+
   const dispatch = useDispatch();
   const { data: skills } = useQuery(
     ['skills'],
@@ -66,8 +69,7 @@ const Profile = ({ next }: Props) => {
       select(dataInner) {
         if (data?.data.data.belongsOrganizer) {
           const result = dataInner.data.data.organizations.filter(
-            (item) =>
-              item.id === data.data.data.belongsOrganizer.organization_id
+            (item) => item.id === data.data.data.belongsOrganizer?.id
           );
           return result[0];
         } else {
@@ -114,7 +116,7 @@ const Profile = ({ next }: Props) => {
 
   useEffect(() => {
     if (user && data) {
-      setBelongsOrganizer(data.data.data.belongsOrganizer?.organization_id);
+      setBelongsOrganizer(data.data.data.belongsOrganizer?.id);
       setSkillsDefault(
         data.data.data.skills?.map((skill) => ({
           label: skill.name,
@@ -123,12 +125,16 @@ const Profile = ({ next }: Props) => {
       );
       form.setFieldsValue({
         // @ts-ignore
-        ...data.data.data.user
+        ...data.data.data.user,
+        confirmPassword: data.data.data.password
       });
     }
-    
-  }, [data]);
-  
+  }, [user, data]);
+
+  useEffect(() => {
+    refetch();
+  }, [user]);
+
   const options: SelectProps['options'] = [
     {
       label: 'Nam',
@@ -147,11 +153,10 @@ const Profile = ({ next }: Props) => {
       form.setFieldsValue({
         // @ts-ignore
         ...data.data.data.user,
-        avatar: updatedAvatarUrl,
-        confirmPassword: data.data.data.password
+        avatar: updatedAvatarUrl
       });
     }
-  };  
+  };
 
   return (
     <React.Fragment>
@@ -169,7 +174,6 @@ const Profile = ({ next }: Props) => {
         <Form
           form={form}
           name='basic'
-          initialValues={{ remember: false }}
           onFinish={handleCreate}
           autoComplete='off'
           layout='vertical'
@@ -192,14 +196,17 @@ const Profile = ({ next }: Props) => {
               {
                 type: 'email',
                 required: true,
-                message: 'Chưa điền email',
+                message: 'Chưa điền email'
               },
               {
-                validator: (_,value) => {
-                  const regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-                  return regex.test(value) ? Promise.resolve() : Promise.reject('Định dạng email không hợp lệ');
-                },
-              },
+                validator: (_, value) => {
+                  const regex =
+                    /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+                  return regex.test(value)
+                    ? Promise.resolve()
+                    : Promise.reject('Định dạng email không hợp lệ');
+                }
+              }
             ]}
           >
             <Input />
@@ -211,7 +218,6 @@ const Profile = ({ next }: Props) => {
             rules={[
               { required: true, message: 'Chưa điền số điện thoại' },
               {
-                
                 message: 'Số điện thoại có 10 chữ số',
                 validator: (_, value) => {
                   if (/(0[3|5|7|8|9])+([0-9]{8})\b/g.test(value)) {
@@ -219,8 +225,8 @@ const Profile = ({ next }: Props) => {
                   } else {
                     return Promise.reject('Số điện thoại có 10 chữ số');
                   }
-                 }
-               }
+                }
+              }
             ]}
           >
             <Input />
@@ -263,14 +269,20 @@ const Profile = ({ next }: Props) => {
             label='Mật khẩu'
             name='password'
             rules={[
-              { type: 'string', required: true, message: 'Vui lòng nhập mật khẩu' },
-              { validator: (_,value) => {
-                if (value.length < 6) {
-                  return Promise.reject('Mật khẩu phải có ít nhất 6 ký tự');
-                } else {
-                  return Promise.resolve();
+              {
+                type: 'string',
+                required: true,
+                message: 'Vui lòng nhập mật khẩu'
+              },
+              {
+                validator: (_, value) => {
+                  if (value.length < 6) {
+                    return Promise.reject('Mật khẩu phải có ít nhất 6 ký tự');
+                  } else {
+                    return Promise.resolve();
+                  }
                 }
-              }, },
+              }
             ]}
           >
             <Input.Password />
@@ -298,11 +310,11 @@ const Profile = ({ next }: Props) => {
           </Form.Item>
 
           {skillsDefault && user?.role_id === 1 && (
-          <Form.Item
-            label='Kỹ năng'
-            name='skills'
-            rules={[{ required: false, message: 'Chưa điền kỹ năng' }]}
-          >
+            <Form.Item
+              label='Kỹ năng'
+              name='skills'
+              rules={[{ required: false, message: 'Chưa điền kỹ năng' }]}
+            >
               <Select
                 defaultValue={skillsDefault}
                 mode='multiple'
@@ -310,10 +322,10 @@ const Profile = ({ next }: Props) => {
                 optionLabelProp='label'
                 options={skills}
               />
-          </Form.Item>
-            )}
-          
-          {belongsOrganizer && user?.role_id === 1 ? (
+            </Form.Item>
+          )}
+
+          {/* {belongsOrganizer && user?.role_id === 1 ? (
             <Form.Item
             label='Thuộc tổ chức'
             name='belongsOrganizer'
@@ -328,8 +340,8 @@ const Profile = ({ next }: Props) => {
             </Form.Item>
             ) : (
               <p>Thuộc tổ chức: {organizersCurrent && organizersCurrent.name}</p>
-            )}
-              
+            )} */}
+
           <Form.Item style={{ textAlign: 'center' }}>
             <Button
               type='primary'
@@ -338,14 +350,13 @@ const Profile = ({ next }: Props) => {
             >
               Cập nhật
               <Popconfirm
-              title="Bạn có chắc chắn muốn cập nhật hồ sơ của mình không?"
-              onConfirm={() => {
-                handleCreate
-              }}
-        >
-          <CheckCircleOutlined />
-          </Popconfirm>
-
+                title='Bạn có chắc chắn muốn cập nhật hồ sơ của mình không?'
+                onConfirm={() => {
+                  handleCreate;
+                }}
+              >
+                <CheckCircleOutlined />
+              </Popconfirm>
             </Button>
           </Form.Item>
         </Form>

@@ -40,7 +40,7 @@ const DetailActivity = ({ activity }: Props) => {
   );
   const currentDate = new Date();
   const router = useRouter();
-  const { user } = useAppSelector((state) => state.appSlice); 
+  const { user } = useAppSelector((state) => state.appSlice);
 
   const newFeedbackMutation = useMutation({
     mutationKey: 'newFeedback',
@@ -87,8 +87,6 @@ const DetailActivity = ({ activity }: Props) => {
       }
     },
     onError(error, variables, context) {
-      // console.log(error);
-      
       message.error('Hủy đăng ký không thành công');
     }
   });
@@ -103,8 +101,7 @@ const DetailActivity = ({ activity }: Props) => {
     newFeedbackMutation.mutate(body);
   }
   if (!activity) return <React.Fragment></React.Fragment>;
-  console.log(user);
-  
+
   return (
     <React.Fragment>
       <Head>
@@ -153,7 +150,8 @@ const DetailActivity = ({ activity }: Props) => {
               </h3>
               {/* dayjs(activity.data.register_from).format('DD/MM/YYYY') */}
               <h3>
-                Số lượng tình nguyện viên tối đa: {activity.data.max_of_volunteers}
+                Số lượng tình nguyện viên tối đa:{' '}
+                {activity.data.max_of_volunteers}
               </h3>
             </div>
             <div className='w-full flex justify-between items-center'>
@@ -178,7 +176,8 @@ const DetailActivity = ({ activity }: Props) => {
             </div>
             {activity.data.num_of_accepted ===
               activity.data.max_of_volunteers ||
-            new Date(activity.data.register_to).getTime() < currentDate.getTime() ? (
+            new Date(activity.data.register_to).getTime() <
+              currentDate.getTime() ? (
               <>
                 <p>
                   Đã đủ tình nguyện viên tham gia hoặc hoạt động hết hạn tham
@@ -189,17 +188,28 @@ const DetailActivity = ({ activity }: Props) => {
               <>
                 {activity.data.status === 0 && user && user.role_id === 1 ? (
                   <>
-                    {userDetail && userDetail.some((item: any) => item.activity_id === activity.data.id) ? (
+                    {userDetail &&
+                    userDetail.some(
+                      (item: any) => item.activity_id === activity.data.id
+                    ) ? (
                       <>
                         <p>Bạn đã đăng ký</p>
-                        <Button onClick={() => cancelActivityMutation.mutate({ activity_id: activity.data.id })}>
+                        <Button
+                          onClick={() =>
+                            cancelActivityMutation.mutate({
+                              activity_id: activity.data.id
+                            })
+                          }
+                        >
                           Huỷ đăng ký
                         </Button>
                       </>
                     ) : (
                       <Button
                         onClick={() => {
-                          applyActivityMutation.mutate({ activity_id: activity.data.id })
+                          applyActivityMutation.mutate({
+                            activity_id: activity.data.id
+                          });
                         }}
                       >
                         Đăng ký
@@ -249,7 +259,6 @@ const DetailActivity = ({ activity }: Props) => {
           <Card title='Feedback'>
             <Form
               name='newFeedback'
-              initialValues={{ remember: true }}
               onFinish={handleNewFeedback}
               autoComplete='off'
               layout='vertical'

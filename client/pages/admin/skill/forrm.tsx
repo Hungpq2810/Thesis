@@ -87,7 +87,6 @@ const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
       <Form
         form={form}
         name='basic'
-        initialValues={{ remember: true }}
         onFinish={handleregister}
         autoComplete='off'
         layout='vertical'

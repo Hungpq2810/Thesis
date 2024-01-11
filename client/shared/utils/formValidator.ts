@@ -13,7 +13,6 @@ export function normalizeNumber(value: string) {
 export function validateVNPhone(message?: string) {
   return {
     validator: (_: any, value: string) => {
-      console.log(value.toString());
       if (value) {
         if (value.toString().match(APP_REGEX.VN_PHONENUMBER)) {
           return Promise.resolve();
@@ -29,7 +28,6 @@ export function validateVNPhone(message?: string) {
 export function validateEmail(message?: string) {
   return {
     validator: (_: any, value: string) => {
-      console.log(value.toString());
       if (value) {
         if (value.toString().match(APP_REGEX.EMAIL)) {
           return Promise.resolve();

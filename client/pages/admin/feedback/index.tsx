@@ -1,5 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons';
-import { Col, Image, message, Popconfirm, Row, Space, Table } from 'antd';
+import { Col, Image, message, Popconfirm, Rate, Row, Space, Table } from 'antd';
 import Search from 'antd/lib/input/Search';
 import { ColumnType } from 'antd/lib/table';
 import DashboardLayout from '@/layouts/DashboardLayout';
@@ -8,17 +8,16 @@ import { userService } from '@/services/user.service';
 import React from 'react';
 import { feedbackService } from '@/services/feedback.service';
 import { IFeedback } from '@/typeDefs/schema/feedback.type';
-import { log } from 'console';
 
 type Props = {};
 
 const FeedbackManagement = ({}: Props) => {
   const { data: dataFeedback, refetch } = useQuery(['listFeedback'], () =>
-    feedbackService.getAllFeedback()
+    feedbackService.getAllFeedbackNoAuth()
   );
   const deleteMutation = useMutation({
     mutationKey: ['deleteMutation'],
-    mutationFn: (userId: number) => userService.deleteUser(userId),
+    mutationFn: (userId: number) => feedbackService.deleteFeedback(userId),
     onSuccess: () => {
       message.success('Xoá thành công');
       refetch();
@@ -27,6 +26,7 @@ const FeedbackManagement = ({}: Props) => {
       message.error('Xoá không thành công');
     }
   });
+
   const columns: ColumnType<IFeedback>[] = [
     {
       title: '#',
@@ -38,25 +38,9 @@ const FeedbackManagement = ({}: Props) => {
       )
     },
     {
-      title: 'Tên hoạt động',
-      dataIndex: 'name',
-      render: (_, record) => <p>{record.activity?.name}</p>
-    },
-    {
       title: 'Người feedback',
-      key: 'user',
-      render: (_, record) => (
-        <div className='w-1/3 flex justify-between items-center'>
-          <Image
-            preview={false}
-            src={record.avatar}
-            width={50}
-            height={50}
-            className='rounded-lg'
-          />
-          <p>{record.name}</p>
-        </div>
-      )
+      dataIndex: 'name',
+      key: 'name'
     },
     {
       title: 'Tiêu đề',
@@ -67,6 +51,19 @@ const FeedbackManagement = ({}: Props) => {
       title: 'Nội dung',
       dataIndex: 'content',
       key: 'content'
+    },
+    {
+      title: 'Đánh giá',
+      // dataIndex: 'rate',
+      key: 'rate',
+      render: (_, record) => {
+        return (
+          <Space>
+            <Rate disabled value={record.rate} />
+            {/* {rate ? <span>{[rate - 1]}</span> : ''} */}
+          </Space>
+        );
+      }
     },
     {
       title: 'Hành động',
@@ -86,7 +83,6 @@ const FeedbackManagement = ({}: Props) => {
       )
     }
   ];
-  console.log(dataFeedback);
 
   return (
     <>
@@ -108,9 +104,7 @@ const FeedbackManagement = ({}: Props) => {
             </Col>
           </Row>
           <Table
-            dataSource={dataFeedback.data.data.feedbacks.filter(
-              (item) => item.activity_id === null
-            )}
+            dataSource={dataFeedback.data.data.feedbacks}
             columns={columns}
           />
         </React.Fragment>

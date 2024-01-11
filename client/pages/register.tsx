@@ -95,14 +95,22 @@ const Register = ({}: Props) => {
             label='Tên tài khoản'
             name='username'
             rules={[
-              { type: 'string', required: true, message: 'Vui lòng tên đăng nhập' },
-              { validator: (_,value) => {
-                if (value.length < 8) {
-                  return Promise.reject('Tên đăng nhập phải có ít nhất 8 ký tự');
-                } else {
-                  return Promise.resolve();
+              {
+                type: 'string',
+                required: true,
+                message: 'Vui lòng tên đăng nhập'
+              },
+              {
+                validator: (_, value) => {
+                  if (value.length < 8) {
+                    return Promise.reject(
+                      'Tên đăng nhập phải có ít nhất 8 ký tự'
+                    );
+                  } else {
+                    return Promise.resolve();
+                  }
                 }
-              }, },
+              }
             ]}
           >
             <Input />
@@ -115,14 +123,17 @@ const Register = ({}: Props) => {
               {
                 type: 'email',
                 required: true,
-                message: 'Chưa điền email',
+                message: 'Chưa điền email'
               },
               {
-                validator: (_,value) => {
-                  const regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-                  return regex.test(value) ? Promise.resolve() : Promise.reject('Định dạng email không hợp lệ');
-                },
-              },
+                validator: (_, value) => {
+                  const regex =
+                    /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+                  return regex.test(value)
+                    ? Promise.resolve()
+                    : Promise.reject('Định dạng email không hợp lệ');
+                }
+              }
             ]}
           >
             <Input />
@@ -142,7 +153,6 @@ const Register = ({}: Props) => {
             rules={[
               { required: true, message: 'Chưa điền số điện thoại' },
               {
-                
                 message: 'Số điện thoại có 10 chữ số',
                 validator: (_, value) => {
                   if (/(0[3|5|7|8|9])+([0-9]{8})\b/g.test(value)) {
@@ -150,8 +160,8 @@ const Register = ({}: Props) => {
                   } else {
                     return Promise.reject('Số điện thoại có 10 chữ số');
                   }
-                 }
-               }
+                }
+              }
             ]}
             hasFeedback
           >
@@ -191,14 +201,20 @@ const Register = ({}: Props) => {
             label='Mật khẩu'
             name='password'
             rules={[
-              { type: 'string', required: true, message: 'Vui lòng nhập mật khẩu' },
-              { validator: (_,value) => {
-                if (value.length < 6) {
-                  return Promise.reject('Mật khẩu phải có ít nhất 6 ký tự');
-                } else {
-                  return Promise.resolve();
+              {
+                type: 'string',
+                required: true,
+                message: 'Vui lòng nhập mật khẩu'
+              },
+              {
+                validator: (_, value) => {
+                  if (value.length < 6) {
+                    return Promise.reject('Mật khẩu phải có ít nhất 6 ký tự');
+                  } else {
+                    return Promise.resolve();
+                  }
                 }
-              }, },
+              }
             ]}
           >
             <Input.Password />

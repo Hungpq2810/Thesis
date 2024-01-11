@@ -19,8 +19,7 @@ const OrganizationManagement = ({}: Props) => {
     ['listOrganizationAdmin'],
     () => organizationService.listOrganizationAdmin()
   );
-  console.log(dataOrganization);
-  
+
   const deleteMutation = useMutation({
     mutationKey: ['deleteMutation'],
     mutationFn: (userId: number) => userService.deleteUser(userId),
@@ -45,8 +44,8 @@ const OrganizationManagement = ({}: Props) => {
     {
       title: 'Id tổ chức',
       key: 'orgId',
-      render: (_,record) => {
-        return <p>{record.id}</p>
+      render: (_, record) => {
+        return <p>{record.id}</p>;
       }
     },
     {
@@ -84,6 +83,7 @@ const OrganizationManagement = ({}: Props) => {
     {
       title: 'Trạng thái',
       dataIndex: 'status',
+
       render: (_, record) => (
         <p>{record.status === 0 ? 'Hoạt động' : 'Không hoạt động'}</p>
       )

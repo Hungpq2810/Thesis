@@ -32,13 +32,13 @@ const status = [
   {
     label: 'Đã đóng',
     value: 1
-  },
+  }
 ];
 const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
   const [form] = useForm();
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const isEditIdValidNumber = typeof editId === 'number';
-  
+
   const { data } = useQuery(
     ['activity'],
     () => activityService.getActivityById(editId as number),
@@ -46,7 +46,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       enabled: isEditIdValidNumber
     }
   );
-  
+
   const { data: skills } = useQuery(
     ['skills'],
     () => skillService.getAllSkill(),
@@ -62,15 +62,14 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       }
     }
   );
-  console.log(skills);
-  
+
   const newMutation = useMutation({
     mutationKey: 'NewActivity',
     mutationFn: (body: {
       name: string;
       description: string;
       location: string;
-      skills: string[];
+      skillsActivity: string[];
     }) => activityService.newActivity(body),
     onSuccess(data, _variables, _context) {
       const res = data.data;
@@ -89,7 +88,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       name: string;
       description: string;
       location: string;
-      skills: string[];
+      skillsActivity: string[];
     }) => activityService.updateActivity(editId as number, body),
     onSuccess(data, _variables, _context) {
       const res = data.data;
@@ -122,16 +121,15 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
   useEffect(() => {
     if (editId && data) {
       setImageUrl(data.data.data.image);
-      
+
       form.setFieldsValue({
         ...data.data.data,
-        skillsActivity: data.data.data.skillsActivity?.map((skill) => ({
-          label: skill.name,
-          value: skill.id
-        }))
+        skillsActivity: data.data.data.skillsActivity?.map((skill) => skill.id)
       });
+    } else {
+      form.resetFields();
     }
-  }, [data]);
+  }, [editId, data]);
   const handleImageChange = (newAvatarUrl: string) => {
     const updatedImageUrl = newAvatarUrl || '';
     setImageUrl(updatedImageUrl);
@@ -156,7 +154,6 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       <Form
         form={form}
         name='basic'
-        // initialValues={{ remember: true }}
         onFinish={handleNewActivity}
         autoComplete='off'
         layout='vertical'
@@ -174,7 +171,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
           name='description'
           rules={[{ required: true, message: 'Chưa điền mô tả' }]}
         >
-          <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} />
+          <Input.TextArea autoSize={{ minRows: 3, maxRows: 40 }} />
         </Form.Item>
 
         <Form.Item
@@ -192,7 +189,9 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
         <Form.Item
           label='Từ ngày'
           name='register_from'
-          rules={[{ required: true, message: 'Chưa điền ngày bắt đầu đăng ký' }]}
+          rules={[
+            { required: true, message: 'Chưa điền ngày bắt đầu đăng ký' }
+          ]}
           getValueFromEvent={(onChange) => dayjs(onChange).format('YYYY-MM-DD')}
           getValueProps={(i) => ({ value: dayjs(i) })}
         >
@@ -202,7 +201,19 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
         <Form.Item
           label='Đến ngày'
           name='register_to'
-          rules={[{ required: true, message: 'Chưa điền đến ngày kết thúc đăng ký' }]}
+          rules={[
+            { required: true, message: 'Chưa điền đến ngày kết thúc đăng ký' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('register_from') <= value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error('Ngày kết thúc phải lớn hơn ngày bắt đầu')
+                );
+              }
+            })
+          ]}
           getValueFromEvent={(onChange) => dayjs(onChange).format('YYYY-MM-DD')}
           getValueProps={(i) => ({ value: dayjs(i) })}
         >
@@ -212,7 +223,19 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
         <Form.Item
           label='Ngày bắt đầu hoạt động'
           name='start_date'
-          rules={[{ required: true, message: 'Chưa điền đến ngày bắt đầu hoạt động' }]}
+          rules={[
+            { required: true, message: 'Chưa điền đến ngày bắt đầu hoạt động' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('register_from') <= value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error('Ngày bắt đầu phải lớn hơn ngày kết thúc đăng ký')
+                );
+              }
+            })
+          ]}
           getValueFromEvent={(onChange) => dayjs(onChange).format('YYYY-MM-DD')}
           getValueProps={(i) => ({ value: dayjs(i) })}
         >
@@ -222,7 +245,23 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
         <Form.Item
           label='Ngày kết thúc hoạt động'
           name='end_date'
-          rules={[{ required: true, message: 'Chưa điền đến ngày kết thúc đăng ký' }]}
+          rules={[
+            { required: true, message: 'Chưa điền đến ngày kết thúc đăng ký' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (
+                  !value ||
+                  getFieldValue('start_date') <= value ||
+                  getFieldValue('register_to') <= value
+                ) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error('Ngày kết thúc phải lớn hơn ngày bắt đầu')
+                );
+              }
+            })
+          ]}
           getValueFromEvent={(onChange) => dayjs(onChange).format('YYYY-MM-DD')}
           getValueProps={(i) => ({ value: dayjs(i) })}
         >
@@ -242,10 +281,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
           name='status'
           rules={[{ required: true, message: 'Chưa điền trạng thái' }]}
         >
-          <Select
-            placeholder='Thay đổi trạng thái'
-            options={status}
-          />
+          <Select placeholder='Thay đổi trạng thái' options={status} />
         </Form.Item>
 
         <Form.Item
@@ -254,7 +290,6 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
           rules={[{ required: true, message: 'Chưa điền kỹ năng' }]}
         >
           <Select
-            defaultValue={0}
             mode='multiple'
             placeholder='Chọn kỹ năng cho hoạt động'
             optionLabelProp='label'

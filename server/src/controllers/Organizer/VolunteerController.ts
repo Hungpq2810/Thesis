@@ -24,7 +24,7 @@ export const getVolunteer = async (
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const organizer = await Users.findByPk(userId);
-    
+
     if (organizer) {
       if (!organizer.organization_id && organizer.role_id !== 2) {
         const response: GeneralResponse<{}> = {
@@ -47,13 +47,12 @@ export const getVolunteer = async (
         const response: GeneralResponse<{}> = {
           status: 200,
           data: volunteers,
-          message: "Lấy danh sách thành công",
+          message: 'Lấy danh sách thành công',
         };
         commonResponse(req, res, response);
       }
     }
-    }
-  catch (error: any) {
+  } catch (error: any) {
     console.error(error);
     const response: GeneralResponse<{}> = {
       status: 400,
@@ -77,7 +76,7 @@ export const removeVolunteer = async (
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const organizerId = decodedToken.id;
     const organizer = await Users.findByPk(organizerId);
-    
+
     if (organizer) {
       if (!organizer.organization_id && organizer.role_id !== 2) {
         const response: GeneralResponse<{}> = {
@@ -88,10 +87,12 @@ export const removeVolunteer = async (
         commonResponse(req, res, response);
       } else {
         const volunteer = await Users.findOne({
-          where: { id: req.params.id, organization_id: organizer.organization_id },
+          where: {
+            id: req.params.id,
+            organization_id: organizer.organization_id,
+          },
         });
-        console.log(volunteer);
-        
+
         if (volunteer) {
           await volunteer.update({ organization_id: null });
         }

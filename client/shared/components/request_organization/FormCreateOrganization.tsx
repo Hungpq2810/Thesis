@@ -77,7 +77,7 @@ const FormCreateOrganization = ({ next }: Props) => {
             name='description'
             rules={[{ required: true, message: 'Vui lòng nhập mô tả' }]}
           >
-            <Input.TextArea autoSize={{ minRows: 3, maxRows: 6 }} />
+            <Input.TextArea autoSize={{ minRows: 3, maxRows: 40 }} />
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
             <Button

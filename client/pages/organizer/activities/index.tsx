@@ -24,7 +24,7 @@ type Props = {};
 const ActivityManagement = ({}: Props) => {
   const { user } = useAppSelector((state) => state.appSlice);
   const [open, setOpen] = useState(false);
-  const [action, setAtion] = useState<string>('');
+  const [action, setAction] = useState<string>('');
   const [rowId, setRowId] = useState<number>();
   const { data: dataActivity, refetch } = useQuery(
     ['listActivty'],
@@ -34,8 +34,7 @@ const ActivityManagement = ({}: Props) => {
         const filterActivity = data.data.data.activities.filter(
           (activity) => activity.creator_id === +user!.id
         );
-        
-        
+
         return filterActivity;
       }
     }
@@ -57,6 +56,7 @@ const ActivityManagement = ({}: Props) => {
     },
     {
       title: 'Mô tả',
+      width: 500,
       dataIndex: 'description',
       key: 'description',
       render: (_, record) => (
@@ -108,7 +108,7 @@ const ActivityManagement = ({}: Props) => {
           <div
             className='cursor-pointer'
             onClick={() => {
-              setAtion('edit');
+              setAction('edit');
               setOpen(true);
               setRowId(record.id);
             }}
@@ -119,7 +119,6 @@ const ActivityManagement = ({}: Props) => {
       )
     }
   ];
-  console.log(dataActivity);
 
   return (
     <>
@@ -140,7 +139,7 @@ const ActivityManagement = ({}: Props) => {
                 />
                 <Button
                   onClick={() => {
-                    setAtion('create');
+                    setAction('create');
                     setRowId(NaN);
                     setOpen(true);
                   }}

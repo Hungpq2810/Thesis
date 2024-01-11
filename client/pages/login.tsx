@@ -11,7 +11,7 @@ import { APP_SAVE_KEYS } from '@/constant/AppConstant';
 import useTrans from '@/hooks/useTrans';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { log } from 'console';
+
 type Props = {};
 
 const Login = ({}: Props) => {
@@ -28,6 +28,7 @@ const Login = ({}: Props) => {
       if (decodeData) {
         setCookie(APP_SAVE_KEYS.KEYS, res.token, { maxAge: decodeData.exp });
         setCookie(APP_SAVE_KEYS.ROLE, decodeData.role_id);
+
         dispatch(
           login({
             role_id: decodeData.role_id,
@@ -54,11 +55,11 @@ const Login = ({}: Props) => {
       dispatch(
         login({
           role_id: decodeData.role_id,
-            username: decodeData.username,
-            id: decodeData.id,
-            avatar: decodeData.avatar,
-            name: decodeData.name,
-            email: decodeData.email
+          username: decodeData.username,
+          id: decodeData.id,
+          avatar: decodeData.avatar,
+          name: decodeData.name,
+          email: decodeData.email
         })
       );
       router.push('/');

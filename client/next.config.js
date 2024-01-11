@@ -7,7 +7,8 @@ const nextConfig = {
   },
   i18n: {
     locales: ['vi', 'en'],
-    defaultLocale: 'vi'
+    defaultLocale: 'vi',
+    localeDetection: false
   }
 };
 

@@ -13,7 +13,6 @@ import { OrganizationRequest } from '../../models/organization_request';
 import { Op } from 'sequelize';
 import { sequelize } from '../../db';
 
-
 export const deleteOrganization = async (
   req: Request,
   res: Response,
@@ -106,18 +105,20 @@ export const listOrganizationAdmin = async (
 ): Promise<void> => {
   try {
     const notYetApprovedOrgs = await OrganizationRequest.findAll({
-      where: {status: 1}
-    })
-    const notYetApprovedOrgsId = notYetApprovedOrgs.map((orgRequest) => orgRequest.organization_id);
-    
+      where: { status: 1 },
+    });
+    const notYetApprovedOrgsId = notYetApprovedOrgs.map(
+      (orgRequest) => orgRequest.organization_id,
+    );
+
     const organizationsCurrent = await Organization.findAll({
       where: {
         id: {
-          [Op.notIn]: notYetApprovedOrgsId
-        }
-      }
+          [Op.notIn]: notYetApprovedOrgsId,
+        },
+      },
     });
-    
+
     const organizations = await organizationMapper(organizationsCurrent);
     if (organizations.length > 0) {
       const response: GeneralResponse<{

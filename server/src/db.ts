@@ -1,12 +1,14 @@
 import { Sequelize } from 'sequelize';
 import { createPool, Pool, PoolOptions } from 'mysql2/promise';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const dbConfig: PoolOptions = {
-  host: '127.0.0.1',
-  port: 3306,
-  user: 'root',
-  password: '',
-  database: 'activity_management',
+  // host: 'localhost',
+  // port: 3307,
+  // user: 'root',
+  // password: 'root',
+  // database: 'activity_management',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
