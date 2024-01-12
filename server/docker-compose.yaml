@@ -1,9 +1,9 @@
 version: '3'
 services:
   client:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     command: npm run dev
     ports:
-      - 6379:5000
+      - 5432:3076
