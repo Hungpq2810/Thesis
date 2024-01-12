@@ -21,7 +21,7 @@ const sequelize = new Sequelize({
   dialect: 'mysql',
   dialectModule: require('mysql2'),
   host: 'localhost',
-  port: 3307,
+  port: 3306,
   username: 'hustdb',
   password: 'hust',
   database: 'activity_management',
