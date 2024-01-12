@@ -30,6 +30,7 @@ export interface IActivity {
 
 export interface IAppliedVolunteers {
   appliedVolunteers: IAppliedVolunteer[];
+  activityApplied: any;
 }
 
 export interface IAppliedVolunteer {
@@ -45,6 +46,7 @@ export interface IAppliedVolunteer {
   created_at: string;
   updated_at: string;
   activity?: IActivity;
+  activityApplied: any;
 }
 
 export interface IAppliedVolunteerMapped {

@@ -5,10 +5,10 @@ import {
   ExclamationCircleOutlined
 } from '@ant-design/icons';
 import { Space, Popconfirm } from 'antd';
-import { IAppliedVolunteer } from '../../../shared/typeDefs/schema/activity.type';
+import { IAppliedVolunteer } from '../../typeDefs/schema/activity.type';
 import { UseMutationResult } from 'react-query/types/react/types';
 import { AxiosResponse } from 'axios';
-import { ApplyActivityStatus } from '.';
+import { ApplyActivityStatus } from '../../../pages/organizer/apply-activity';
 
 type Props = {
   record: IAppliedVolunteer;

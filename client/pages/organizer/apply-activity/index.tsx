@@ -14,7 +14,7 @@ import React, { useMemo } from 'react';
 import { activityService } from '@/services/activity.service';
 import { IAppliedVolunteer } from '@/typeDefs/schema/activity.type';
 import { useAppSelector } from '@/hooks/useRedux';
-import { ApplyAction } from './action';
+import { ApplyAction } from '../../../shared/components/ApplyVolunteerAction/action';
 
 type Props = {};
 

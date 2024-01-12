@@ -16,6 +16,7 @@ export interface IRequestVolunteer {
   created_at?: any;
   updated_at?: any;
   volunteersApplied?: IAppliedVolunteerMapped[];
+  requestVolunteers: any;
 }
 
 export interface IVolunteerGroupOrganizer {

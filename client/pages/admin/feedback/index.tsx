@@ -15,17 +15,17 @@ const FeedbackManagement = ({}: Props) => {
   const { data: dataFeedback, refetch } = useQuery(['listFeedback'], () =>
     feedbackService.getAllFeedbackNoAuth()
   );
-  const deleteMutation = useMutation({
-    mutationKey: ['deleteMutation'],
-    mutationFn: (userId: number) => feedbackService.deleteFeedback(userId),
-    onSuccess: () => {
-      message.success('Xoá thành công');
-      refetch();
-    },
-    onError() {
-      message.error('Xoá không thành công');
-    }
-  });
+  // const deleteMutation = useMutation({
+  //   mutationKey: ['deleteMutation'],
+  //   mutationFn: (userId: number) => feedbackService.deleteFeedback(userId),
+  //   onSuccess: () => {
+  //     message.success('Xoá thành công');
+  //     refetch();
+  //   },
+  //   onError() {
+  //     message.error('Xoá không thành công');
+  //   }
+  // });
 
   const columns: ColumnType<IFeedback>[] = [
     {
@@ -65,23 +65,23 @@ const FeedbackManagement = ({}: Props) => {
         );
       }
     },
-    {
-      title: 'Hành động',
-      key: 'action',
-      render: (_, record) => (
-        <Space size='middle'>
-          <Popconfirm
-            okButtonProps={{ loading: deleteMutation.isLoading }}
-            onConfirm={() => {
-              deleteMutation.mutate(record.id);
-            }}
-            title={'Xoá'}
-          >
-            <DeleteOutlined className='cursor-pointer'></DeleteOutlined>
-          </Popconfirm>
-        </Space>
-      )
-    }
+    // {
+    //   title: 'Hành động',
+    //   key: 'action',
+    //   render: (_, record) => (
+    //     <Space size='middle'>
+    //       <Popconfirm
+    //         okButtonProps={{ loading: deleteMutation.isLoading }}
+    //         onConfirm={() => {
+    //           deleteMutation.mutate(record.id);
+    //         }}
+    //         title={'Xoá'}
+    //       >
+    //         <DeleteOutlined className='cursor-pointer'></DeleteOutlined>
+    //       </Popconfirm>
+    //     </Space>
+    //   )
+    // }
   ];
 
   return (
