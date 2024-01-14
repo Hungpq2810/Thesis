@@ -20,10 +20,16 @@ export default dbConnection;
 const sequelize = new Sequelize({
   dialect: 'mysql',
   dialectModule: require('mysql2'),
-  host: '8.219.196.61',
-  port: 3306,
-  username: 'hustdb',
-  password: 'hust',
+  // host: '8.219.196.61',
+  // port: 3306,
+  // username: 'hustdb',
+  // password: 'hust',
+  // database: 'activity_management',
+  // Use for local host
+  host: 'localhost',
+  port: 3307,
+  username: 'root',
+  password: 'root',
   database: 'activity_management',
   pool: {
     ...dbConfig,

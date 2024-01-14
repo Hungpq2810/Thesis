@@ -167,7 +167,7 @@ const SiderMenu = () => {
           />
         ) : (
           <>
-            <Typography>Activity Management</Typography>
+            <Typography>HVMS Dashboard</Typography>
             <img
               style={{ maxWidth: 32, maxHeight: 32 }}
               alt='logo'

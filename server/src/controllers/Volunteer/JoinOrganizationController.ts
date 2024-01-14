@@ -11,7 +11,7 @@ import { VolunteerRequest } from '../../models/volunteer_request';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
-export const JoinOrganization = async (
+export const getCurrentRequestToOrganization = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
@@ -38,29 +38,23 @@ export const JoinOrganization = async (
           user_id: userId,
         },
       });
-
-      if (!volunteerRequest) {
-        // Tạo bản ghi mới nếu tình nguyện viên chưa đăng ký vào tổ chức nào
-        await VolunteerRequest.create({
-          user_id: Number(userId) as number,
-          organization_id: req.body.organization_id,
-          status: 1,
-          created_at: new Date(),
-          updated_at: new Date(),
-        });
-      } else {
-        // Cập nhật tổ chức đăng ký nếu tình nguyện viên đã đăng ký vào tổ chức khác
-        await volunteerRequest.update({
-          organization_id: req.body.organization_id,
-        });
+      if (volunteerRequest){
+        const response: GeneralResponse<any> = {
+          status: 200,
+          data: volunteerRequest,
+          message: 'Lấy dữ liệu thành công',
+        };
+        commonResponse(req, res, response);
       }
-
-      const response: GeneralResponse<any> = {
-        status: 200,
-        data: volunteerRequest,
-        message: 'Update successfully',
-      };
-      commonResponse(req, res, response);
+      else {
+        const response: GeneralResponse<{}> = {
+          status: 200,
+          data: null,
+          message: 'Không tìm thấy dữ liệu',
+        };
+        commonResponse(req, res, response);
+      
+      }
     }
   } catch (error: any) {
     console.error(error);

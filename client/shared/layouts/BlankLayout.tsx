@@ -3,9 +3,10 @@ import {
   QuestionCircleOutlined,
   ExpandAltOutlined,
   UserOutlined,
-  GroupOutlined
+  GroupOutlined,
+  SearchOutlined
 } from '@ant-design/icons';
-import { Button, Layout, Menu, MenuProps } from 'antd';
+import { Button, Input, Layout, Menu, MenuProps } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Search from 'antd/lib/input/Search';
@@ -19,7 +20,7 @@ import DashboardLayout from './DashboardLayout';
 
 const { Header, Content, Footer } = Layout;
 
-function RequestOrganization({ children }: { children: React.ReactNode }) {
+function BlankLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAppSelector((state) => state.appSlice);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const dispatch = useDispatch();
@@ -99,13 +100,13 @@ function RequestOrganization({ children }: { children: React.ReactNode }) {
             mode='horizontal'
             items={APP_WEBSITE_MENU}
           />
-          <Search
-            className='col-span-1 bg-blue-300 rounded-lg'
-            placeholder='Tìm kiếm'
-            onSearch={() => {
-              handleSearch;
-            }}
-            enterButton
+          <Input.Search
+            style={{ display: 'flex', margin: '0 auto' }}
+            placeholder={`Tìm kiếm...`}
+            allowClear
+            enterButton={<SearchOutlined />}
+            size='large'
+            onSearch={(value) => handleSearch(value)}
           />
           <div className='col-span-2 w-full flex justify-end items-center gap-4'>
             {user && <UserOutlined onClick={() => router.push('/profile')} />}
@@ -138,7 +139,7 @@ function RequestOrganization({ children }: { children: React.ReactNode }) {
     </React.Fragment>
   );
 }
-RequestOrganization.getLayout = (children: React.ReactNode) => (
+BlankLayout.getLayout = (children: React.ReactNode) => (
   <DashboardLayout>{children}</DashboardLayout>
 );
-export default RequestOrganization;
+export default BlankLayout;

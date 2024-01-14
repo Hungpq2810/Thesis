@@ -34,7 +34,7 @@ export const requestOrganization = async (
       {
         const body = {
           user_id: userId as number,
-          organization_id: organization.id as number,
+          organization_id: organization?.id as number,
           status: 1,
           created_at: new Date(),
           updated_at: new Date(),
@@ -69,7 +69,7 @@ export const requestOrganization = async (
     commonResponse(req, res, response);
   }
 };
-export const getCurrentRequestOrganization = async (
+export const getCurrentRequestTobeOrganization = async (
   req: Request,
   res: Response,
 ): Promise<void> => {

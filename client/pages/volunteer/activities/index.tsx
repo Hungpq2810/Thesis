@@ -3,12 +3,14 @@ import { useAppSelector } from '../../../shared/hooks/useRedux';
 import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { volunteerService } from '../../../shared/services/volunteer.service';
 import { useMutation, useQuery } from 'react-query';
-import { Col, Row, Table } from 'antd';
+import { Col, Row, Table, Button } from 'antd';
 import { IAppliedVolunteer } from '../../../shared/typeDefs/schema/activity.type';
 import React from 'react';
+import { useRouter } from 'next/router';
 
 const VolunteerActivity = () => {
   const { user } = useAppSelector((state) => state.appSlice);
+  const router = useRouter();
   const { data: dataVolunteerActivity } = useQuery(
     ['listVolunteerActivity'],
     () => volunteerService.getAppliedActivities(),
@@ -22,12 +24,17 @@ const VolunteerActivity = () => {
   const columns: ColumnType<IAppliedVolunteer>[] = [
     {
       title: '#',
-      key: 'id',
+      key: 'no.',
       render: (value, record, index) => (
         <div>
           <p>{index + 1}</p>
         </div>
       )
+    },
+    {
+      title: 'Id hoạt động',
+      key: 'id',
+      render: (_,record) => <p>{record.activity_id}</p>
     },
     {
       title: 'Tên hoạt động',
@@ -48,6 +55,16 @@ const VolunteerActivity = () => {
                 : record.status === 3
                   ? 'Đã tham gia'
                   : 'Không tham gia'}
+        </p>
+      )
+    },
+    {
+      title: 'Link sự kiện',
+      render:(_,record) => (
+        <p>
+        <Button onClick={() => router.push(`/activity/${record.activity_id}`)}>
+           Xem chi tiết
+        </Button>
         </p>
       )
     }

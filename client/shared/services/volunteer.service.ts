@@ -15,8 +15,15 @@ class VolunteerService {
   > {
     return https.get('/volunteer/activities');
   }
-  requestToOrganization(body: { id: number }) {
-    return https.post('/volunteer/request_to_org', body);
+  getCurrentRequestToOrganization(): Promise<
+  AxiosResponse<IBaseResponse<IRequestVolunteer>>
+  > {
+    return https.get('/volunteer/get_current_request_to_organization')
+  }
+
+
+  requestToOrganization(body: { organization_id: number }) {
+    return https.post('/volunteer/request_to_organization', body);
   }
   cancelRequestToOrganization() {
     return https.post('/volunteer/cancel_request_to_org');

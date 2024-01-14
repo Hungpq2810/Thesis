@@ -16,6 +16,16 @@ class ActivityService {
   ): Promise<AxiosResponse<IBaseResponse<IActivityList>>> {
     return httpsNoToken.get(`/search_activities?key=${key}`);
   }
+
+  searchMultipleActivity(body: {
+    name?: string
+    address?: string
+    skills?: number[]
+    orgainzer?: number
+  }): Promise<AxiosResponse<IBaseResponse<IActivityList>>> {
+    return httpsNoToken.post(`/search_multiple_activities`, body)
+  }
+  
   applyActivity(body: { activity_id: number }) {
     return https.post('/apply_volunteer', body);
   }

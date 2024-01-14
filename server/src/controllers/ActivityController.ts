@@ -145,3 +145,88 @@ export const searchActivities = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+export const searchMultipleActivities = async (req: Request, res: Response) => {
+  try {
+    const { name, address, skills, organizer, date } = req.body;
+    let activities;
+    if (name) {
+      activities = await Activities.findAll({
+        where: {
+          name: {
+            [Op.like]: `%${name.toLowerCase()}%`,
+          },
+        },
+      });
+    }
+    if (address) {
+      activities = await Activities.findAll({
+        where: {
+          location: {
+            [Op.like]: `%${address.toLowerCase()}%`,
+          },
+        },
+      });
+    }
+    if (date) {
+      if (date.register_from && date.register_to) {
+        activities = await Activities.findAll({
+          where: {
+            register_from: {
+              [Op.between]: [date.register_from, date.register_to],
+            },
+          },
+        });
+      } else if (date.register_from) {
+        activities = await Activities.findAll({
+          where: {
+            register_from: {
+              [Op.gte]: date.register_from,
+            },
+          },
+        });
+      } else if (date.register_to) {
+        activities = await Activities.findAll({
+          where: {
+            register_to: {
+              [Op.lte]: date.register_to,
+            },
+          },
+        });
+      }
+    }
+    if (skills && skills.length > 0) {
+      const skillIds = skills.map((skill: any) => +skill);
+      const skillActivities = await SkillActivities.findAll({
+        where: {
+          skill_id: skillIds,
+        },
+      });
+      const skillActivitiesIds = skillActivities.map(
+        (skillActivity) => skillActivity.activity_id
+      );
+      activities = await Activities.findAll({
+        where: {
+          id: skillActivitiesIds,
+        },
+      });
+    }
+    if (organizer) {
+      activities = await Activities.findAll({
+        where: {
+          creator: organizer,
+        },
+      });
+    }
+    
+    const response = {
+      status: 200,
+      data: { activities },
+      message: "Search activities successfully",
+    };
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

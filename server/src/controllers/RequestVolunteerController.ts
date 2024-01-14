@@ -21,7 +21,7 @@ export const requestVolunteer = async (
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
-
+    
     if (user) {
       if (user.organization_id && user.role_id === 2) {
         const response: GeneralResponse<{}> = {
@@ -31,30 +31,18 @@ export const requestVolunteer = async (
         };
         commonResponse(req, res, response);
       } else {
-        const checkRequestTime = await VolunteerRequest.findAll({
-          where: {
-            user_id: userId,
-            status: 1,
-          },
-        });
-        if (checkRequestTime.length > 0) {
-          const response: GeneralResponse<{}> = {
-            status: 400,
-            data: null,
-            message: 'Bạn đã yêu cầu trở thành tổ chức',
-          };
-          commonResponse(req, res, response);
-        } else {
           const body = {
             user_id: Number(userId) as number,
             organization_id: Number(req.body.organization_id) as number,
             status: 1,
             created_at: new Date(),
             updated_at: new Date(),
-          };
+          };  
           const existingRequest = await VolunteerRequest.findOne({
             where: { user_id: userId },
           });
+          console.log(existingRequest);
+          
           if (existingRequest) {
             await existingRequest.update(body);
           } else {
@@ -68,7 +56,6 @@ export const requestVolunteer = async (
           commonResponse(req, res, response);
         }
       }
-    }
   } catch (error: any) {
     console.error(error);
     const response: GeneralResponse<{}> = {

@@ -1,4 +1,3 @@
-import { cancelRequestTobeOrg } from './../controllers/Volunteer/RequestOrganizationController';
 import { listOrganizationAdmin } from './../controllers/Admin/OrganizationController';
 import express from 'express';
 import { login, register, resetPassword } from '../controllers/AuthController';
@@ -21,8 +20,9 @@ import {
   updateOrganization,
 } from '../controllers/Admin/OrganizationController';
 import {
-  getCurrentRequestOrganization,
+  getCurrentRequestTobeOrganization,
   requestOrganization,
+  cancelRequestTobeOrg
 } from '../controllers/Volunteer/RequestOrganizationController';
 import {
   listRequestOrganization,
@@ -40,6 +40,7 @@ import {
   detailActivity,
   listActivity,
   searchActivities,
+  searchMultipleActivities,
 } from '../controllers/ActivityController';
 import {
   createActivity,
@@ -79,6 +80,7 @@ import {
   removeVolunteer,
 } from '../controllers/Organizer/VolunteerController';
 import { listActivityApplied } from '../controllers/Volunteer/ActivityApplyController';
+import { getCurrentRequestToOrganization } from '../controllers/Volunteer/JoinOrganizationController';
 
 const router = express.Router();
 //Auth
@@ -276,7 +278,7 @@ router.post(
 router.get(
   '/api/v1/volunteer/get_current_request_tobe_organization',
   authenticateToken,
-  getCurrentRequestOrganization,
+  getCurrentRequestTobeOrganization,
 );
 //Cancel request to be org
 router.delete(
@@ -284,13 +286,19 @@ router.delete(
   authenticateToken,
   cancelRequestTobeOrg,
 );
+//Get current request to join in organization
+router.get(
+  '/api/v1/volunteer/get_current_request_to_organization',
+  authenticateToken,
+  getCurrentRequestToOrganization,
+);
 //Request Join In Orgainzation By Volunteer
 router.post(
   '/api/v1/volunteer/request_to_organization',
   authenticateToken,
   requestVolunteer,
 );
-//Cancel Request
+//Cancel Request to ỏg
 router.post(
   '/api/v1/volunteer/cancel_request_to_organization',
   authenticateToken,
@@ -312,6 +320,7 @@ router.get('/api/v1/organization/:id', detailOrganization);
 //Activity
 router.get('/api/v1/activities', listActivity);
 router.get('/api/v1/search_activities', searchActivities);
+router.post("/api/v1/search_multiple_activities", searchMultipleActivities);
 router.get('/api/v1/activities/:id', detailActivity);
 router.post('/api/v1/activities_by_skill', listActivitesBySkills);
 //Skill

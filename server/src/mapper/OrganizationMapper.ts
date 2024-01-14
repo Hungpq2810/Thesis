@@ -22,10 +22,11 @@ export const organizationMapper = async (
         const creator = await Users.findByPk(creatorId);
         const creatorName = creator ? creator.name : null;
         const creatorAvatar = creator ? creator.avatar : null;
+        const email = creator ? creator.email : null;
+        const phone = creator ? creator.phone : null;
 
         return {
           id,
-
           name,
           description,
           location,
@@ -33,6 +34,8 @@ export const organizationMapper = async (
             name: creatorName,
             avatar: creatorAvatar,
           },
+          email,
+          phone,
           status,
           created_at,
           updated_at,

@@ -36,6 +36,8 @@ const OrganizationPage = () => {
                 <br />
                 {item.description}
               </span>
+              <p><strong>Email:</strong> {item.email}</p>
+              <p><strong>Số điện thoại:</strong> {item.phone}</p>
             </Card>
           ))}
       </div>

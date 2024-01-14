@@ -115,7 +115,7 @@ export const updateActivity = async (
           register_to: req.body.register_to,
           updated_at: new Date(),
         };
-        debugger;
+        
         const today = new Date();
 
         if (today > new Date(updatedActivity.register_to))

@@ -10,6 +10,8 @@ export interface IOrganization {
   location: string;
   creator: IUser;
   status: number;
+  email: string;
+  phone: string;
   created_at: string;
   updated_at: string;
 }
