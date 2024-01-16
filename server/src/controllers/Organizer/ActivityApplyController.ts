@@ -11,7 +11,7 @@ import {
   ActivityApplyAttributes,
 } from '../../models/activity_apply';
 import { Activities } from '../../models/activities';
-import { activityApplyMapper } from '../../mapper/ActivityApplyMapper';
+import { activityApplyMapper } from '../../mappers/ActivityApplyMapper';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 

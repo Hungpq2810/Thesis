@@ -10,7 +10,7 @@ import {
 } from '../../models/organization_request';
 import { Users } from '../../models/users';
 import { Organization } from '../../models/organization';
-import { requestOrganizationMapper } from '../../mapper/RequestOrganizationMapper';
+import { requestOrganizationMapper } from '../../mappers/RequestOrganizationMapper';
 import { EmailUtils, EmailDetails } from '../../utilities/EmailUtils';
 dotenv.config();
 

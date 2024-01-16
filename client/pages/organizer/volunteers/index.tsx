@@ -98,6 +98,9 @@ const VolunteersManagement = ({}: Props) => {
           <Table
             dataSource={dataVolunteer.data.data as any}
             columns={columns}
+            pagination={{
+              pageSize: 10
+            }}
           />
         </React.Fragment>
       )}

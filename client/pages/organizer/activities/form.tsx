@@ -39,8 +39,8 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const isEditIdValidNumber = typeof editId === 'number';
 
-  const { data } = useQuery(
-    ['activity'],
+  const { data, isLoading } = useQuery(
+    ['activity', editId],
     () => activityService.getActivityById(editId as number),
     {
       enabled: isEditIdValidNumber
@@ -118,6 +118,9 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       newMutation.mutate(value);
     }
   }
+  console.log(editId);
+  console.log(data);
+
   useEffect(() => {
     if (editId && data) {
       setImageUrl(data.data.data.image);
@@ -129,7 +132,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
     } else {
       form.resetFields();
     }
-  }, [editId, data]);
+  }, [editId, data, isLoading]);
   const handleImageChange = (newAvatarUrl: string) => {
     const updatedImageUrl = newAvatarUrl || '';
     setImageUrl(updatedImageUrl);

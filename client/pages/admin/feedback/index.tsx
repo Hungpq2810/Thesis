@@ -64,7 +64,7 @@ const FeedbackManagement = ({}: Props) => {
           </Space>
         );
       }
-    },
+    }
     // {
     //   title: 'Hành động',
     //   key: 'action',
@@ -106,6 +106,9 @@ const FeedbackManagement = ({}: Props) => {
           <Table
             dataSource={dataFeedback.data.data.feedbacks}
             columns={columns}
+            pagination={{
+              pageSize: 10
+            }}
           />
         </React.Fragment>
       )}

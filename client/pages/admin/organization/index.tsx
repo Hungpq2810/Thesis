@@ -138,6 +138,9 @@ const OrganizationManagement = ({}: Props) => {
           <Table
             dataSource={dataOrganization.data.data.organizations}
             columns={columns}
+            pagination={{
+              pageSize: 10
+            }}
           />
           <FormOrganization
             refetch={refetch}

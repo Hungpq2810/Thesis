@@ -5,7 +5,7 @@ import {
   commonResponse,
 } from '../../utilities/CommonResponse';
 import { Feedback, FeedbackAttributes } from '../../models/feedback';
-import { feedbackMapper } from '../../mapper/FeedbackMapper';
+import { feedbackMapper } from '../../mappers/FeedbackMapper';
 dotenv.config();
 
 export const listFeedBack = async (

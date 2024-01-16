@@ -13,7 +13,7 @@ import { randomId } from '../../utilities/random';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
-export const requestOrganization = async (
+export const requestToBeOrganization = async (
   req: Request,
   res: Response,
 ): Promise<void> => {

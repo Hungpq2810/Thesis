@@ -59,8 +59,8 @@ const FormFaq = ({ editId, open, setOpen, refetch }: Props) => {
       newMutation.mutate(value);
     }
   }
-  const { data } = useQuery(
-    ['user'],
+  const { data, isLoading } = useQuery(
+    ['user', editId],
     () => faqService.getFaqById(editId as number),
     {
       enabled: isEditIdValidNumber
@@ -72,7 +72,7 @@ const FormFaq = ({ editId, open, setOpen, refetch }: Props) => {
         ...data.data.data
       });
     }
-  }, [data]);
+  }, [data, editId, isLoading]);
 
   return (
     <Modal

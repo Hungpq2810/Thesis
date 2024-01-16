@@ -113,6 +113,9 @@ const ActivityManagement = ({}: Props) => {
           <Table
             dataSource={dataActivity.data.data.activities}
             columns={columns}
+            pagination={{
+              pageSize: 10
+            }}
           />
         </React.Fragment>
       )}

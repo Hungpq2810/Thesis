@@ -130,6 +130,9 @@ const RequestVolunteerManagement = ({}: Props) => {
           <Table
             dataSource={dataRequestVolunteers?.data.data.requestVolunteers}
             columns={columns}
+            pagination={{
+              pageSize: 10
+            }}
           />
         </React.Fragment>
       }

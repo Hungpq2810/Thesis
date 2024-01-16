@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import { GeneralResponse, commonResponse } from '../utilities/CommonResponse';
 import { Users } from '../models/users';
 import { Feedback } from '../models/feedback';
-import { feedbackMapper } from '../mapper/FeedbackMapper';
+import { feedbackMapper } from '../mappers/FeedbackMapper';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 

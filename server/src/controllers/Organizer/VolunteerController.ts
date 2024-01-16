@@ -7,7 +7,7 @@ import {
 } from '../../utilities/CommonResponse';
 import { Users } from '../../models/users';
 import { VolunteerRequest } from '../../models/volunteer_request';
-import { volunteerRequestMapper } from '../../mapper/VolunteerRequestMapper';
+import { volunteerRequestMapper } from '../../mappers/VolunteerRequestMapper';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 

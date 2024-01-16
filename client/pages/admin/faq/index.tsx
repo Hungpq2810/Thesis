@@ -132,7 +132,13 @@ const FAQManagement = ({}: Props) => {
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataFaq.data.data.faqs} columns={columns} />
+          <Table
+            dataSource={dataFaq.data.data.faqs}
+            columns={columns}
+            pagination={{
+              pageSize: 10
+            }}
+          />
           {action === 'create' && !rowId ? (
             <FormFaq refetch={refetch} open={open} setOpen={setOpen} />
           ) : (

@@ -85,27 +85,27 @@ const ApplyActivityManagement = ({}: Props) => {
     }
   });
 
-  let filterActivityByName: { text: string; value: string }[] = []
+  let filterActivityByName: { text: string; value: string }[] = [];
 
   if (dataApplyActivity) {
-    const uniqueNamesSet = new Set()
+    const uniqueNamesSet = new Set();
 
     const uniqueFilterActivityByName = dataApplyActivity
-      .map(item => ({
+      .map((item) => ({
         text: item.activity!.name,
         value: item.activity!.name
       }))
-      .filter(item => {
-        const isUnique = !uniqueNamesSet.has(item.value)
-        uniqueNamesSet.add(item.value)
-        return isUnique
-      })
-    filterActivityByName = uniqueFilterActivityByName
+      .filter((item) => {
+        const isUnique = !uniqueNamesSet.has(item.value);
+        uniqueNamesSet.add(item.value);
+        return isUnique;
+      });
+    filterActivityByName = uniqueFilterActivityByName;
   } else {
     filterActivityByName.push({
       text: '',
       value: ''
-    })
+    });
   }
   const columns: ColumnType<IAppliedVolunteer>[] = [
     {
@@ -178,7 +178,13 @@ const ApplyActivityManagement = ({}: Props) => {
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataApplyActivity} columns={columns} />
+          <Table
+            dataSource={dataApplyActivity}
+            columns={columns}
+            pagination={{
+              pageSize: 10
+            }}
+          />
         </React.Fragment>
       }
     </>

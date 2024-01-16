@@ -76,8 +76,8 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
       registerMutation.mutate(value);
     }
   }
-  const { data } = useQuery(
-    ['user'],
+  const { data, isLoading } = useQuery(
+    ['user', editId],
     () => userService.getUserById(editId as number),
     {
       enabled: isEditIdValidNumber
@@ -94,7 +94,7 @@ const FormUser = ({ editId, open, setOpen, refetch }: Props) => {
         birthday: formattedBirthday
       });
     }
-  }, [data]);
+  }, [data, editId, isLoading]);
   const options: SelectProps['options'] = [
     {
       label: 'Nam',

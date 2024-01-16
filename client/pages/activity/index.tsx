@@ -1,6 +1,16 @@
 import { activityService } from '@/services/activity.service';
 import { IActivity } from '@/typeDefs/schema/activity.type';
-import { Avatar, Badge, Button, Card, DatePicker, Form, Input, Select, message } from 'antd';
+import {
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  message
+} from 'antd';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -15,34 +25,42 @@ const { RangePicker } = DatePicker;
 const ActivityPage = () => {
   const router = useRouter();
   const { query } = router;
-  const [ form ] = useForm();
+  const [form] = useForm();
   const [key, setKey] = useState('');
   const [filterActivity, setFilterActivity] = useState<
     IActivity[] | undefined
   >();
-  const { data: skills } = useQuery(['skills'], () => skillService.getAllSkill(), {
-    select(data) {
-      const result = data.data.data
-      if (!result) return
-      const res = result.skills.map(skill => ({
-        label: skill.name,
-        value: skill.id
-      }))
-      return res
+  const { data: skills } = useQuery(
+    ['skills'],
+    () => skillService.getAllSkill(),
+    {
+      select(data) {
+        const result = data.data.data;
+        if (!result) return;
+        const res = result.skills.map((skill) => ({
+          label: skill.name,
+          value: skill.id
+        }));
+        return res;
+      }
     }
-  })
-  const { data: organizers } = useQuery(['organizers'], () => organizationService.getAllOrganization(), {
-    select(data) {
-      const result = data.data.data
-      if (!result) return
-      const res = result.organizations.map(organization => ({
-        label: organization.name,
-        value: organization.id
-      }))
-      return res
+  );
+  const { data: organizers } = useQuery(
+    ['organizers'],
+    () => organizationService.getAllOrganization(),
+    {
+      select(data) {
+        const result = data.data.data;
+        if (!result) return;
+        const res = result.organizations.map((organization) => ({
+          label: organization.name,
+          value: organization.id
+        }));
+        return res;
+      }
     }
-  })
-  
+  );
+
   const { data: dataActivitySearch, refetch: refetchSearch } = useQuery(
     ['listActivitySearch'],
     () => activityService.searchActivity(key as string),
@@ -83,29 +101,33 @@ const ActivityPage = () => {
   }, [dataActivity, key]); // Chỉ gọi lại khi dataActivity thay đổi
   const filterActivityMute = useMutation({
     mutationKey: 'filterActivityMute',
-    mutationFn: (body: { name?: string; address?: string; skills?: number[]; organizer?: number }) =>
-      activityService.searchMultipleActivity(body),
+    mutationFn: (body: {
+      name?: string;
+      address?: string;
+      skills?: number[];
+      organizer?: number;
+    }) => activityService.searchMultipleActivity(body),
     onSuccess(data, _variables, _context) {
-      setFilterActivity(data.data.data.activities)
+      setFilterActivity(data.data.data.activities);
       if (data.data.data) {
-        message.success('Tìm kiếm thành công')
+        message.success('Tìm kiếm thành công');
       }
     },
     onError(error, variables, context) {
-      message.error('Tìm kiếm không thành công')
+      message.error('Tìm kiếm không thành công');
     }
-  })
-  
+  });
+
   const handleFilter = (value: any) => {
-    const queryParams: { [key: string]: string } = {}
+    const queryParams: { [key: string]: string } = {};
     if (value.name) {
-      queryParams.name = value.name
+      queryParams.name = value.name;
     }
     if (value.address) {
-      queryParams.address = value.address
+      queryParams.address = value.address;
     }
     if (value.organizer) {
-      queryParams.organizer = value.organizer
+      queryParams.organizer = value.organizer;
     }
     // router.push({
     //   pathname: '/activity',
@@ -115,12 +137,15 @@ const ActivityPage = () => {
       name: value.name,
       address: value.address,
       organizer: value.creator,
-      date: { register_from: value.date && convertDate(value.date[0].$d), register_to: value.date && convertDate(value.date[1].$d) },
+      date: {
+        register_from: value.date && convertDate(value.date[0].$d),
+        register_to: value.date && convertDate(value.date[1].$d)
+      },
       skills: value.skills
-    }
+    };
 
-    filterActivityMute.mutate(body)
-  }
+    filterActivityMute.mutate(body);
+  };
   return (
     <React.Fragment>
       <Head>
@@ -151,10 +176,19 @@ const ActivityPage = () => {
             <RangePicker />
           </Form.Item>
           <Form.Item label='Thuộc tổ chức' name='organizer'>
-            <Select placeholder='Chọn tổ chức' optionLabelProp='label' options={organizers} />
+            <Select
+              placeholder='Chọn tổ chức'
+              optionLabelProp='label'
+              options={organizers}
+            />
           </Form.Item>
           <Form.Item label='Kỹ năng' name='skills' className='w-1/2'>
-            <Select mode='multiple' placeholder='Chọn các kỹ năng' optionLabelProp='label' options={skills} />
+            <Select
+              mode='multiple'
+              placeholder='Chọn các kỹ năng'
+              optionLabelProp='label'
+              options={skills}
+            />
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
             <Button type='primary' htmlType='submit'>

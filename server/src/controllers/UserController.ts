@@ -10,7 +10,7 @@ import {
 } from '../models/volunteer_request';
 import { ActivityApply } from '../models/activity_apply';
 import { Organization, OrganizationAttributes } from '../models/organization';
-import { activityApplyMapper } from '../mapper/ActivityApplyMapper';
+import { activityApplyMapper } from '../mappers/ActivityApplyMapper';
 import { Skills } from '../models/skills';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;

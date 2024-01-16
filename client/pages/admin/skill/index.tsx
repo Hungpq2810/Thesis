@@ -109,7 +109,13 @@ const SkillManagement = ({}: Props) => {
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataSkill.data.data.skills} columns={columns} />
+          <Table
+            dataSource={dataSkill.data.data.skills}
+            columns={columns}
+            pagination={{
+              pageSize: 10
+            }}
+          />
           {action === 'create' && !rowId ? (
             <FormSkill refetch={refetch} open={open} setOpen={setOpen} />
           ) : (

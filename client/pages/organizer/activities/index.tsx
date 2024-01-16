@@ -153,6 +153,9 @@ const ActivityManagement = ({}: Props) => {
             dataSource={dataActivity}
             columns={columns}
             scroll={{ x: 'max-content' }}
+            pagination={{
+              pageSize: 10
+            }}
           />
           {action === 'create' && !rowId ? (
             <FormActivity refetch={refetch} open={open} setOpen={setOpen} />

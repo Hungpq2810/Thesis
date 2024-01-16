@@ -34,7 +34,7 @@ const VolunteerActivity = () => {
     {
       title: 'Id hoạt động',
       key: 'id',
-      render: (_,record) => <p>{record.activity_id}</p>
+      render: (_, record) => <p>{record.activity_id}</p>
     },
     {
       title: 'Tên hoạt động',
@@ -60,11 +60,13 @@ const VolunteerActivity = () => {
     },
     {
       title: 'Link sự kiện',
-      render:(_,record) => (
+      render: (_, record) => (
         <p>
-        <Button onClick={() => router.push(`/activity/${record.activity_id}`)}>
-           Xem chi tiết
-        </Button>
+          <Button
+            onClick={() => router.push(`/activity/${record.activity_id}`)}
+          >
+            Xem chi tiết
+          </Button>
         </p>
       )
     }
@@ -91,7 +93,13 @@ const VolunteerActivity = () => {
            </div>
          </Col> */}
           </Row>
-          <Table columns={columns} dataSource={dataVolunteerActivity} />
+          <Table
+            columns={columns}
+            dataSource={dataVolunteerActivity}
+            pagination={{
+              pageSize: 10
+            }}
+          />
         </React.Fragment>
       }
     </>

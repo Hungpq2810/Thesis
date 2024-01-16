@@ -137,7 +137,13 @@ const UserManagement = ({}: Props) => {
               </div>
             </Col>
           </Row>
-          <Table dataSource={dataUser.data.data.users} columns={columns} />
+          <Table
+            dataSource={dataUser.data.data.users}
+            columns={columns}
+            pagination={{
+              pageSize: 10
+            }}
+          />
           {action === 'create' && !rowId ? (
             <FormUser refetch={refetch} open={open} setOpen={setOpen} />
           ) : (

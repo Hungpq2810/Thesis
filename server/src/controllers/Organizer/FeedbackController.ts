@@ -8,7 +8,7 @@ import {
 import { Feedback, FeedbackAttributes } from '../../models/feedback';
 import { Users } from '../../models/users';
 import { Activities } from '../../models/activities';
-import { feedbackMapper } from '../../mapper/FeedbackMapper';
+import { feedbackMapper } from '../../mappers/FeedbackMapper';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 

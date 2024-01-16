@@ -9,11 +9,11 @@ const FAQPage = () => {
   const { data: dataFaq } = useQuery(['listFaq'], () => faqService.getAllFaq());
   return (
     <React.Fragment>
-        <div className='mt-5 flex flex-col justify-center sticky'>
-  <h1 className='text-4xl leading-8 text-bold text-[#0F147F] border-b-2 border-b-black top-0'>
-    FAQ
-  </h1>
-</div>
+      <div className='mt-5 flex flex-col justify-center sticky'>
+        <h1 className='text-4xl leading-8 text-bold text-[#0F147F] border-b-2 border-b-black top-0'>
+          FAQ
+        </h1>
+      </div>
       <div className='w-full h-full grid grid-cols-1 gap-5'>
         {dataFaq &&
           dataFaq.data.data &&

@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
 import { GeneralResponse, commonResponse } from '../utilities/CommonResponse';
 import { Organization, OrganizationAttributes } from '../models/organization';
-import { organizationMapper } from '../mapper/OrganizationMapper';
+import { organizationMapper } from '../mappers/OrganizationMapper';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 

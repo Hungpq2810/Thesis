@@ -5,7 +5,7 @@ import { Activities, ActivityAttributes } from '../models/activities';
 import { Op } from 'sequelize';
 import { SkillActivities } from '../models/skill_activities';
 import { Skills } from '../models/skills';
-import { mappedActivities } from '../mapper/ActivityMapper';
+import { mappedActivities } from '../mappers/ActivityMapper';
 dotenv.config();
 
 export const listActivity = async (
@@ -203,7 +203,7 @@ export const searchMultipleActivities = async (req: Request, res: Response) => {
         },
       });
       const skillActivitiesIds = skillActivities.map(
-        (skillActivity) => skillActivity.activity_id
+        (skillActivity) => skillActivity.activity_id,
       );
       activities = await Activities.findAll({
         where: {
@@ -218,15 +218,15 @@ export const searchMultipleActivities = async (req: Request, res: Response) => {
         },
       });
     }
-    
+
     const response = {
       status: 200,
       data: { activities },
-      message: "Search activities successfully",
+      message: 'Search activities successfully',
     };
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };

@@ -21,17 +21,17 @@ import {
 } from '../controllers/Admin/OrganizationController';
 import {
   getCurrentRequestTobeOrganization,
-  requestOrganization,
-  cancelRequestTobeOrg
-} from '../controllers/Volunteer/RequestOrganizationController';
+  requestToBeOrganization,
+  cancelRequestTobeOrg,
+} from '../controllers/Volunteer/RequestToBeOrganizationController';
 import {
   listRequestOrganization,
   updateRequestOrganization,
 } from '../controllers/Admin/RequestOrganizationController';
 import {
-  cancelRequestVolunteer,
-  requestVolunteer,
-} from '../controllers/RequestVolunteerController';
+  cancelRequestToOrganization,
+  requestToOrganization,
+} from '../controllers/Volunteer/JoinOrganizationController';
 import {
   listRequestVolunteers,
   updateRequestVolunteer,
@@ -50,7 +50,7 @@ import {
 import {
   activityApplyVolunteer,
   cancelApplyActivity,
-} from '../controllers/ActivityApplyController';
+} from '../controllers/Volunteer/ActivityApplyController';
 import {
   listApplyVolunteers,
   updateApplyVolunteer,
@@ -272,7 +272,7 @@ router.post(
 router.post(
   '/api/v1/volunteer/request_tobe_organization',
   authenticateToken,
-  requestOrganization,
+  requestToBeOrganization,
 );
 //Get current request to be org
 router.get(
@@ -296,13 +296,13 @@ router.get(
 router.post(
   '/api/v1/volunteer/request_to_organization',
   authenticateToken,
-  requestVolunteer,
+  requestToOrganization,
 );
 //Cancel Request to ỏg
 router.post(
   '/api/v1/volunteer/cancel_request_to_organization',
   authenticateToken,
-  cancelRequestVolunteer,
+  cancelRequestToOrganization,
 );
 //Activity application By Volunteer
 router.post(
@@ -320,7 +320,7 @@ router.get('/api/v1/organization/:id', detailOrganization);
 //Activity
 router.get('/api/v1/activities', listActivity);
 router.get('/api/v1/search_activities', searchActivities);
-router.post("/api/v1/search_multiple_activities", searchMultipleActivities);
+router.post('/api/v1/search_multiple_activities', searchMultipleActivities);
 router.get('/api/v1/activities/:id', detailActivity);
 router.post('/api/v1/activities_by_skill', listActivitesBySkills);
 //Skill

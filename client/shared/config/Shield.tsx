@@ -29,7 +29,7 @@ export function Shield({ children }: Props) {
         <Spin />
       </div>
     ),
-    privateRoutes: ['/admin/*', '/organizer/*'],
+    privateRoutes: ['/admin/*', '/organizer/*, /volunteer/*'],
     publicRoutes: ['/login', '/'],
     loginRoute: '/login',
     accessRoute: '/'

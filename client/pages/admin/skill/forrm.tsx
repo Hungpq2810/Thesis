@@ -61,8 +61,8 @@ const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
       registerMutation.mutate(value);
     }
   }
-  const { data } = useQuery(
-    ['skill'],
+  const { data, isLoading } = useQuery(
+    ['skill', editId],
     () => skillService.getSkillById(editId as number),
     {
       enabled: isEditIdValidNumber
@@ -74,7 +74,7 @@ const FormSkill = ({ editId, open, setOpen, refetch }: Props) => {
         ...data.data.data
       });
     }
-  }, [data]);
+  }, [data, editId, isLoading]);
 
   return (
     <Modal

@@ -8,7 +8,7 @@ import {
   OrganizationAttributes,
 } from '../../models/organization';
 import { Users } from '../../models/users';
-import { organizationMapper } from '../../mapper/OrganizationMapper';
+import { organizationMapper } from '../../mappers/OrganizationMapper';
 import { OrganizationRequest } from '../../models/organization_request';
 import { Op } from 'sequelize';
 import { sequelize } from '../../db';

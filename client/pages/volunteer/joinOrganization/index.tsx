@@ -16,22 +16,26 @@ const JoinOrganization = () => {
     organizationService.getAllOrganization()
   );
   console.log(dataOrganization);
-  const { data: organizers } = useQuery(['organizers'], () => organizationService.getAllOrganization(), {
-    select(data) {
-      const result = data.data.data
-      if (!result) return
-      const res = result.organizations.map(organization => ({
-        label: organization.name,
-        value: organization.id
-      }))
-      return res
+  const { data: organizers } = useQuery(
+    ['organizers'],
+    () => organizationService.getAllOrganization(),
+    {
+      select(data) {
+        const result = data.data.data;
+        if (!result) return;
+        const res = result.organizations.map((organization) => ({
+          label: organization.name,
+          value: organization.id
+        }));
+        return res;
+      }
     }
-  })
+  );
   const { data: dataVolunteerRequest } = useQuery(
     'getCurrentRequestOrganization',
     () => volunteerService.getCurrentRequestToOrganization()
-  )
-  
+  );
+
   const handleForm = useMutation({
     mutationKey: 'requestToOrganization',
     mutationFn: (body: { organization_id: number }) =>
@@ -41,14 +45,13 @@ const JoinOrganization = () => {
     },
     onError(error, variables, context) {
       console.log(error);
-    }  
-  })
+    }
+  });
 
   const handleRequest = (organization_id: number) => {
-    handleForm.mutate({organization_id});
-  }
-  
-  
+    handleForm.mutate({ organization_id });
+  };
+
   const columns: ColumnType<IOrganization>[] = [
     {
       title: '#',
@@ -62,7 +65,7 @@ const JoinOrganization = () => {
     {
       title: 'Id tổ chức',
       key: 'id',
-      render: (_,record) => <p>{record.id}</p>
+      render: (_, record) => <p>{record.id}</p>
     },
     {
       title: 'Tên tổ chức',
@@ -89,39 +92,44 @@ const JoinOrganization = () => {
           </div>
         );
       }
-    },
-    
-  ];
-  
-
-  return(
-    <>
-    {
-      <React.Fragment>
-        <Form
-          form={form}
-          onFinish={handleRequest}
-        >
-          <Form.Item label='Chọn tổ chức bạn muốn gia nhập' name='organization_id'>
-            <Select placeholder='Chọn tổ chức' optionLabelProp='label' options={organizers} />
-          </Form.Item>
-          <Form.Item style={{ textAlign: 'center' }}>
-            <Button type='primary' htmlType='submit'>
-              Gửi yêu cầu
-            </Button>
-          </Form.Item>
-        </Form>
-        <h1 className='flex flex-col justify-center items-center gap-10 mb-24 text-6xl leading-8 text-bold text-[#0F147F]'>
-          Danh sách tổ chức
-        </h1>
-        <Table
-          columns={columns}
-          dataSource={dataOrganization?.data?.data?.organizations}
-          />
-      </React.Fragment>
     }
-  </> 
-  )
+  ];
+
+  return (
+    <>
+      {
+        <React.Fragment>
+          <Form form={form} onFinish={handleRequest}>
+            <Form.Item
+              label='Chọn tổ chức bạn muốn gia nhập'
+              name='organization_id'
+            >
+              <Select
+                placeholder='Chọn tổ chức'
+                optionLabelProp='label'
+                options={organizers}
+              />
+            </Form.Item>
+            <Form.Item style={{ textAlign: 'center' }}>
+              <Button type='primary' htmlType='submit'>
+                Gửi yêu cầu
+              </Button>
+            </Form.Item>
+          </Form>
+          <h1 className='flex flex-col justify-center items-center gap-10 mb-24 text-6xl leading-8 text-bold text-[#0F147F]'>
+            Danh sách tổ chức
+          </h1>
+          <Table
+            columns={columns}
+            dataSource={dataOrganization?.data?.data?.organizations}
+            pagination={{
+              pageSize: 10
+            }}
+          />
+        </React.Fragment>
+      }
+    </>
+  );
 };
 
 JoinOrganization.getLayout = (children: React.ReactNode) => (

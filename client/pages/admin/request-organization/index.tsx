@@ -130,6 +130,9 @@ const RequestOrganizationManagement = ({}: Props) => {
           <Table
             dataSource={dataRequestOrganization.data.data.requestOrganizations}
             columns={columns}
+            pagination={{
+              pageSize: 10
+            }}
           />
         </React.Fragment>
       )}
