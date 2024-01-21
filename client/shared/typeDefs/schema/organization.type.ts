@@ -1,4 +1,4 @@
-import { IUser } from './../user.type';
+import { IUser } from './user.type';
 // import { IUser } from '../baseReponse.type';
 export interface IOrganizations {
   organizations: IOrganization[];

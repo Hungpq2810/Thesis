@@ -1,4 +1,4 @@
-import { IUser } from '../user.type';
+import { IUser } from './user.type';
 import { IActivity } from './activity.type';
 
 export interface IActivityApplyList {
