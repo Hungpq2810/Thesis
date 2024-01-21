@@ -6,6 +6,7 @@ import { Op } from 'sequelize';
 import { SkillActivities } from '../models/skill_activities';
 import { Skills } from '../models/skills';
 import { mappedActivities } from '../mappers/ActivityMapper';
+import { Users } from '../models/users';
 dotenv.config();
 
 export const listActivity = async (
@@ -212,9 +213,15 @@ export const searchMultipleActivities = async (req: Request, res: Response) => {
       });
     }
     if (organizer) {
+      const user = await Users.findOne({
+        where: {
+          role_id: 2,
+          organization_id: organizer,
+        },
+      });
       activities = await Activities.findAll({
         where: {
-          creator: organizer,
+          creator: user?.id,
         },
       });
     }

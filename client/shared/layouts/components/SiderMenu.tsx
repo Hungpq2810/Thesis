@@ -3,14 +3,18 @@ import {
   AuditOutlined,
   CalendarOutlined,
   ClusterOutlined,
+  DashboardFilled,
+  EditOutlined,
   HomeOutlined,
   MonitorOutlined,
   PullRequestOutlined,
   StarOutlined,
   UserAddOutlined,
+  UserOutlined,
   UsergroupAddOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, MenuProps, Typography, theme } from 'antd';
+import { icons } from 'antd/es/image/PreviewGroup';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 const { Sider } = Layout;
@@ -32,6 +36,21 @@ const SiderMenu = () => {
       icon: <AuditOutlined />,
       label: 'Quản trị viên',
       children: [
+        {
+          key: '/profile',
+          icon: <UserOutlined />,
+          label: 'Thông tin cá nhân'
+        },
+        {
+          key: '/change-password',
+          label: 'Đổi mật khẩu',
+          icon: <EditOutlined />
+        },
+        {
+          key: '/admin',
+          icon: <DashboardFilled />,
+          label: 'Dashboard'
+        },
         {
           key: '/admin/user',
           icon: <UserAddOutlined />,
@@ -82,6 +101,21 @@ const SiderMenu = () => {
       label: 'Ban tổ chức',
       children: [
         {
+          key: '/profile',
+          icon: <UserOutlined />,
+          label: 'Thông tin cá nhân'
+        },
+        {
+          key: '/change-password',
+          label: 'Đổi mật khẩu',
+          icon: <EditOutlined />
+        },
+        {
+          key: '/organizer',
+          icon: <DashboardFilled />,
+          label: 'Dashboard'
+        },
+        {
           key: '/organizer/activities',
           icon: <CalendarOutlined />,
           label: 'Quản lý hoạt động'
@@ -121,19 +155,39 @@ const SiderMenu = () => {
       label: 'Tình nguyện viên',
       children: [
         {
+          key: '/profile',
+          icon: <UserOutlined />,
+          label: 'Thông tin cá nhân'
+        },
+        {
+          key: '/change-password',
+          label: 'Đổi mật khẩu',
+          icon: <EditOutlined />
+        },
+        {
+          key: '/volunteer',
+          icon: <DashboardFilled />,
+          label: 'Dashboard'
+        },
+        {
           key: '/volunteer/activities',
           icon: <MonitorOutlined />,
           label: 'Hoạt động'
         },
         {
-          key: '/volunteer/joinOrganization',
+          key: '/volunteer/join-organization',
           icon: <PullRequestOutlined />,
           label: 'Tham gia tổ chức'
         },
         {
-          key: 'request_organization',
+          key: 'volunteer/request-organization',
           icon: <PullRequestOutlined />,
           label: 'Trở thành tổ chức'
+        },
+        {
+          key: 'volunteer/your-organization',
+          icon: <UsergroupAddOutlined />,
+          label: 'Tổ chức của bạn'
         }
       ]
     }

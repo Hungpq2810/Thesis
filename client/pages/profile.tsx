@@ -11,34 +11,26 @@ import {
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import BlankLayout from '@/layouts/BlankLayout';
 import { useForm } from 'antd/lib/form/Form';
-import { useDispatch } from 'react-redux';
-import { setInforOrganization } from '@/store/appSlice';
 import { userService } from '@/services/user.service';
 import { useAppSelector } from '@/hooks/useRedux';
 import { skillService } from '@/services/skill.service';
 import { IUser } from '@/typeDefs/schema/user.type';
-import { organizationService } from '@/services/organization.service';
 import dayjs from 'dayjs';
 import InputUpload from '@/components/common/UploadInput';
-import { useRouter } from 'next/router';
 import { CheckCircleOutlined } from '@ant-design/icons';
+import DashboardLayout from '../shared/layouts/DashboardLayout';
 type Props = {
   next: any;
 };
 const Profile = ({ next }: Props) => {
   const [form] = useForm();
-  const router = useRouter();
   const { user } = useAppSelector((state) => state.appSlice);
   const { data, refetch } = useQuery(['userDetail'], () =>
     userService.getUserByAuth()
   );
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(user?.avatar);
 
-  const [belongsOrganizer, setBelongsOrganizer] = useState<number | undefined>(
-    data?.data.data.belongsOrganizer?.id
-  );
   const [skillsDefault, setSkillsDefault] = useState<any[] | undefined>(
     data?.data.data.skills?.map((skill) => ({
       label: skill.name,
@@ -46,7 +38,6 @@ const Profile = ({ next }: Props) => {
     }))
   );
 
-  const dispatch = useDispatch();
   const { data: skills } = useQuery(
     ['skills'],
     () => skillService.getAllSkill(),
@@ -62,45 +53,12 @@ const Profile = ({ next }: Props) => {
       }
     }
   );
-  const { data: organizersCurrent } = useQuery(
-    ['organizers'],
-    () => organizationService.getAllOrganization(),
-    {
-      select(dataInner) {
-        if (data?.data.data.belongsOrganizer) {
-          const result = dataInner.data.data.organizations.filter(
-            (item) => item.id === data.data.data.belongsOrganizer?.id
-          );
-          return result[0];
-        } else {
-          return undefined;
-        }
-      }
-    }
-  );
-
-  const { data: organizers } = useQuery(
-    ['organizers'],
-    () => organizationService.getAllOrganization(),
-    {
-      select(data) {
-        const result = data.data.data;
-        if (!result) return;
-        const res = result.organizations.map((organization) => ({
-          label: organization.name,
-          value: organization.id
-        }));
-        return res;
-      }
-    }
-  );
 
   const updateProfile = useMutation({
     mutationKey: 'updateProfile',
     mutationFn: (body: IUser) => userService.updateProfile(body),
     onSuccess(data, _variables, _context) {
       if (data.data.data) {
-        dispatch(setInforOrganization(data.data.data));
         message.success('Cập nhật thành công');
       }
     },
@@ -116,7 +74,6 @@ const Profile = ({ next }: Props) => {
 
   useEffect(() => {
     if (user && data) {
-      setBelongsOrganizer(data.data.data.belongsOrganizer?.id);
       setSkillsDefault(
         data.data.data.skills?.map((skill) => ({
           label: skill.name,
@@ -125,8 +82,7 @@ const Profile = ({ next }: Props) => {
       );
       form.setFieldsValue({
         // @ts-ignore
-        ...data.data.data.user,
-        confirmPassword: data.data.data.password
+        ...data.data.data.user
       });
     }
   }, [user, data]);
@@ -265,50 +221,6 @@ const Profile = ({ next }: Props) => {
             <Input />
           </Form.Item>
 
-          <Form.Item
-            label='Mật khẩu'
-            name='password'
-            rules={[
-              {
-                type: 'string',
-                required: true,
-                message: 'Vui lòng nhập mật khẩu'
-              },
-              {
-                validator: (_, value) => {
-                  if (value.length < 6) {
-                    return Promise.reject('Mật khẩu phải có ít nhất 6 ký tự');
-                  } else {
-                    return Promise.resolve();
-                  }
-                }
-              }
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item
-            label='Xác nhận mật khẩu'
-            name='confirmPassword'
-            dependencies={['password']}
-            rules={[
-              { required: true, message: 'Vui lòng xác nhận mật khẩu' },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    new Error('Mật khẩu xác nhận không khớp')
-                  );
-                }
-              })
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-
           {skillsDefault && user?.role_id === 1 && (
             <Form.Item
               label='Kỹ năng'
@@ -324,24 +236,6 @@ const Profile = ({ next }: Props) => {
               />
             </Form.Item>
           )}
-
-          {/* {belongsOrganizer && user?.role_id === 1 ? (
-            <Form.Item
-            label='Thuộc tổ chức'
-            name='belongsOrganizer'
-            rules={[{ required: false, message: 'Chưa điền tổ chức' }]}
-            >
-            <Select
-            defaultValue={belongsOrganizer && belongsOrganizer}
-            placeholder='Chọn tổ chức bạn muốn gia nhập'
-            optionLabelProp='label'
-            options={organizers}
-            />
-            </Form.Item>
-            ) : (
-              <p>Thuộc tổ chức: {organizersCurrent && organizersCurrent.name}</p>
-            )} */}
-
           <Form.Item style={{ textAlign: 'center' }}>
             <Button
               type='primary'
@@ -365,6 +259,6 @@ const Profile = ({ next }: Props) => {
   );
 };
 Profile.getLayout = (children: React.ReactNode) => (
-  <BlankLayout>{children}</BlankLayout>
+  <DashboardLayout>{children}</DashboardLayout>
 );
 export default Profile;

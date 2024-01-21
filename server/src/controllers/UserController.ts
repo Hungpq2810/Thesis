@@ -4,13 +4,6 @@ import * as dotenv from 'dotenv';
 import { GeneralResponse, commonResponse } from '../utilities/CommonResponse';
 import { UserAttributes, Users } from '../models/users';
 import { SkillUsers } from '../models/skill_users';
-import {
-  VolunteerRequest,
-  VolunteerRequestAttributes,
-} from '../models/volunteer_request';
-import { ActivityApply } from '../models/activity_apply';
-import { Organization, OrganizationAttributes } from '../models/organization';
-import { activityApplyMapper } from '../mappers/ActivityApplyMapper';
 import { Skills } from '../models/skills';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
@@ -50,30 +43,8 @@ export const updateProfile = async (
           await SkillUsers.create(skill);
         }
       }
-
-      // const currentRequest = await VolunteerRequest.findOne({
-      //   where: {user_id: user.id}
-      // })
-
-      // const requestApplyOrganizer = {
-      //   user_id: Number(userId) as number,
-      //   organization_id: currentRequest?.organization_id || Number(req.body.belongsOrganizer) as number,
-      //   status: 1,
-      //   created_at: new Date(),
-      //   updated_at: new Date(),
-      // };
-      // console.log(requestApplyOrganizer);
-
-      // await VolunteerRequest.destroy({
-      //   where: {
-      //     user_id: userId,
-      //     organization_id: req.body.belongsOrganizer,
-      //   },
-      // });
-      // await VolunteerRequest.create(requestApplyOrganizer);
       const body = req.body;
-      // delete body.role_id;
-      // delete body.organization_id;
+
       const result = await user.update(body);
       const response: GeneralResponse<UserAttributes> = {
         status: 200,
@@ -107,6 +78,10 @@ export const detailUser = async (
     const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
     const userId = decodedToken.id;
     const user = await Users.findByPk(userId);
+    const filteredUser = {
+      ...user?.toJSON(),
+      password: undefined,
+    };
     if (!user) {
       const response: GeneralResponse<{}> = {
         status: 400,
@@ -126,26 +101,15 @@ export const detailUser = async (
       const skill = skills.find((skill) => skill.id === activity.skill_id);
       return skill;
     });
-    const userOrganizer = await VolunteerRequest.findOne({
-      where: { user_id: userId },
-    });
 
-    const userActivity = await ActivityApply.findAll({
-      where: { user_id: userId },
-    });
-    const activityMapper = await activityApplyMapper(userActivity);
     const response: GeneralResponse<{
-      user: UserAttributes;
+      user: any;
       skills: any[];
-      activityApplied: any[];
-      belongsOrganizer: VolunteerRequestAttributes | null;
     }> = {
       status: 200,
       data: {
-        user: user.toJSON() as UserAttributes,
+        user: filteredUser,
         skills: skillsWithDetails,
-        activityApplied: activityMapper,
-        belongsOrganizer: userOrganizer,
       },
       message: 'Lấy thông tin người dùng thành công',
     };

@@ -136,7 +136,7 @@ const ActivityPage = () => {
     const body = {
       name: value.name,
       address: value.address,
-      organizer: value.creator,
+      organizer: value.organizer,
       date: {
         register_from: value.date && convertDate(value.date[0].$d),
         register_to: value.date && convertDate(value.date[1].$d)

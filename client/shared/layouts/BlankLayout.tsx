@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import { login } from '@/store/appSlice';
 import jwt_decode from 'jwt-decode';
 import DashboardLayout from './DashboardLayout';
+import FooterContent from './components/Footer';
 
 const { Header, Content, Footer } = Layout;
 
@@ -133,9 +134,7 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
       <Content className='w-full min-h-[100vh] flex flex-col justify-center items-center mx-auto p-20'>
         {children}
       </Content>
-      <Footer style={{ textAlign: 'center' }}>
-        Ant Design ©2023 Created by Ant UED
-      </Footer>
+      <Footer className='w-full'>{/* <FooterContent /> */}</Footer>
     </React.Fragment>
   );
 }

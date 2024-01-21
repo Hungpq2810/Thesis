@@ -15,7 +15,6 @@ import { useMutation } from 'react-query';
 import BlankLayout from '@/layouts/BlankLayout';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { validateVNPhone } from '../shared/utils/formValidator';
 type Props = {};
 
 const Register = ({}: Props) => {

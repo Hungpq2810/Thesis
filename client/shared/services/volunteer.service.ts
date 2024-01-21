@@ -25,7 +25,7 @@ class VolunteerService {
     return https.post('/volunteer/request_to_organization', body);
   }
   cancelRequestToOrganization() {
-    return https.post('/volunteer/cancel_request_to_org');
+    return https.post('/volunteer/cancel_request_to_organization');
   }
 
   // Organizer
@@ -38,7 +38,7 @@ class VolunteerService {
     return https.put('/organizer/update_request_volunteer', body);
   }
   getVolunteerGroupOrganizer(): Promise<
-    AxiosResponse<IBaseResponse<IVolunteerGroupOrganizer>>
+    AxiosResponse<IBaseResponse<IVolunteerGroupOrganizer[]>>
   > {
     return https.get('/organizer/volunteers');
   }

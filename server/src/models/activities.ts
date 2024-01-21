@@ -64,7 +64,7 @@ Activities.init(
       allowNull: false,
     },
     description: {
-      type: new DataTypes.STRING(255),
+      type: new DataTypes.STRING(2000),
       allowNull: false,
     },
     image: {

@@ -1,6 +1,11 @@
 import { listOrganizationAdmin } from './../controllers/Admin/OrganizationController';
 import express from 'express';
-import { login, register, resetPassword } from '../controllers/AuthController';
+import {
+  changePassword,
+  login,
+  register,
+  resetPassword,
+} from '../controllers/AuthController';
 import {
   deleteUser,
   getUserById,
@@ -87,6 +92,7 @@ const router = express.Router();
 router.post('/api/v1/login', login);
 router.post('/api/v1/register', register);
 router.post('/api/v1/reset_password', resetPassword);
+router.post('/api/v1/change_password', authenticateToken, changePassword);
 //Admin
 //User
 router.get('/api/v1/admin/users', authenticateToken, checkRoleAdmin, listUser);

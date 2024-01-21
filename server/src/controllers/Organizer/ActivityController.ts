@@ -31,6 +31,8 @@ export const createActivity = async (
       where: { id: organizerId, role_id: 2 },
     });
 
+    const org_id = organizer?.organization_id;
+
     if (organizer) {
       const body = {
         creator: organizerId as number,
@@ -49,8 +51,11 @@ export const createActivity = async (
         updated_at: new Date(),
       };
 
+
       // body.status = new Date() > req.body.register_to ? 1 : 0;
       const result = await Activities.create(body);
+
+
       if (result) {
         const skillsActivity = req.body.skillsActivity;
         try {
@@ -102,7 +107,7 @@ export const updateActivity = async (
       const activity = await Activities.findByPk(activityId);
       if (activity && activity.creator === organizerId) {
         const updatedActivity = {
-          creator: organizerId as number,
+          // creator: organizerId as number,
           name: req.body.name as string,
           description: req.body.description as string,
           location: req.body.location as string,
@@ -116,13 +121,13 @@ export const updateActivity = async (
           updated_at: new Date(),
         };
 
-        const today = new Date();
+        // const today = new Date();
 
-        if (today > new Date(updatedActivity.register_to))
-          updatedActivity.status = 1;
-        else {
-          updatedActivity.status = 0;
-        }
+        // if (today > new Date(updatedActivity.register_to))
+        //   updatedActivity.status = 1;
+        // else {
+        //   updatedActivity.status = 0;
+        // }
 
         await Activities.update(updatedActivity, {
           where: { id: activityId },

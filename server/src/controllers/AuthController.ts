@@ -18,8 +18,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     });
 
     if (account) {
-      // const isPasswordValid = await bcrypt.compare(password, account.password);
-      const isPasswordValid = true;
+      const isPasswordValid = await bcrypt.compare(password, account.password);
+      // const isPasswordValid = true;
       if (isPasswordValid) {
         const user = account.toJSON();
         const objectToken = {
@@ -111,6 +111,73 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         message: 'Invalid something or email exits',
       };
       commonResponse(req, res, response);
+    }
+  } catch (error) {
+    console.error(error);
+    const response: GeneralResponse<null> = {
+      status: 500,
+      message: 'Internal server error',
+    };
+    commonResponse(req, res, response);
+  }
+};
+
+export const changePassword = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const currentPassword = req.body.currentPassword;
+    const newPassword = req.body.newPassword;
+    const confirmPassword = req.body.confirmPassword;
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
+    const userId = decodedToken.id;
+    const user = await Users.findByPk(userId);
+    if (!user) {
+      const response: GeneralResponse<{}> = {
+        status: 400,
+        data: null,
+        message: 'Không tìm thấy người dùng',
+      };
+      commonResponse(req, res, response);
+      return;
+    } else {
+      const isPasswordValid = await bcrypt.compare(
+        currentPassword,
+        user.password,
+      );
+      if (isPasswordValid) {
+        if (newPassword === confirmPassword) {
+          const hashedPassword = await bcrypt.hash(newPassword, 10);
+          user.password = hashedPassword;
+          await user.save();
+          const response: GeneralResponse<{}> = {
+            status: 200,
+            data: null,
+            message: 'Success: Change password successfully!',
+          };
+          commonResponse(req, res, response);
+        } else {
+          const response: GeneralResponse<{}> = {
+            status: 400,
+            data: null,
+            message: 'Confirm password does not match!',
+          };
+          commonResponse(req, res, response);
+        }
+      } else {
+        const response: GeneralResponse<{}> = {
+          status: 400,
+          data: null,
+          message: 'Current password does not match!',
+        };
+        commonResponse(req, res, response);
+      }
     }
   } catch (error) {
     console.error(error);

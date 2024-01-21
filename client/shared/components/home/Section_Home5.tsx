@@ -14,6 +14,7 @@ const Section_Home5 = ({ feedbacks }: Props) => {
   const { data: dataFeedback } = useQuery(['listFeedback'], () =>
     feedbackService.getAllFeedbackNoAuth()
   );
+
   return (
     <React.Fragment>
       <div className='mt-5 flex flex-col justify-center items-center'>
@@ -21,9 +22,9 @@ const Section_Home5 = ({ feedbacks }: Props) => {
           Feedback người dùng
         </h1>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-        {feedbacks &&
-          feedbacks.map((feedback) => (
+      <div className='grid grid-cols-1 md:grid-cols-4 gap-5'>
+        {dataFeedback?.data.data &&
+          dataFeedback?.data.data.feedbacks.map((feedback) => (
             <Collapse
               key={feedback.id}
               collapsible='icon'

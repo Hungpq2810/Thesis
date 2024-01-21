@@ -118,8 +118,7 @@ const FormActivity = ({ editId, open, setOpen, refetch }: Props) => {
       newMutation.mutate(value);
     }
   }
-  console.log(editId);
-  console.log(data);
+
 
   useEffect(() => {
     if (editId && data) {

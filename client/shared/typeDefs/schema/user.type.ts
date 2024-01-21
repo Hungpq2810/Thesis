@@ -24,3 +24,9 @@ export interface IUser {
   belongsOrganizer?: IOrganization;
   activityApplied?: any;
 }
+
+export interface IChangePassword {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}

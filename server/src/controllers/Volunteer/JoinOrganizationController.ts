@@ -90,15 +90,15 @@ export const requestToOrganization = async (
       } else {
         const body = {
           user_id: Number(userId) as number,
-          organization_id: Number(req.body.organization_id) as number,
+          organization_id: Number(req.body.organization_id.organization_id),
           status: 1,
           created_at: new Date(),
           updated_at: new Date(),
         };
+
         const existingRequest = await VolunteerRequest.findOne({
           where: { user_id: userId },
         });
-        console.log(existingRequest);
 
         if (existingRequest) {
           await existingRequest.update(body);

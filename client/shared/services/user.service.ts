@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { https } from '../config/https.config';
-import { IUser, IUserList } from '@/typeDefs/schema/user.type';
+import { IChangePassword, IUser, IUserList } from '@/typeDefs/schema/user.type';
 import { IBaseResponse } from '@/typeDefs/baseReponse.type';
 
 class UserService {
@@ -13,6 +13,10 @@ class UserService {
   getUserByAuth(): Promise<AxiosResponse<IBaseResponse<IUser>>> {
     return https.get(`/user`);
   }
+  changePassword(body: IChangePassword) {
+    return https.post('/change_password', body);
+  }
+
   newUser(body: { username: string; password: string }) {
     return https.post('/register', body);
   }
