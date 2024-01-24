@@ -23,7 +23,7 @@ class ActivityService {
     skills?: number[];
     orgainzer?: number;
   }): Promise<AxiosResponse<IBaseResponse<IActivityList>>> {
-    return httpsNoToken.post(`/search_multiple_activities`, body);
+    return httpsNoToken.get(`/search_multiple_activities`, {params: body});
   }
 
   applyActivity(body: { activity_id: number }) {

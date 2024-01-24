@@ -19,6 +19,7 @@ import {
   createOrganization,
   listOrganization,
   detailOrganization,
+  updateRequestingOrganization,
 } from '../controllers/OrganizationController';
 import {
   deleteOrganization,
@@ -274,6 +275,14 @@ router.post(
   authenticateToken,
   createOrganization,
 );
+//Detail organization
+router.get('/api/v1/volunteer/my_organization', authenticateToken, detailOrganization);
+//Update organization
+router.post(
+  '/api/v1/volunteer/update_organization',
+  authenticateToken,
+  updateRequestingOrganization,
+);
 //Request to be organization
 router.post(
   '/api/v1/volunteer/request_tobe_organization',
@@ -321,12 +330,11 @@ router.post('/api/v1/cancel_volunteer', authenticateToken, cancelApplyActivity);
 //public
 //Organization
 router.get('/api/v1/organizations', listOrganization);
-router.get('/api/v1/organization/:id', detailOrganization);
 
 //Activity
 router.get('/api/v1/activities', listActivity);
 router.get('/api/v1/search_activities', searchActivities);
-router.post('/api/v1/search_multiple_activities', searchMultipleActivities);
+router.get('/api/v1/search_multiple_activities', searchMultipleActivities);
 router.get('/api/v1/activities/:id', detailActivity);
 router.post('/api/v1/activities_by_skill', listActivitesBySkills);
 //Skill

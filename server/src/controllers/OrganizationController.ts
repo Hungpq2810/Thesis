@@ -52,16 +52,26 @@ export const detailOrganization = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { id } = req.params;
-    const organization = await Organization.findByPk(id);
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
+    const userId = decodedToken.id;
+
+    const organization = await Organization.findOne({
+      where: { creator: userId}
+    });
 
     if (organization) {
       const response: GeneralResponse<{
-        organization: OrganizationAttributes;
+        organization: any;
       }> = {
         status: 200,
         data: {
-          organization: organization.toJSON(),
+          organization
         },
         message: 'Get organization details successfully',
       };
@@ -84,6 +94,56 @@ export const detailOrganization = async (
     commonResponse(req, res, response);
   }
 };
+
+export const updateRequestingOrganization = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try{
+
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+    const decodedToken = jwt.verify(token, secretKey) as jwt.JwtPayload;
+    const userId = decodedToken.id;
+    const userRole = decodedToken.role_id;
+    if (userRole !== 1) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+    
+    
+    const body = {
+      name: req.body.name as string,
+      description: req.body.description as string,
+      location: req.body.location as string,
+      updated_at: new Date(),
+    };
+    
+    const result = await Organization.update(body, {
+      where: { creator: userId },
+    });
+    if (result) {
+      const response: GeneralResponse<{}> = {
+        status: 200,
+        data: body,
+        message: 'Cập nhật thông tin tổ chức thành công',
+      };
+      commonResponse(req, res, response);
+    }
+  } catch (error: any) {
+    console.error(error);
+    const response: GeneralResponse<{}> = {
+      status: 400,
+      data: null,
+      message: error.message,
+    };
+    commonResponse(req, res, response);
+  }
+}
 
 export const createOrganization = async (
   req: Request,

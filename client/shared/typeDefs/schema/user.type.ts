@@ -23,6 +23,7 @@ export interface IUser {
   skills?: ISkill[];
   belongsOrganizer?: IOrganization;
   activityApplied?: any;
+  user?: any;
 }
 
 export interface IChangePassword {

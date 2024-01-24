@@ -129,10 +129,20 @@ const ActivityPage = () => {
     if (value.organizer) {
       queryParams.organizer = value.organizer;
     }
-    // router.push({
-    //   pathname: '/activity',
-    //   query: queryParams
-    // })
+    if (value.date) {
+      queryParams.date = value.date;
+    }
+    if (value.dateAct) {
+      queryParams.dateAct = value.dateAct;
+    }
+    if (value.skills && value.skills.length > 0) {
+      // queryParams.skills = value.skills;
+      queryParams.skills = value.skills.join(',');
+    }
+    router.push({
+      pathname: '/activity',
+      query: queryParams
+    })
     const body = {
       name: value.name,
       address: value.address,
@@ -140,6 +150,10 @@ const ActivityPage = () => {
       date: {
         register_from: value.date && convertDate(value.date[0].$d),
         register_to: value.date && convertDate(value.date[1].$d)
+      },
+      dateAct: {
+        start_date: value.dateAct && convertDate(value.date[0].$d),
+        end_date: value.dateAct && convertDate(value.date[1].$d)
       },
       skills: value.skills
     };
@@ -172,14 +186,17 @@ const ActivityPage = () => {
           <Form.Item label='Địa điểm' name='address'>
             <Input />
           </Form.Item>
-          <Form.Item label='Bắt đầu - Kết thúc' name='date'>
+          <Form.Item label='Bắt đầu - Kết thúc đăng ký' name='date'>
+            <RangePicker />
+          </Form.Item>
+          <Form.Item label='Bắt đầu - Kết thúc hoạt động' name='dateAct'>
             <RangePicker />
           </Form.Item>
           <Form.Item label='Thuộc tổ chức' name='organizer'>
             <Select
               placeholder='Chọn tổ chức'
               optionLabelProp='label'
-              options={organizers}
+              options={organizers ? [{ label: 'None', value: null }, ...organizers] : [{ label: 'None', value: null }]}
             />
           </Form.Item>
           <Form.Item label='Kỹ năng' name='skills' className='w-1/2'>

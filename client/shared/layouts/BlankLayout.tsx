@@ -4,9 +4,16 @@ import {
   ExpandAltOutlined,
   UserOutlined,
   GroupOutlined,
-  SearchOutlined
+  SearchOutlined,
+  FacebookOutlined,
+  GooglePlusOutlined,
+  InstagramOutlined,
+  LinkedinOutlined,
+  SkypeOutlined,
+  TwitterOutlined,
+  YoutubeOutlined
 } from '@ant-design/icons';
-import { Button, Input, Layout, Menu, MenuProps } from 'antd';
+import { Button, Col, Input, Layout, Menu, MenuProps, Row, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Search from 'antd/lib/input/Search';
@@ -17,7 +24,8 @@ import { useDispatch } from 'react-redux';
 import { login } from '@/store/appSlice';
 import jwt_decode from 'jwt-decode';
 import DashboardLayout from './DashboardLayout';
-import FooterContent from './components/Footer';
+import FooterContent from './components/FooterContent';
+import { Link } from 'react-router-dom';
 
 const { Header, Content, Footer } = Layout;
 
@@ -134,7 +142,35 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
       <Content className='w-full min-h-[100vh] flex flex-col justify-center items-center mx-auto p-20'>
         {children}
       </Content>
-      <Footer className='w-full'>{/* <FooterContent /> */}</Footer>
+      <Footer className='w-full'>
+        
+        <Row
+          className='flex'
+          justify='space-around'
+          align='middle'
+          style={{ backgroundColor: '#f0f2f5', padding: '20px 0' }}
+        >
+          <Col style={{ textAlign: 'center' }}>
+            <div className='text-2xl px-4 cursor-pointer'>
+              <img width={200} onClick={() => router.push('/')} src='/logo.svg' />
+            </div>
+          </Col>
+
+          <Col style={{ textAlign: 'center' }}>
+          
+            <FacebookOutlined />
+            <br />
+            <YoutubeOutlined />
+          
+          </Col>
+        
+          <Col style={{ textAlign: 'center' }}>
+            <p>SĐT: 0886055886</p>
+            <p>Đại học Bách Khoa Hà Nội</p>
+            <p>Email: <a>hungphiquoc@gmail.com</a> </p>
+          </Col>
+        </Row>
+      </Footer>
     </React.Fragment>
   );
 }

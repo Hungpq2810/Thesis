@@ -180,12 +180,12 @@ const SiderMenu = () => {
           label: 'Tham gia tổ chức'
         },
         {
-          key: 'volunteer/request-organization',
+          key: '/volunteer/request-organization',
           icon: <PullRequestOutlined />,
           label: 'Trở thành tổ chức'
         },
         {
-          key: 'volunteer/your-organization',
+          key: '/volunteer/your-organization',
           icon: <UsergroupAddOutlined />,
           label: 'Tổ chức của bạn'
         }

@@ -5,7 +5,7 @@ import { Activities, ActivityAttributes } from '../models/activities';
 import { Op } from 'sequelize';
 import { SkillActivities } from '../models/skill_activities';
 import { Skills } from '../models/skills';
-import { mappedActivities } from '../mappers/ActivityMapper';
+import { mappedActivities, mappedSearchActivities } from '../mappers/ActivityMapper';
 import { Users } from '../models/users';
 dotenv.config();
 
@@ -149,86 +149,82 @@ export const searchActivities = async (req: Request, res: Response) => {
 
 export const searchMultipleActivities = async (req: Request, res: Response) => {
   try {
-    const { name, address, skills, organizer, date } = req.body;
+    const { name, address, skills, organizer, date, dateAct } = req.query;
+    const parsedSkills = skills ? Object.values((skills as string[]).map(Number)) : [];
+    const parsedOrganizer = organizer ? Number(organizer) : undefined;
+    // const parsedDate = date ? JSON.parse(date as string) : undefined;
+    // console.log(parsedDate);
+    // console.log(req.query.date, req.query.dateAct);
+    // console.log(Array.isArray(Object.values(req.query.date)));
+    
+    
     let activities;
+    let whereClause: { [key: string]: any } = {};
+
     if (name) {
-      activities = await Activities.findAll({
-        where: {
-          name: {
-            [Op.like]: `%${name.toLowerCase()}%`,
-          },
-        },
-      });
-    }
-    if (address) {
-      activities = await Activities.findAll({
-        where: {
-          location: {
-            [Op.like]: `%${address.toLowerCase()}%`,
-          },
-        },
-      });
-    }
-    if (date) {
-      if (date.register_from && date.register_to) {
-        activities = await Activities.findAll({
-          where: {
-            register_from: {
-              [Op.between]: [date.register_from, date.register_to],
-            },
-          },
-        });
-      } else if (date.register_from) {
-        activities = await Activities.findAll({
-          where: {
-            register_from: {
-              [Op.gte]: date.register_from,
-            },
-          },
-        });
-      } else if (date.register_to) {
-        activities = await Activities.findAll({
-          where: {
-            register_to: {
-              [Op.lte]: date.register_to,
-            },
-          },
-        });
+      if (typeof name === 'string') {
+        whereClause['name'] = {
+          [Op.like]: `%${name.toLowerCase()}%`,
+        };
       }
     }
-    if (skills && skills.length > 0) {
-      const skillIds = skills.map((skill: any) => +skill);
-      const skillActivities = await SkillActivities.findAll({
-        where: {
-          skill_id: skillIds,
-        },
-      });
-      const skillActivitiesIds = skillActivities.map(
-        (skillActivity) => skillActivity.activity_id,
-      );
-      activities = await Activities.findAll({
-        where: {
-          id: skillActivitiesIds,
-        },
-      });
-    }
-    if (organizer) {
-      const user = await Users.findOne({
-        where: {
-          role_id: 2,
-          organization_id: organizer,
-        },
-      });
-      activities = await Activities.findAll({
-        where: {
-          creator: user?.id,
-        },
-      });
-    }
 
-    const response = {
+    if (address && typeof address === 'string') {
+      whereClause['location'] = {
+        [Op.like]: `%${address.toLowerCase()}%`,
+      };
+    }
+    
+// if (parsedDate) {
+//   if (parsedDate.register_from && parsedDate.register_to) {
+//     whereClause['register_from'] = {
+//       [Op.between]: [parsedDate.register_from, parsedDate.register_to],
+//     };
+//   } else if (parsedDate.register_from) {
+//     whereClause['register_from'] = {
+//       [Op.gte]: parsedDate.register_from,
+//     };
+//   } else if (parsedDate.register_to) {
+//     whereClause['register_to'] = {
+//       [Op.lte]: parsedDate.register_to,
+//     };
+//   }
+// }
+
+if (parsedOrganizer) {
+  const user = await Users.findOne({
+    where: {
+      role_id: 2,
+      organization_id: parsedOrganizer,
+    },
+  });
+  if (user) {
+    whereClause['creator'] = user.id;
+  }
+}
+
+activities = await Activities.findAll({
+  where: whereClause,
+});
+
+let mappedResult = await Promise.all(mappedSearchActivities(activities));
+
+let activitySet = await SkillActivities.findAll({
+  where: {
+    skill_id: {
+      [Op.in]: parsedSkills
+    }
+  },
+});
+let activityIds = [...new Set(activitySet.map(activity => activity.activity_id))];
+
+// mappedResult = mappedResult.filter(activity => activityIds.includes(activity?.id));
+mappedResult = mappedResult.filter(activity => activity && activity.id !== undefined && activityIds.includes(activity.id));
+
+
+const response = {
       status: 200,
-      data: { activities },
+      data: { activities: mappedResult },
       message: 'Search activities successfully',
     };
     res.status(200).json(response);

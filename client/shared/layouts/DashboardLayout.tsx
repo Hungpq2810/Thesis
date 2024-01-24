@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Layout, theme } from 'antd';
 import Appbar from './components/Appbar';
 import SiderMenu from './components/SiderMenu';
-import FooterContent from './components/Footer';
+import FooterContent from './components/FooterContent';
 import { getCookie } from 'cookies-next';
 import jwt_decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';

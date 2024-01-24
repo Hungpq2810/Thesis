@@ -21,14 +21,10 @@ const JoinOrganization = ({ next }: Props) => {
     organizationService.getAllOrganization()
   );
 
-  const { data: dataUser } = useQuery(['userDetail'], () =>
+  const { data: dataUser, status, error } = useQuery(['userDetail'], () =>
     userService.getUserByAuth()
   );
-
-  const [disabled, setDisabled] = useState(false);
-  if (dataUser?.data.data.organization_id) {
-    setDisabled(true);
-  }
+  
   const { data: organizers } = useQuery(
     ['organizers'],
     () => organizationService.getAllOrganization(),
@@ -44,7 +40,7 @@ const JoinOrganization = ({ next }: Props) => {
       }
     }
   );
-  const { data: dataVolunteerRequest, refetch } = useQuery(
+  const { data: dataVolunteerRequest} = useQuery(
     'getCurrentRequestOrganization',
     () => volunteerService.getCurrentRequestToOrganization()
   );
@@ -78,10 +74,6 @@ const JoinOrganization = ({ next }: Props) => {
     handleForm.mutate({ organization_id });
     next();
   };
-
-  // useEffect(() => {
-  //   refetch()
-  // }, [dataVolunteerRequest]);
 
   const columns: ColumnType<IOrganization>[] = [
     {
@@ -135,7 +127,7 @@ const JoinOrganization = ({ next }: Props) => {
           </h3>
           <h3>
             Bạn đã gia nhập tổ chức:{' '}
-            {dataUser?.data.data.organization_id || 'Không'}
+            {dataUser?.data.data.user.organization_id || 'Không'}
           </h3>
           <div className='flex items-center'>
             <h3 className='mr-4'>
@@ -145,6 +137,7 @@ const JoinOrganization = ({ next }: Props) => {
             <Button
               type='primary'
               htmlType='submit'
+              disabled={dataUser?.data.data.user.organization_id}
               onClick={() => handleCancellation.mutate()}
             >
               Hủy yêu cầu
@@ -164,7 +157,11 @@ const JoinOrganization = ({ next }: Props) => {
                 />
               </Form.Item>
               <Form.Item style={{ textAlign: 'center' }}>
-                <Button type='primary' htmlType='submit' disabled={disabled}>
+                <Button 
+                  type='primary' 
+                  htmlType='submit'
+                  disabled={dataUser?.data.data.user.organization_id}
+                >
                   Gửi yêu cầu
                 </Button>
               </Form.Item>

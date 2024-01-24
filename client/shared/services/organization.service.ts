@@ -4,7 +4,6 @@ import { IBaseResponse } from '@/typeDefs/baseReponse.type';
 import {
   IOrganization,
   IOrganizations,
-  IRequestOrganization,
   IRequestOrganizations
 } from '@/typeDefs/schema/organization.type';
 
@@ -17,11 +16,7 @@ class OrganizationService {
   getAllOrganization(): Promise<AxiosResponse<IBaseResponse<IOrganizations>>> {
     return httpsNoToken.get('/organizations');
   }
-  getOrganizationById(
-    id: number
-  ): Promise<AxiosResponse<IBaseResponse<IOrganization>>> {
-    return https.get(`/organization/${id}`);
-  }
+  
   newOrganization(body: {
     name: string;
     location: string;
@@ -29,9 +24,21 @@ class OrganizationService {
   }): Promise<AxiosResponse<IBaseResponse<IOrganization>>> {
     return https.post('/volunteer/create_organization', body);
   }
+  
   requestBecomeOrganization(body: { organization_id: number }) {
     return https.post('/volunteer/request_tobe_organization', body);
   }
+
+  getMyOrganization(): Promise<AxiosResponse<IBaseResponse<IOrganization>>> {
+    return https.get(`/volunteer/my_organization`);
+  }
+
+  updateMyOrganization(
+    body: { name: string; location: string; description: string }
+  ) {
+    return https.post(`/volunteer/update_organization`, body);
+  }
+  
   updateOrganization(
     id: number,
     body: { name: string; location: string; description: string }

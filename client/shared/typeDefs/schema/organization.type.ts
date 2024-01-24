@@ -14,6 +14,7 @@ export interface IOrganization {
   phone: string;
   created_at: string;
   updated_at: string;
+  organization?: any;
 }
 export interface IRequestOrganizations {
   requestOrganizations: IRequestOrganization[];

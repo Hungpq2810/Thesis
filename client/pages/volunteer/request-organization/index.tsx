@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Form, message, Steps } from 'antd';
 import Head from 'next/head';
 import FormCreateOrganization from '@/components/request_organization/FormCreateOrganization';
 import { useAppSelector } from '@/hooks/useRedux';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { organizationService } from '@/services/organization.service';
 import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 
 const RequestOrganization = () => {
   const { inforOrganization } = useAppSelector((state) => state.appSlice);
-
+  const {data: dataMyOrganization} = useQuery(['myOrganization'], () => organizationService.getMyOrganization())  
   const [current, setCurrent] = useState(0);
+  useEffect(() => {
+    if(dataMyOrganization) {
+      setCurrent(1);
+    }
+  }, [dataMyOrganization]); 
+  console.log(inforOrganization);
+  
   const next = () => {
     setCurrent(current + 1);
   };
@@ -56,11 +63,11 @@ const RequestOrganization = () => {
             autoComplete='off'
             layout='vertical'
           >
-            <h2>Tên tổ chức: {inforOrganization?.name}</h2>
-            <h3>Địa chỉ: {inforOrganization?.location}</h3>
+            <h2>Tên tổ chức: {dataMyOrganization?.data.data.organization.name}</h2>
+            <h3>Địa chỉ: {dataMyOrganization?.data.data.organization.location}</h3>
             <h3>Mô tả:</h3>
             <span style={{ whiteSpace: 'pre-line' }}>
-              {inforOrganization?.description}
+              {dataMyOrganization?.data.data.organization.description}
             </span>
             <Form.Item
               name='remember'
