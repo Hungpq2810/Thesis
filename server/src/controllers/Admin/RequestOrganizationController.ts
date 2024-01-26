@@ -154,8 +154,8 @@ export const updateRequestOrganization = async (
             const emailUtils = new EmailUtils();
             const receiverEmail = accountUser.email as string;
             const emailDetails: EmailDetails = {
-              subject: 'Volunteer Request Confirmation',
-              body: 'Your volunteer request has been successfully submitted.',
+              subject: 'Organization request Confirmation',
+              body: 'Your organization request has been successfully accepted.',
             };
             emailUtils.sendEmail(receiverEmail, emailDetails);
             const response: GeneralResponse<{}> = {
@@ -175,16 +175,16 @@ export const updateRequestOrganization = async (
       if (organizationRequestRecord && organization) {
         const result = await organizationRequestRecord.update(body);
         await organization.update({ status: 1 });
-        // const accountUser = await Users.findByPk(
-        //   organizationRequestRecord.user_id,
-        // );
-        //     const emailUtils = new EmailUtils();
-        //     const receiverEmail = accountUser.email as string;
-        //     const emailDetails: EmailDetails = {
-        //       subject: 'Volunteer Request Confirmation',
-        //       body: 'Your volunteer request has been successfully submitted.',
-        //     };
-        //     emailUtils.sendEmail(receiverEmail, emailDetails);
+        const accountUser = await Users.findByPk(
+          organizationRequestRecord.user_id,
+        );
+        const emailUtils = new EmailUtils();
+        const receiverEmail = accountUser?.email as string;
+        const emailDetails: EmailDetails = {
+          subject: 'Organization request Confirmation',
+          body: 'Your organization request has been rejected.',
+        };
+        emailUtils.sendEmail(receiverEmail, emailDetails);
         if (result) {
           const response: GeneralResponse<{}> = {
             status: 200,

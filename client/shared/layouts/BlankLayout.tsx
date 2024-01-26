@@ -152,22 +152,24 @@ function BlankLayout({ children }: { children: React.ReactNode }) {
         >
           <Col style={{ textAlign: 'center' }}>
             <div className='text-2xl px-4 cursor-pointer'>
-              <img width={200} onClick={() => router.push('/')} src='/logo.svg' />
+              <img width={300} onClick={() => router.push('/')} src='/logo.svg' />
             </div>
           </Col>
 
-          <Col style={{ textAlign: 'center' }}>
-          
-            <FacebookOutlined />
+          <Col >
+            <h3 className='text-xl px-4 cursor-pointer'>
+
+            <FacebookOutlined /> <a href="https://www.facebook.com/tinhnguyen.bachkhoa">Tình nguyện Bách Khoa</a>
             <br />
-            <YoutubeOutlined />
+            <YoutubeOutlined /> <a href="https://www.youtube.com/@tinhnguyenict">Đội tình nguyện trường CNTT&TT</a>
+            </h3>
           
           </Col>
         
-          <Col style={{ textAlign: 'center' }}>
-            <p>SĐT: 0886055886</p>
-            <p>Đại học Bách Khoa Hà Nội</p>
-            <p>Email: <a>hungphiquoc@gmail.com</a> </p>
+          <Col >
+            <p className='text-xl px-4'>SĐT liên hệ: 0886055886</p>
+            <p className='text-xl px-4'>Địa chỉ: Đại học Bách Khoa Hà Nội</p>
+            <p className='text-xl px-4'>Email: <a>hungphiquoc@gmail.com</a> </p>
           </Col>
         </Row>
       </Footer>

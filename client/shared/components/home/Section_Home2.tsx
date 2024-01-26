@@ -1,6 +1,5 @@
 import { Carousel } from 'antd';
 import React from 'react';
-
 const Section_Home2 = () => {
   const onChange = (currentSlide: number) => {};
   return (
@@ -10,7 +9,7 @@ const Section_Home2 = () => {
           Sinh viên tình nguyện
           <span>Đại học Bách Khoa Hà Nội</span>
         </h1>
-        <Carousel afterChange={onChange} autoplay={true} autoplaySpeed={10000}>
+        <Carousel afterChange={onChange} autoplay={true} autoplaySpeed={10000} >
           <div className='max-w-[1980px] max-h-[1000px] relative overflow-hidden'>
             <img
               className='w-full h-full object-cover object-center rounded-lg'

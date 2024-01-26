@@ -51,10 +51,8 @@ export const createActivity = async (
         updated_at: new Date(),
       };
 
-
       // body.status = new Date() > req.body.register_to ? 1 : 0;
       const result = await Activities.create(body);
-
 
       if (result) {
         const skillsActivity = req.body.skillsActivity;

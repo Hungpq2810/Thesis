@@ -62,7 +62,7 @@ export const detailOrganization = async (
     const userId = decodedToken.id;
 
     const organization = await Organization.findOne({
-      where: { creator: userId}
+      where: { creator: userId },
     });
 
     if (organization) {
@@ -71,7 +71,7 @@ export const detailOrganization = async (
       }> = {
         status: 200,
         data: {
-          organization
+          organization,
         },
         message: 'Get organization details successfully',
       };
@@ -99,10 +99,9 @@ export const updateRequestingOrganization = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  try{
-
+  try {
     const token = req.headers.authorization?.split(' ')[1];
-    
+
     if (!token) {
       res.status(401).json({ message: 'Unauthorized' });
       return;
@@ -114,15 +113,14 @@ export const updateRequestingOrganization = async (
       res.status(401).json({ message: 'Unauthorized' });
       return;
     }
-    
-    
+
     const body = {
       name: req.body.name as string,
       description: req.body.description as string,
       location: req.body.location as string,
       updated_at: new Date(),
     };
-    
+
     const result = await Organization.update(body, {
       where: { creator: userId },
     });
@@ -143,7 +141,7 @@ export const updateRequestingOrganization = async (
     };
     commonResponse(req, res, response);
   }
-}
+};
 
 export const createOrganization = async (
   req: Request,

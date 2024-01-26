@@ -59,7 +59,7 @@ const FeedbackPage = () => {
       <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-5'>
         {dataFeedback &&
           dataFeedback.data.data &&
-          dataFeedback.data.data.feedbacks.map((feedback) => (
+          dataFeedback.data.data.feedbacks?.map((feedback) => (
             <Collapse
               key={feedback.id}
               collapsible='icon'
@@ -106,7 +106,7 @@ const FeedbackPage = () => {
             <Input.TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
           </Form.Item>
 
-          <Form.Item label='Đánh giá' name='rate'>
+          <Form.Item label='Đánh giá' name='rate' rules={[{ required: true, message: 'Chưa điền số sao' }]}>
             <Rate onChange={setRate} value={rate} />
             {rate ? <span> {[rate]}</span> : ''}
           </Form.Item>

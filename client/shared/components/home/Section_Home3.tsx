@@ -14,7 +14,7 @@ const Section_Home3 = () => {
           <div className='col-span-1 w-full h-full flex flex-col justify-center items-center gap-3'>
             <p className='text-xl text-center m-0'>
               Tạo ra một môi trường quản lý sinh viên tình nguyện đa dụng, thuận
-              tiện cho mọi hoạt động của mỗi đội tình nguyện và của ĐHBK HN
+              tiện cho mọi hoạt động của mỗi đội tình nguyện và của Đại học Bách Khoa Hà Nội
             </p>
             <img
               className='w-full h-full object-cover object-center rounded-lg'
@@ -25,6 +25,9 @@ const Section_Home3 = () => {
           </div>
           <div className='col-span-2 max-w-[1980px] h-[600px] relative overflow-hidden'>
             <div className='w-full h-full relative'>
+            <p className='text-xl text-center m-0'>
+              Đưa tình nguyện đến gần hơn với cộng đồng, đẩy mạnh các hoạt động tình nguyện ở phạm vi trong và ngoài trường. Phát triển hoạt động ngoại khóa tốt dành cho sinh viên
+            </p>
               <img
                 className='object-contain w-full h-full'
                 src='https://www.sterlingbackcheck.ca/wp-content/uploads/2019/06/Blog_Globe.jpg'

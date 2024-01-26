@@ -8,6 +8,7 @@ import {
 import { VolunteerRequest } from '../../models/volunteer_request';
 import { Users } from '../../models/users';
 import { volunteerRequestMapper } from '../../mappers/VolunteerRequestMapper';
+import { EmailUtils } from '../../utilities/EmailUtils';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
@@ -31,7 +32,7 @@ export const listRequestVolunteers = async (
       },
     });
 
-    if (organizer) {
+    if (organizer && organizer.organization_id) {
       const requestVolunteersCurrent = await VolunteerRequest.findAll({
         where: { organization_id: organizer?.organization_id },
       });
@@ -106,6 +107,9 @@ export const updateRequestVolunteer = async (
               updated_at: new Date(),
             });
             if (resultTwo) {
+              const emailUtils = new EmailUtils();
+              
+
               const response: GeneralResponse<{}> = {
                 status: 200,
                 data: null,

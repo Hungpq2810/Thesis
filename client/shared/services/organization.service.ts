@@ -30,7 +30,7 @@ class OrganizationService {
   }
 
   getMyOrganization(): Promise<AxiosResponse<IBaseResponse<IOrganization>>> {
-    return https.get(`/volunteer/my_organization`);
+    return https.get(`/my_organization`);
   }
 
   updateMyOrganization(

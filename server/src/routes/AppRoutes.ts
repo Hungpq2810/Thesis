@@ -275,8 +275,7 @@ router.post(
   authenticateToken,
   createOrganization,
 );
-//Detail organization
-router.get('/api/v1/volunteer/my_organization', authenticateToken, detailOrganization);
+
 //Update organization
 router.post(
   '/api/v1/volunteer/update_organization',
@@ -326,6 +325,13 @@ router.post(
   activityApplyVolunteer,
 );
 router.post('/api/v1/cancel_volunteer', authenticateToken, cancelApplyActivity);
+
+//Detail organization for volunteer and organizer
+router.get(
+  '/api/v1/my_organization',
+  authenticateToken,
+  detailOrganization,
+);
 
 //public
 //Organization

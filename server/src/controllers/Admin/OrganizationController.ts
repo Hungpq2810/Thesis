@@ -11,7 +11,6 @@ import { Users } from '../../models/users';
 import { organizationMapper } from '../../mappers/OrganizationMapper';
 import { OrganizationRequest } from '../../models/organization_request';
 import { Op } from 'sequelize';
-import { sequelize } from '../../db';
 
 export const deleteOrganization = async (
   req: Request,

@@ -53,9 +53,14 @@ export const mappedActivities = (activities: ActivityAttributes[]) => {
       let inforOrganizer;
       if (creator && creator.organization_id) {
         inforOrganizer = await Organization.findOne({
-      where: { id: creator.organization_id },
-      });
-}
+          where: { id: creator.organization_id },
+        });
+      }
+      let currentStatus = 0;
+      const today = new Date();
+      if (num_of_accepted == max_of_volunteers || register_to < today) {
+        currentStatus = 1;
+      }
       return {
         id,
         name,
@@ -68,7 +73,7 @@ export const mappedActivities = (activities: ActivityAttributes[]) => {
         register_to,
         start_date,
         end_date,
-        status,
+        status: currentStatus,
         created_at,
         updated_at,
         skillsActivity: skillsWithDetails,
@@ -112,8 +117,7 @@ export const mappedSearchActivities = (activities: ActivityAttributes[]) => {
         where: { activity_id: id },
       });
       const mappedFeedbacks = await feedbackMapper(feedbacks);
-      
-      
+
       const skillsActivity = await SkillActivities.findAll({
         where: { activity_id: id },
       });
@@ -128,9 +132,9 @@ export const mappedSearchActivities = (activities: ActivityAttributes[]) => {
       let inforOrganizer;
       if (creator && creator.organization_id) {
         inforOrganizer = await Organization.findOne({
-      where: { id: creator.organization_id },
-      });
-}
+          where: { id: creator.organization_id },
+        });
+      }
       return {
         id,
         name,
@@ -151,7 +155,6 @@ export const mappedSearchActivities = (activities: ActivityAttributes[]) => {
         creator: creatorName,
         feedback: mappedFeedbacks,
         inforOrganizer: inforOrganizer,
-        
       };
     } catch (error) {
       console.error('Error fetching creator:', error);

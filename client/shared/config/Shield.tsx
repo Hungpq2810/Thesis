@@ -11,7 +11,8 @@ interface Props {
   children: ReactNode;
 }
 export function Shield({ children }: Props) {
-  // const { isAuth, privateRoute } = useAppSelector(state => state.appSlice)
+  const { isAuth, privateRoute } = useAppSelector(state => state.appSlice)
+  const { user } = useAppSelector(state => state.appSlice)
   const router = useRouter();
   const shieldConfig = {
     router,
@@ -29,7 +30,8 @@ export function Shield({ children }: Props) {
         <Spin />
       </div>
     ),
-    privateRoutes: ['/admin/*', '/organizer/*, /volunteer/*'],
+    // privateRoutes: ['/admin/*', '/organizer/*, /volunteer/*'],
+    privateRoutes: user?.role_id === 3 ? ['/admin/*'] : user?.role_id === 2 ? ['/organizer/*'] : ['/volunteer/*'],
     publicRoutes: ['/login', '/'],
     loginRoute: '/login',
     accessRoute: '/'

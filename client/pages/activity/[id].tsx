@@ -34,13 +34,16 @@ const DetailActivity = ({ activity }: Props) => {
     () => userService.getUserByAuth(),
     {
       select(data) {
+        console.log(data.data.data.activityApplied);
         return data.data.data.activityApplied;
       }
     }
   );
+
   const currentDate = new Date();
   const router = useRouter();
   const { user } = useAppSelector((state) => state.appSlice);
+  
 
   const newFeedbackMutation = useMutation({
     mutationKey: 'newFeedback',
@@ -100,6 +103,7 @@ const DetailActivity = ({ activity }: Props) => {
     };
     newFeedbackMutation.mutate(body);
   }
+
   if (!activity) return <React.Fragment></React.Fragment>;
 
   return (

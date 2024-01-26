@@ -5,6 +5,8 @@ import { GeneralResponse, commonResponse } from '../utilities/CommonResponse';
 import { UserAttributes, Users } from '../models/users';
 import { SkillUsers } from '../models/skill_users';
 import { Skills } from '../models/skills';
+import { activityApplyMapper } from '../mappers/ActivityApplyMapper';
+import { ActivityApply } from '../models/activity_apply';
 dotenv.config();
 const secretKey = process.env.SECRETKEY as string;
 
@@ -101,15 +103,21 @@ export const detailUser = async (
       const skill = skills.find((skill) => skill.id === activity.skill_id);
       return skill;
     });
+    const userActivity = await ActivityApply.findAll({
+      where: { user_id: userId },
+    });
+    const activityMapper = await activityApplyMapper(userActivity);
 
     const response: GeneralResponse<{
       user: any;
       skills: any[];
+      activityApplied: any[];
     }> = {
       status: 200,
       data: {
         user: filteredUser,
         skills: skillsWithDetails,
+        activityApplied: activityMapper,
       },
       message: 'Lấy thông tin người dùng thành công',
     };
